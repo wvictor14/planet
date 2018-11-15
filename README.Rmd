@@ -1,0 +1,98 @@
+---
+title: "README"
+author: "Victor"
+date: "November 15, 2018"
+output: 
+  md_document:
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# pl_infer_ethnicity
+
+For inferring ethnicity from placental DNA methylation microarray data. 
+
+### Install
+
+```{r message = F, eval = F}
+library(devtools)
+install_github('wvictor14/plmec')
+```
+
+### Use
+
+#### Example Data
+
+For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196 "GSE75196").
+
+```{r}
+library(plmec)
+library(GEOquery)
+library(minfi)
+library(wateRmelon)
+
+# download IDATs
+getGEOSuppFiles("GSE75196") # 377.7 MB
+untar("GSE75196/GSE75196_RAW.tar", exdir = "GSE75196/idat")
+head(list.files("GSE75196/idat", pattern = "idat"))
+
+# unzip
+idatFiles <- list.files("GSE75196/idat", pattern = "idat.gz$", full = TRUE)
+sapply(idatFiles, gunzip, overwrite = TRUE)
+
+#load into R
+rgset <- read.metharray.exp("GSE75196/idat")
+rgset # 24 samples, 42.7 MB
+
+# load phenotype data, not necessary for examples
+#geoMat <- getGEO("GSE75196") 
+#pDat <- pData(geoMat[[1]])
+#head(pDat)
+```
+
+Because the data used to train the ethnicity classifier was normalized, I recommend using the same
+normalization procedures.
+
+Here I we apply noob and BMIQ normalization to the methylation data, and then combine this with the
+65 snp probe data.
+
+```{r}
+#normalization
+mset_noob <- preprocessNoob(rgset)
+bmiq <- BMIQ(mset_noob)
+
+#snp probes
+snps <- getSnpBeta(rgset)
+
+#combine methylation and genotyping data
+dat <- rbind(bmiq, snps)
+dim(dat) # 485577     24
+```
+
+#### Infer ethnicity
+
+The reason we added the snp data onto the betas matrix was because a subset of those are used to 
+predict ethnicity. The input data needs to contain all 1862 features in the final model. We can
+check this with the pl_ethnicity_features vector.
+
+```{r}
+all(pl_ethnicity_features %in% rownames(dat))
+```
+
+You don't need to subset to these 1862 features before running pl_ethnicity_infer():
+
+```{r}
+dim(dat)
+results <- pl_infer_ethnicity(dat)
+head(results)
+
+library(ggplot2)
+qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
+     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
+     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+```
+
+We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
+were collected in Sydney, Australia, and Australians have a high percentage of European ancestry.
