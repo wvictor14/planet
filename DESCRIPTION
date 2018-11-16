@@ -9,7 +9,8 @@ Description: This package contains a single function: a glmnet model which was d
   methylation data (but is compatible with 850k data as well) to infer ethnicity in placental 
   samples.
 Imports: 
-  glmnet
+  glmnet,
+  Matrix
 Suggests:
   minfi,
   minfiData,
