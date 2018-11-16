@@ -24,8 +24,8 @@ install_github('wvictor14/plmec')
 ### Example Data
 
 For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from an study including 
-Australian samples. To save on memory, I only use 8/24 samples saved in this repo as an 
-`minfi::RGChannelSet` object, which is can be [loaded from idat files](https://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html#3_reading_data).
+Australian samples. To save on memory, I only use 8/24 samples, which I have saved in this repo as 
+an `minfi::RGChannelSet` object.
 
 ```{r, message = F, warning = F}
 library(plmec)
@@ -37,17 +37,20 @@ data(pl_rgset)
 pl_rgset # 8 samples
 ```
 
-Because the data used to train the ethnicity classifier was normalized, I recommend using the same
-normalization procedures.
+Ideally, your data should be normalized in the same manner as the training data used to develop the
+ethnicity-predictive model. If IDATs are supplied, you can apply both [noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and [BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) normalization. 
+If only methylated and unmethylated data matrices are available, you can apply just BMIQ. If neither
+are available, then you can still run the inference but be wary dataset-specific effects may affect
+accuracy. 
 
-Here we apply `minfi::preprocessNoob()` and `wateRmelon::BMIQ()` to normalize the methylation data: 
+To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ()`: 
 
 ```{r normalization, message = F, warning = F}
 pl_noob <- preprocessNoob(pl_rgset)
 pl_bmiq <- BMIQ(pl_noob)
 ```
 
-and then we combine this with the 65 snp probe data (will be 59 SNPs if using EPIC).
+combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC).
 
 ```{r}
 pl_snps <- getSnpBeta(pl_rgset)
@@ -71,7 +74,7 @@ ethnicity calls:
 ```{r}
 dim(pl_dat)
 results <- pl_infer_ethnicity(pl_dat)
-head(results)
+print(results, row.names = F)
 
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
      col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
@@ -79,7 +82,8 @@ qplot(data = results, x = Prob_Caucasian, y = Prob_Asian,
      col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 ```
 
-The results for the whole (n=24) dataset are 22/24 = predicted Caucasian, 2/24 predicted Asian.
+\*For the entire dataset (not just the subset shown here), 22/24 were predicted Caucasian and 2/24 
+Asian.
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
 were collected in Sydney, Australia, and are therefore likely mostly European with some Asian 
