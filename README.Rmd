@@ -27,7 +27,7 @@ install_github('wvictor14/plmec')
 For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from an study including 
 Australian samples. I only use 8/24 samples here, to save on memory.
 
-```{r}
+```{r, message = F}
 library(plmec)
 library(minfi)
 library(wateRmelon)
