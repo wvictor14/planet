@@ -41,8 +41,8 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75){
     kbeta <- methods::rbind2(a0[i, , drop = FALSE], nbeta[[i]])#was rbind2
     vnames <- dimnames(kbeta)[[1]]
     dimnames(kbeta) <- list(NULL, NULL)
-    kbeta <- kbeta[, lamlist$left, drop = FALSE] %*% Diagonal(x=lamlist$frac) +
-      kbeta[, lamlist$right, drop = FALSE] %*% Diagonal(x=1 - lamlist$frac)
+    kbeta <- kbeta[, lamlist$left, drop = FALSE] %*% Matrix::Diagonal(x=lamlist$frac) +
+      kbeta[, lamlist$right, drop = FALSE] %*% Matrix::Diagonal(x=1 - lamlist$frac)
     dimnames(kbeta) <- list(vnames, paste(seq(along = s)))
     nbeta[[i]] <- kbeta
   }
