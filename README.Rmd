@@ -4,34 +4,34 @@ author: "Victor"
 date: "November 15, 2018"
 output: 
   md_document:
-    toc: true
 editor_options: 
   chunk_output_type: console
 ---
 
-# pl_infer_ethnicity
+# plmec
 
-For inferring ethnicity from placental DNA methylation microarray data. 
+`plmec` is an R package for inferring ethnicity from placental DNA methylation microarray data. 
 
-### Install
+## Installation
 
 ```{r message = F, eval = F}
 library(devtools)
 install_github('wvictor14/plmec')
 ```
 
-### Use
+## Usage
 
-#### Example Data
+### Example Data
 
 For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from an study including 
-Australian samples. I only use 8/24 samples here, to save on memory.
+Australian samples. To save on memory, I only use 8/24 samples saved in this repo as an 
+`minfi::RGChannelSet` object, which is can be [loaded from idat files](https://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html#3_reading_data).
 
-```{r, message = F}
+```{r, message = F, warning = F}
 library(plmec)
-library(minfi)
-library(wateRmelon)
-library(ggplot2)
+library(minfi)      # for normalization
+library(wateRmelon) # for normalization
+library(ggplot2)    
 
 data(pl_rgset)
 pl_rgset # 8 samples
@@ -40,33 +40,33 @@ pl_rgset # 8 samples
 Because the data used to train the ethnicity classifier was normalized, I recommend using the same
 normalization procedures.
 
-Here I we apply noob and BMIQ normalization to the methylation data, and then combine this with the
-65 snp probe data.
+Here we apply `minfi::preprocessNoob()` and `wateRmelon::BMIQ()` to normalize the methylation data: 
 
-```{r}
-#normalization
+```{r normalization, message = F, warning = F}
 pl_noob <- preprocessNoob(pl_rgset)
 pl_bmiq <- BMIQ(pl_noob)
+```
 
-#snp probes
+and then we combine this with the 65 snp probe data (will be 59 SNPs if using EPIC).
+
+```{r}
 pl_snps <- getSnpBeta(pl_rgset)
-
-#combine methylation and genotyping data
 pl_dat <- rbind(pl_bmiq, pl_snps)
 dim(pl_dat) # 485577     8
 ```
 
-#### Infer ethnicity
+### Infer ethnicity
 
 The reason we added the snp data onto the betas matrix was because a subset of those are used to 
 predict ethnicity. The input data needs to contain all 1862 features in the final model. We can
-check this with the pl_ethnicity_features vector.
+check this our data for these features with the `pl_ethnicity_features` vector.
 
 ```{r}
 all(pl_ethnicity_features %in% rownames(pl_dat))
 ```
 
-You don't need to subset to these 1862 features before running pl_ethnicity_infer():
+You don't need to subset to these 1862 features before running `pl_ethnicity_infer()` to obtain 
+ethnicity calls:
 
 ```{r}
 dim(pl_dat)

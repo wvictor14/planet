@@ -1,36 +1,31 @@
--   [pl\_infer\_ethnicity](#pl_infer_ethnicity)
-    -   [Install](#install)
-    -   [Use](#use)
+plmec
+=====
 
-pl\_infer\_ethnicity
-====================
+`plmec` is an R package for inferring ethnicity from placental DNA
+methylation microarray data.
 
-For inferring ethnicity from placental DNA methylation microarray data.
-
-### Install
+Installation
+------------
 
     library(devtools)
     install_github('wvictor14/plmec')
 
-### Use
+Usage
+-----
 
-#### Example Data
+### Example Data
 
 For examples I download some [placental DNAm GEO
 data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from
-an study including Australian samples. I only use 8/24 samples here, to
-save on memory.
+an study including Australian samples. To save on memory, I only use
+8/24 samples saved in this repo as an `minfi::RGChannelSet` object,
+which is can be [loaded from idat
+files](https://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html#3_reading_data).
 
     library(plmec)
-    library(minfi)
-
-    ## Warning: package 'iterators' was built under R version 3.5.1
-
-    library(wateRmelon)
-
-    ## Warning: package 'ggplot2' was built under R version 3.5.1
-
-    library(ggplot2)
+    library(minfi)      # for normalization
+    library(wateRmelon) # for normalization
+    library(ggplot2)    
 
     data(pl_rgset)
     pl_rgset # 8 samples
@@ -52,47 +47,34 @@ save on memory.
 Because the data used to train the ethnicity classifier was normalized,
 I recommend using the same normalization procedures.
 
-Here I we apply noob and BMIQ normalization to the methylation data, and
-then combine this with the 65 snp probe data.
+Here we apply `minfi::preprocessNoob()` and `wateRmelon::BMIQ()` to
+normalize the methylation data:
 
-    #normalization
     pl_noob <- preprocessNoob(pl_rgset)
-
-    ## Loading required package: IlluminaHumanMethylation450kmanifest
-
-    ## [dyeCorrection] Applying R/G ratio flip to fix dye bias
-
     pl_bmiq <- BMIQ(pl_noob)
 
-    ## 
-    ## Attaching package: 'RPMM'
+and then we combine this with the 65 snp probe data (will be 59 SNPs if
+using EPIC).
 
-    ## The following object is masked from 'package:limma':
-    ## 
-    ##     ebayes
-
-    #snp probes
     pl_snps <- getSnpBeta(pl_rgset)
-
-    #combine methylation and genotyping data
     pl_dat <- rbind(pl_bmiq, pl_snps)
     dim(pl_dat) # 485577     8
 
     ## [1] 485577      8
 
-#### Infer ethnicity
+### Infer ethnicity
 
 The reason we added the snp data onto the betas matrix was because a
 subset of those are used to predict ethnicity. The input data needs to
-contain all 1862 features in the final model. We can check this with the
-pl\_ethnicity\_features vector.
+contain all 1862 features in the final model. We can check this our data
+for these features with the `pl_ethnicity_features` vector.
 
     all(pl_ethnicity_features %in% rownames(pl_dat))
 
     ## [1] TRUE
 
 You don't need to subset to these 1862 features before running
-pl\_ethnicity\_infer():
+`pl_ethnicity_infer()` to obtain ethnicity calls:
 
     dim(pl_dat)
 
@@ -119,19 +101,19 @@ pl\_ethnicity\_infer():
     ## GSM1944963_9376561070_R03C02                    Caucasian
     ## GSM1944964_9376561070_R04C02                    Caucasian
     ##                              Predicted_ethnicity Prob_African   Prob_Asian
-    ## GSM1944959_9376561070_R05C01               Asian  0.012630828 0.9570737363
-    ## GSM1944960_9376561070_R06C01           Caucasian  0.015919779 0.1713318381
-    ## GSM1944961_9376561070_R01C02               Asian  0.021703784 0.9103326732
-    ## GSM1944962_9376561070_R02C02           Caucasian  0.000726820 0.0007070925
-    ## GSM1944963_9376561070_R03C02           Caucasian  0.002583857 0.0031621865
-    ## GSM1944964_9376561070_R04C02           Caucasian  0.006235280 0.0115791460
+    ## GSM1944959_9376561070_R05C01               Asian 0.0116803725 0.9610366943
+    ## GSM1944960_9376561070_R06C01           Caucasian 0.0143189207 0.1398351332
+    ## GSM1944961_9376561070_R01C02               Asian 0.0206390347 0.9104669237
+    ## GSM1944962_9376561070_R02C02           Caucasian 0.0007663899 0.0007906337
+    ## GSM1944963_9376561070_R03C02           Caucasian 0.0027674764 0.0036634367
+    ## GSM1944964_9376561070_R04C02           Caucasian 0.0057602852 0.0102684594
     ##                              Prob_Caucasian Highest_Prob
-    ## GSM1944959_9376561070_R05C01     0.03029544    0.9570737
-    ## GSM1944960_9376561070_R06C01     0.81274838    0.8127484
-    ## GSM1944961_9376561070_R01C02     0.06796354    0.9103327
-    ## GSM1944962_9376561070_R02C02     0.99856609    0.9985661
-    ## GSM1944963_9376561070_R03C02     0.99425396    0.9942540
-    ## GSM1944964_9376561070_R04C02     0.98218557    0.9821856
+    ## GSM1944959_9376561070_R05C01     0.02728293    0.9610367
+    ## GSM1944960_9376561070_R06C01     0.84584595    0.8458459
+    ## GSM1944961_9376561070_R01C02     0.06889404    0.9104669
+    ## GSM1944962_9376561070_R02C02     0.99844298    0.9984430
+    ## GSM1944963_9376561070_R03C02     0.99356909    0.9935691
+    ## GSM1944964_9376561070_R04C02     0.98397126    0.9839713
 
     qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
          col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
