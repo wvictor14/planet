@@ -23,9 +23,9 @@ install_github('wvictor14/plmec')
 
 ### Example Data
 
-For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from an study including 
-Australian samples. To save on memory, I only use 8/24 samples, which I have saved in this repo as 
-an `minfi::RGChannelSet` object.
+For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196), which contains samples collected 
+in an Australian population. To save on memory, I only use 8/24 samples, which I have saved in
+this repo as a `minfi::RGChannelSet` object.
 
 ```{r, message = F, warning = F}
 library(plmec)
@@ -37,11 +37,13 @@ data(pl_rgset)
 pl_rgset # 8 samples
 ```
 
+### Preprocessing data
+
 Ideally, your data should be normalized in the same manner as the training data used to develop the
 ethnicity-predictive model. If IDATs are supplied, you can apply both [noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and [BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) normalization. 
 If only methylated and unmethylated data matrices are available, you can apply just BMIQ. If neither
-are available, then you can still run the inference but be wary dataset-specific effects may affect
-accuracy. 
+are available, then you can still run the algorithm but any differences resulting from the different
+normalizations may impact accuracy. 
 
 To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ()`: 
 
@@ -50,7 +52,7 @@ pl_noob <- preprocessNoob(pl_rgset)
 pl_bmiq <- BMIQ(pl_noob)
 ```
 
-combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC).
+Combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC):
 
 ```{r}
 pl_snps <- getSnpBeta(pl_rgset)
@@ -62,7 +64,7 @@ dim(pl_dat) # 485577     8
 
 The reason we added the snp data onto the betas matrix was because a subset of those are used to 
 predict ethnicity. The input data needs to contain all 1862 features in the final model. We can
-check this our data for these features with the `pl_ethnicity_features` vector.
+check this our data for these features with the `pl_ethnicity_features` vector:
 
 ```{r}
 all(pl_ethnicity_features %in% rownames(pl_dat))
