@@ -35,4 +35,5 @@ testDat <- rbind(b, s)
 
 pl_infer_ethnicity(testDat)
 ## note that these are none placental samples
+
 }
