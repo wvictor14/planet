@@ -11,16 +11,16 @@
 #' @return A m x 7 dataframe of predicted ethnicity information and associated probabilities.
 #' @examples
 #' ## To predict ethnicity on 450k/850k samples
-#' library(minfiData)
-#' data(RGsetEx)
 #'
-#' b <- getBeta(RGsetEx)
-#' s <- getSnpBeta(RGsetEx)
+#' # Load placenta DNAm data
+#' data(pl_rgset)
+#'
+#' b <- getBeta(pl_rgset)     # 450k/850k methylation data
+#' s <- getSnpBeta(pl_rgset)  # 450k/850k SNP data
 #'
 #' testDat <- rbind(b, s)
 #'
 #' pl_infer_ethnicity(testDat)
-#' ## note that these are none placental samples
 #'
 #' @export
 #'
