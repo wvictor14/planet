@@ -21,7 +21,6 @@
 #'
 #' pl_infer_ethnicity(testDat)
 #' ## note that these are none placental samples
-
 pl_infer_ethnicity <- function(betas, threshold = 0.75){
 
   pf <- intersect(rownames(betas), pl_ethnicity_features)

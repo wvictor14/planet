@@ -1,4 +1,6 @@
 .Rproj.user
-GSE75196
-*.Rproj
 .Rhistory
+.RData
+.Ruserdata
+*.Rproj
+GSE75196
