@@ -10,8 +10,15 @@ rownames(a0) <- rep("(Intercept)", nrow(a0))
 # nbeta
 nbeta <- pl_glmnet$beta # save this too
 
+# nclass
+nclass <- 3
+
 # lambda tuning grid
 lambda <- pl_glmnet$lambda
 lamlist <- glmnet::lambda.interp(lambda, 0.01) # or this
 
-use_data(a0, nbeta, lamlist, internal = T, overwrite = T)
+# lambda
+s <- pl_glmnet$lambdaOpt
+nlambda <- length(s)
+
+use_data(a0, nclass, nbeta, lamlist, s, nlambda, internal = T, overwrite = T)
