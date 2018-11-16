@@ -25,7 +25,7 @@ install_github('wvictor14/plmec')
 #### Example Data
 
 For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from an study including 
-Australian samples.
+Australian samples. I only use 8/24 samples here, to save on memory.
 
 ```{r}
 library(plmec)
@@ -34,12 +34,7 @@ library(wateRmelon)
 library(ggplot2)
 
 data(pl_rgset)
-pl_rgset # 24 samples, 42.7 MB
-
-# load phenotype data, not necessary for examples
-#geoMat <- getGEO("GSE75196") 
-#pDat <- pData(geoMat[[1]])
-#head(pDat)
+pl_rgset # 8 samples
 ```
 
 Because the data used to train the ethnicity classifier was normalized, I recommend using the same
@@ -58,7 +53,7 @@ pl_snps <- getSnpBeta(pl_rgset)
 
 #combine methylation and genotyping data
 pl_dat <- rbind(pl_bmiq, pl_snps)
-dim(pl_dat) # 485577     24
+dim(pl_dat) # 485577     8
 ```
 
 #### Infer ethnicity
@@ -84,5 +79,12 @@ qplot(data = results, x = Prob_Caucasian, y = Prob_Asian,
      col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 ```
 
+The results for the whole (n=24) dataset are 22/24 = predicted Caucasian, 2/24 predicted Asian.
+
 We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
-were collected in Sydney, Australia, and Australians have a high percentage of European ancestry.
+were collected in Sydney, Australia, and are therefore likely mostly European with some Asian 
+ancestries. 
+
+```{r}
+table(results$Predicted_ethnicity)
+```
