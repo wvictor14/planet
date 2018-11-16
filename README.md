@@ -18,9 +18,8 @@ Usage
 For examples I download some [placental DNAm GEO
 data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from
 an study including Australian samples. To save on memory, I only use
-8/24 samples saved in this repo as an `minfi::RGChannelSet` object,
-which is can be [loaded from idat
-files](https://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.html#3_reading_data).
+8/24 samples, which I have saved in this repo as an
+`minfi::RGChannelSet` object.
 
     library(plmec)
     library(minfi)      # for normalization
@@ -44,16 +43,23 @@ files](https://bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/m
     ##   array: IlluminaHumanMethylation450k
     ##   annotation: ilmn12.hg19
 
-Because the data used to train the ethnicity classifier was normalized,
-I recommend using the same normalization procedures.
+Ideally, your data should be normalized in the same manner as the
+training data used to develop the ethnicity-predictive model. If IDATs
+are supplied, you can apply both
+[noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and
+[BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/)
+normalization. If only methylated and unmethylated data matrices are
+available, you can apply just BMIQ. If neither are available, then you
+can still run the inference but be wary dataset-specific effects may
+affect accuracy.
 
-Here we apply `minfi::preprocessNoob()` and `wateRmelon::BMIQ()` to
-normalize the methylation data:
+To apply normalization, run `minfi::preprocessNoob()` and then
+`wateRmelon::BMIQ()`:
 
     pl_noob <- preprocessNoob(pl_rgset)
     pl_bmiq <- BMIQ(pl_noob)
 
-and then we combine this with the 65 snp probe data (will be 59 SNPs if
+combine the methylation data with the 65 snp probe data (59 SNPs, if
 using EPIC).
 
     pl_snps <- getSnpBeta(pl_rgset)
@@ -84,36 +90,26 @@ You don't need to subset to these 1862 features before running
 
     ## [1] "1862 of 1862 predictors present."
 
-    head(results)
+    print(results, row.names = F)
 
-    ##                                                 Sample_ID
-    ## GSM1944959_9376561070_R05C01 GSM1944959_9376561070_R05C01
-    ## GSM1944960_9376561070_R06C01 GSM1944960_9376561070_R06C01
-    ## GSM1944961_9376561070_R01C02 GSM1944961_9376561070_R01C02
-    ## GSM1944962_9376561070_R02C02 GSM1944962_9376561070_R02C02
-    ## GSM1944963_9376561070_R03C02 GSM1944963_9376561070_R03C02
-    ## GSM1944964_9376561070_R04C02 GSM1944964_9376561070_R04C02
-    ##                              Predicted_ethnicity_nothresh
-    ## GSM1944959_9376561070_R05C01                        Asian
-    ## GSM1944960_9376561070_R06C01                    Caucasian
-    ## GSM1944961_9376561070_R01C02                        Asian
-    ## GSM1944962_9376561070_R02C02                    Caucasian
-    ## GSM1944963_9376561070_R03C02                    Caucasian
-    ## GSM1944964_9376561070_R04C02                    Caucasian
-    ##                              Predicted_ethnicity Prob_African   Prob_Asian
-    ## GSM1944959_9376561070_R05C01               Asian 0.0116803725 0.9610366943
-    ## GSM1944960_9376561070_R06C01           Caucasian 0.0143189207 0.1398351332
-    ## GSM1944961_9376561070_R01C02               Asian 0.0206390347 0.9104669237
-    ## GSM1944962_9376561070_R02C02           Caucasian 0.0007663899 0.0007906337
-    ## GSM1944963_9376561070_R03C02           Caucasian 0.0027674764 0.0036634367
-    ## GSM1944964_9376561070_R04C02           Caucasian 0.0057602852 0.0102684594
-    ##                              Prob_Caucasian Highest_Prob
-    ## GSM1944959_9376561070_R05C01     0.02728293    0.9610367
-    ## GSM1944960_9376561070_R06C01     0.84584595    0.8458459
-    ## GSM1944961_9376561070_R01C02     0.06889404    0.9104669
-    ## GSM1944962_9376561070_R02C02     0.99844298    0.9984430
-    ## GSM1944963_9376561070_R03C02     0.99356909    0.9935691
-    ## GSM1944964_9376561070_R04C02     0.98397126    0.9839713
+    ##                     Sample_ID Predicted_ethnicity_nothresh
+    ##  GSM1944959_9376561070_R05C01                        Asian
+    ##  GSM1944960_9376561070_R06C01                    Caucasian
+    ##  GSM1944961_9376561070_R01C02                        Asian
+    ##  GSM1944962_9376561070_R02C02                    Caucasian
+    ##  GSM1944963_9376561070_R03C02                    Caucasian
+    ##  GSM1944964_9376561070_R04C02                    Caucasian
+    ##  GSM1944965_9376561070_R05C02                    Caucasian
+    ##  GSM1944966_9376561070_R06C02                    Caucasian
+    ##  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
+    ##                Asian 0.0108744464 0.9608744853     0.02825107    0.9608745
+    ##            Caucasian 0.0145143895 0.1571743610     0.82831125    0.8283112
+    ##                Asian 0.0202528838 0.8994892679     0.08025785    0.8994893
+    ##            Caucasian 0.0007565667 0.0007720338     0.99847140    0.9984714
+    ##            Caucasian 0.0018592489 0.0022457704     0.99589498    0.9958950
+    ##            Caucasian 0.0072757093 0.0126948036     0.98002949    0.9800295
+    ##            Caucasian 0.0019096988 0.0021660987     0.99592420    0.9959242
+    ##            Caucasian 0.0009336147 0.0015319691     0.99753442    0.9975344
 
     qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
          col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
@@ -125,8 +121,8 @@ You don't need to subset to these 1862 features before running
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-5-2.png)
 
-The results for the whole (n=24) dataset are 22/24 = predicted
-Caucasian, 2/24 predicted Asian.
+\*For the entire dataset (not just the subset shown here), 22/24 were
+predicted Caucasian and 2/24 Asian.
 
 We can't compare this to self-reported ethnicity as it is unavailable.
 But we know these samples were collected in Sydney, Australia, and are
