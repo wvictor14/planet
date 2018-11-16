@@ -24,170 +24,11 @@ save on memory.
     library(plmec)
     library(minfi)
 
-    ## Loading required package: BiocGenerics
-
-    ## Loading required package: parallel
-
-    ## 
-    ## Attaching package: 'BiocGenerics'
-
-    ## The following objects are masked from 'package:parallel':
-    ## 
-    ##     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
-    ##     clusterExport, clusterMap, parApply, parCapply, parLapply,
-    ##     parLapplyLB, parRapply, parSapply, parSapplyLB
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     IQR, mad, sd, var, xtabs
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     anyDuplicated, append, as.data.frame, basename, cbind,
-    ##     colMeans, colnames, colSums, dirname, do.call, duplicated,
-    ##     eval, evalq, Filter, Find, get, grep, grepl, intersect,
-    ##     is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
-    ##     paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
-    ##     Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
-    ##     table, tapply, union, unique, unsplit, which, which.max,
-    ##     which.min
-
-    ## Loading required package: GenomicRanges
-
-    ## Loading required package: stats4
-
-    ## Loading required package: S4Vectors
-
-    ## 
-    ## Attaching package: 'S4Vectors'
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     expand.grid
-
-    ## Loading required package: IRanges
-
-    ## 
-    ## Attaching package: 'IRanges'
-
-    ## The following object is masked from 'package:grDevices':
-    ## 
-    ##     windows
-
-    ## Loading required package: GenomeInfoDb
-
-    ## Loading required package: SummarizedExperiment
-
-    ## Loading required package: Biobase
-
-    ## Welcome to Bioconductor
-    ## 
-    ##     Vignettes contain introductory material; view with
-    ##     'browseVignettes()'. To cite Bioconductor, see
-    ##     'citation("Biobase")', and for packages 'citation("pkgname")'.
-
-    ## Loading required package: DelayedArray
-
-    ## Loading required package: matrixStats
-
-    ## 
-    ## Attaching package: 'matrixStats'
-
-    ## The following objects are masked from 'package:Biobase':
-    ## 
-    ##     anyMissing, rowMedians
-
-    ## Loading required package: BiocParallel
-
-    ## 
-    ## Attaching package: 'DelayedArray'
-
-    ## The following objects are masked from 'package:matrixStats':
-    ## 
-    ##     colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     aperm, apply
-
-    ## Loading required package: Biostrings
-
-    ## Loading required package: XVector
-
-    ## 
-    ## Attaching package: 'Biostrings'
-
-    ## The following object is masked from 'package:DelayedArray':
-    ## 
-    ##     type
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     strsplit
-
-    ## Loading required package: bumphunter
-
-    ## Loading required package: foreach
-
-    ## Loading required package: iterators
-
     ## Warning: package 'iterators' was built under R version 3.5.1
-
-    ## Loading required package: locfit
-
-    ## locfit 1.5-9.1    2013-03-22
-
-    ## Setting options('download.file.method.GEOquery'='auto')
-
-    ## Setting options('GEOquery.inmemory.gpl'=FALSE)
 
     library(wateRmelon)
 
-    ## Loading required package: limma
-
-    ## 
-    ## Attaching package: 'limma'
-
-    ## The following object is masked from 'package:BiocGenerics':
-    ## 
-    ##     plotMA
-
-    ## Loading required package: methylumi
-
-    ## Loading required package: scales
-
-    ## Loading required package: reshape2
-
-    ## Loading required package: ggplot2
-
     ## Warning: package 'ggplot2' was built under R version 3.5.1
-
-    ## Loading required package: FDb.InfiniumMethylation.hg19
-
-    ## Loading required package: GenomicFeatures
-
-    ## Loading required package: AnnotationDbi
-
-    ## Loading required package: TxDb.Hsapiens.UCSC.hg19.knownGene
-
-    ## Loading required package: org.Hs.eg.db
-
-    ## 
-
-    ## Loading required package: lumi
-
-    ## 
-    ## Attaching package: 'lumi'
-
-    ## The following objects are masked from 'package:methylumi':
-    ## 
-    ##     estimateM, getHistory
-
-    ## Loading required package: ROC
-
-    ## Loading required package: IlluminaHumanMethylation450kanno.ilmn12.hg19
-
-    ## Loading required package: illuminaio
 
     library(ggplot2)
 
@@ -277,20 +118,20 @@ pl\_ethnicity\_infer():
     ## GSM1944962_9376561070_R02C02                    Caucasian
     ## GSM1944963_9376561070_R03C02                    Caucasian
     ## GSM1944964_9376561070_R04C02                    Caucasian
-    ##                              Predicted_ethnicity Prob_African  Prob_Asian
-    ## GSM1944959_9376561070_R05C01               Asian 0.0108363827 0.955766512
-    ## GSM1944960_9376561070_R06C01           Caucasian 0.0105432572 0.114481856
-    ## GSM1944961_9376561070_R01C02               Asian 0.0223480174 0.885851476
-    ## GSM1944962_9376561070_R02C02           Caucasian 0.0007165613 0.000718034
-    ## GSM1944963_9376561070_R03C02           Caucasian 0.0019643319 0.002470725
-    ## GSM1944964_9376561070_R04C02           Caucasian 0.0066539200 0.011746580
+    ##                              Predicted_ethnicity Prob_African   Prob_Asian
+    ## GSM1944959_9376561070_R05C01               Asian  0.012630828 0.9570737363
+    ## GSM1944960_9376561070_R06C01           Caucasian  0.015919779 0.1713318381
+    ## GSM1944961_9376561070_R01C02               Asian  0.021703784 0.9103326732
+    ## GSM1944962_9376561070_R02C02           Caucasian  0.000726820 0.0007070925
+    ## GSM1944963_9376561070_R03C02           Caucasian  0.002583857 0.0031621865
+    ## GSM1944964_9376561070_R04C02           Caucasian  0.006235280 0.0115791460
     ##                              Prob_Caucasian Highest_Prob
-    ## GSM1944959_9376561070_R05C01     0.03339711    0.9557665
-    ## GSM1944960_9376561070_R06C01     0.87497489    0.8749749
-    ## GSM1944961_9376561070_R01C02     0.09180051    0.8858515
-    ## GSM1944962_9376561070_R02C02     0.99856540    0.9985654
-    ## GSM1944963_9376561070_R03C02     0.99556494    0.9955649
-    ## GSM1944964_9376561070_R04C02     0.98159950    0.9815995
+    ## GSM1944959_9376561070_R05C01     0.03029544    0.9570737
+    ## GSM1944960_9376561070_R06C01     0.81274838    0.8127484
+    ## GSM1944961_9376561070_R01C02     0.06796354    0.9103327
+    ## GSM1944962_9376561070_R02C02     0.99856609    0.9985661
+    ## GSM1944963_9376561070_R03C02     0.99425396    0.9942540
+    ## GSM1944964_9376561070_R04C02     0.98218557    0.9821856
 
     qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
          col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
