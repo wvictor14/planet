@@ -24,26 +24,17 @@ install_github('wvictor14/plmec')
 
 #### Example Data
 
-For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196 "GSE75196").
+For examples I download some [placental DNAm GEO data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) from an study including 
+Australian samples.
 
 ```{r}
 library(plmec)
-library(GEOquery)
 library(minfi)
 library(wateRmelon)
+library(ggplot2)
 
-# download IDATs
-getGEOSuppFiles("GSE75196") # 377.7 MB
-untar("GSE75196/GSE75196_RAW.tar", exdir = "GSE75196/idat")
-head(list.files("GSE75196/idat", pattern = "idat"))
-
-# unzip
-idatFiles <- list.files("GSE75196/idat", pattern = "idat.gz$", full = TRUE)
-sapply(idatFiles, gunzip, overwrite = TRUE)
-
-#load into R
-rgset <- read.metharray.exp("GSE75196/idat")
-rgset # 24 samples, 42.7 MB
+data(pl_rgset)
+pl_rgset # 24 samples, 42.7 MB
 
 # load phenotype data, not necessary for examples
 #geoMat <- getGEO("GSE75196") 
@@ -59,15 +50,15 @@ Here I we apply noob and BMIQ normalization to the methylation data, and then co
 
 ```{r}
 #normalization
-mset_noob <- preprocessNoob(rgset)
-bmiq <- BMIQ(mset_noob)
+pl_noob <- preprocessNoob(pl_rgset)
+pl_bmiq <- BMIQ(pl_noob)
 
 #snp probes
-snps <- getSnpBeta(rgset)
+pl_snps <- getSnpBeta(pl_rgset)
 
 #combine methylation and genotyping data
-dat <- rbind(bmiq, snps)
-dim(dat) # 485577     24
+pl_dat <- rbind(pl_bmiq, pl_snps)
+dim(pl_dat) # 485577     24
 ```
 
 #### Infer ethnicity
@@ -77,17 +68,16 @@ predict ethnicity. The input data needs to contain all 1862 features in the fina
 check this with the pl_ethnicity_features vector.
 
 ```{r}
-all(pl_ethnicity_features %in% rownames(dat))
+all(pl_ethnicity_features %in% rownames(pl_dat))
 ```
 
 You don't need to subset to these 1862 features before running pl_ethnicity_infer():
 
 ```{r}
-dim(dat)
-results <- pl_infer_ethnicity(dat)
+dim(pl_dat)
+results <- pl_infer_ethnicity(pl_dat)
 head(results)
 
-library(ggplot2)
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
      col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
