@@ -74,8 +74,8 @@ using EPIC):
 
 The reason we added the snp data onto the betas matrix was because a
 subset of those are used to predict ethnicity. The input data needs to
-contain all 1862 features in the final model. We can check this our data
-for these features with the `pl_ethnicity_features` vector:
+contain all 1862 features in the final model. We can check our data for
+these features with the `pl_ethnicity_features` vector:
 
     all(pl_ethnicity_features %in% rownames(pl_dat))
 
@@ -104,24 +104,33 @@ You don't need to subset to these 1862 features before running
     ##  GSM1944965_9376561070_R05C02                    Caucasian
     ##  GSM1944966_9376561070_R06C02                    Caucasian
     ##  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-    ##                Asian 0.0124882671 0.9552232284      0.0322885    0.9552232
-    ##            Caucasian 0.0138070433 0.1538437606      0.8323492    0.8323492
-    ##                Asian 0.0199219247 0.8908797791      0.0891983    0.8908798
-    ##            Caucasian 0.0006822334 0.0007171549      0.9986006    0.9986006
-    ##            Caucasian 0.0027579845 0.0034917126      0.9937503    0.9937503
-    ##            Caucasian 0.0051003316 0.0093506321      0.9855490    0.9855490
-    ##            Caucasian 0.0016854012 0.0017761895      0.9965384    0.9965384
-    ##            Caucasian 0.0009274933 0.0015014174      0.9975711    0.9975711
+    ##                Asian 0.0127130385 0.9604674649     0.02681950    0.9604675
+    ##            Caucasian 0.0151894719 0.1415606528     0.84324988    0.8432499
+    ##                Asian 0.0209033967 0.8973518606     0.08174474    0.8973519
+    ##            Caucasian 0.0006452899 0.0006345267     0.99872018    0.9987202
+    ##            Caucasian 0.0025423532 0.0033020695     0.99415558    0.9941556
+    ##            Caucasian 0.0070563811 0.0123507595     0.98059286    0.9805929
+    ##            Caucasian 0.0017155738 0.0018062623     0.99647816    0.9964782
+    ##            Caucasian 0.0008453991 0.0013425324     0.99781207    0.9978121
+
+Note the two columns `Predicted_ethnicity_nothresh` and
+`Predicted_ethnicity`. The latter refers to the classification which is
+determined by the highest class-specific probability. The former first
+applies a cutoff to the highest class-specific probability to determine
+if a sample can be confidently classified to a single ethnicity group.
+If a sample fails this threshold, this can be often because of mixed
+ancestry, and the sample is given an `Ambiguous` label. The default
+threshold is 0.75.
 
     qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
          col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 
-![](README_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+![](README_files/figure-markdown_strict/plot_results-1.png)
 
     qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
          col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 
-![](README_files/figure-markdown_strict/unnamed-chunk-5-2.png)
+![](README_files/figure-markdown_strict/plot_results-2.png)
 
 \*For the entire dataset (not just the subset shown here), 22/24 were
 predicted Caucasian and 2/24 Asian.
@@ -135,3 +144,14 @@ therefore likely mostly European with some Asian ancestries.
     ## 
     ##     Asian Caucasian 
     ##         2         6
+
+### Adjustment in differential methylation analysis
+
+Because 'Ambiguous' samples might have different mixtures of ancestries,
+it might be inaccurate to adjust for them as one group in an analysis of
+admixed populations. (In retrospect, I should have called samples
+`African/Asian`, `African/Caucasian`, `Asian/Caucasian` as opposed to
+all as `Ambiguous`). Instead, I recommend adjusting for the actual
+probabilities in a linear modelling analysis, and to use only 2/3 of the
+probabilities, since the third will be redundant (probabilities sum to
+1).
