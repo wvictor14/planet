@@ -1,5 +1,6 @@
 ## glmfit objects for prediction -------------------------------------------------------------------
-
+# Here I take apart the glm_fit object because some components are really large and not necessary.
+#
 # load object from local disc
 pl_glmnet <- readRDS('Z:/Victor/Projects/DNAm-Ethnicity-Predictor/Robjects_final/05_glm_fit.rds')
 
@@ -21,4 +22,5 @@ lamlist <- glmnet::lambda.interp(lambda, 0.01) # or this
 s <- pl_glmnet$lambdaOpt
 nlambda <- length(s)
 
+#save
 use_data(a0, nclass, nbeta, lamlist, s, nlambda, internal = T, overwrite = T)

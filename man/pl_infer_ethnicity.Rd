@@ -8,7 +8,7 @@ pl_infer_ethnicity(betas, threshold = 0.75)
 }
 \arguments{
 \item{betas}{n x m dataframe of methylation values on the beta scale (0, 1), where the variables
-are arranged in rows, and samples in columns. Must contain all 1862 predictors.}
+are arranged in rows, and samples in columns. Should contain all 1860 predictors.}
 
 \item{threshold}{A probability threshold ranging from (0, 1) to call samples 'ambiguous'.
 Defaults to 0.75.}
@@ -20,8 +20,8 @@ A m x 7 dataframe of predicted ethnicity information and associated probabilitie
 \code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA methylation data.
 }
 \details{
-A glmnet model fit using the package caret is applied to the data. The input data must
-contain all 1862 predictors of the final model.
+A glmnet model fit using the package caret is applied to the data. The input data should
+contain all 1860 predictors of the final model.
 }
 \examples{
 ## To predict ethnicity on 450k/850k samples
