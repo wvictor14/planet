@@ -27,13 +27,13 @@
 pl_infer_ethnicity <- function(betas, threshold = 0.75){
 
   pf <- intersect(rownames(betas), pl_ethnicity_features)
-  print(paste(length(pf), 'of 1862 predictors present.'))
-
-  if (!all(pl_ethnicity_features %in% rownames(betas))) {
-    stop('Ensure all pl_ethnicity_features is present in the data')
+  if(length(pf) < length(pl_ethnicity_features)){
+    warning(paste('Only', length(pf), 'out of', length(pl_ethnicity_features), 'present.'))
+  } else {
+    print(paste(length(pf), 'of 1860 predictors present.'))
   }
 
-  # subset down to 1862 final features
+  # subset down to 1860 final features
   betas <- t(betas[pf,])
 
   #glmnet code:
