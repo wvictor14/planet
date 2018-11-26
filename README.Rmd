@@ -63,14 +63,14 @@ dim(pl_dat) # 485577     8
 ### Infer ethnicity
 
 The reason we added the snp data onto the betas matrix was because a subset of those are used to 
-predict ethnicity. The input data needs to contain all 1862 features in the final model. We can
+predict ethnicity. The input data needs to contain all 1860 features in the final model. We can
 check our data for these features with the `pl_ethnicity_features` vector:
 
 ```{r}
 all(pl_ethnicity_features %in% rownames(pl_dat))
 ```
 
-You don't need to subset to these 1862 features before running `pl_ethnicity_infer()` to obtain 
+You don't need to subset to these 1860 features before running `pl_ethnicity_infer()` to obtain 
 ethnicity calls:
 
 ```{r}
@@ -81,10 +81,10 @@ print(results, row.names = F)
 
 Note the two columns `Predicted_ethnicity_nothresh` and `Predicted_ethnicity`. The latter refers to
 the classification which is determined by the highest class-specific probability. The former
- first applies a cutoff to the highest class-specific probability to determine if a sample can be
- confidently classified to a single ethnicity group. If a sample fails this threshold, this can be
- often because of mixed ancestry, and the sample is given an `Ambiguous` label. The default 
- threshold is 0.75. 
+first applies a cutoff to the highest class-specific probability to determine if a sample can be
+confidently classified to a single ethnicity group. If a sample fails this threshold, this 
+indicates mixed ancestry, and the sample is given an `Ambiguous` label. The default threshold is 
+0.75. 
 
 ```{r plot_results}
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
@@ -111,5 +111,5 @@ inaccurate to adjust for them as one group in an analysis of admixed populations
 should have called samples `African/Asian`, `African/Caucasian`, `Asian/Caucasian` as opposed to all
 as `Ambiguous`). Instead, I recommend adjusting for the actual probabilities in a linear modelling 
 analysis, and to use only 2/3 of the probabilities, since the third will be redundant (probabilities 
-sum to 1).
+sum to 1). 
 
