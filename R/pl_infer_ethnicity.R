@@ -3,20 +3,26 @@
 #' \code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA methylation data.
 #'
 #' @param betas n x m dataframe of methylation values on the beta scale (0, 1), where the variables
-#' are arranged in rows, and samples in columns. Must contain all 1862 predictors.
+#' are arranged in rows, and samples in columns. Should contain all 1860 predictors and be
+#' normalized with NOOB and BMIQ.
 #' @param threshold A probability threshold ranging from (0, 1) to call samples 'ambiguous'.
 #' Defaults to 0.75.
-#' @details A glmnet model fit using the package caret is applied to the data. The input data must
-#' contain all 1862 predictors of the final model.
+#' @details A glmnet model fit using the package caret is applied to the data. The input data should
+#' contain all 1860 predictors of the final model. In some datasets I find that the predictions can
+#' become skewed towards one class without any normalization. Therefore, I highly recommend
+#' normalizing before running the model, ideally with NOOB and BMIQ because those were used on the
+#' training data.
+#'
 #' @return A m x 7 dataframe of predicted ethnicity information and associated probabilities.
 #' @examples
 #' ## To predict ethnicity on 450k/850k samples
 #'
 #' # Load placenta DNAm data
+#' library(wateRmelon)
 #' data(pl_rgset)
 #'
-#' b <- getBeta(pl_rgset)     # 450k/850k methylation data
-#' s <- getSnpBeta(pl_rgset)  # 450k/850k SNP data
+#' b <- BMIQ(preprocessNoob(pl_rgset))     # normalize 450k/850k methylation data
+#' s <- getSnpBeta(pl_rgset)               # 450k/850k SNP data
 #'
 #' testDat <- rbind(b, s)
 #'
