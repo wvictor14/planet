@@ -4,7 +4,7 @@
 \name{pl_ethnicity_features}
 \alias{pl_ethnicity_features}
 \title{Features from 450k/850k data used to predict ethnicity}
-\format{A character vector of length 1862}
+\format{A character vector of length 1860}
 \source{
 \url{https://github.com/wvictor14/Ethnicity_Inference_450k}
 }
