@@ -1,31 +1,38 @@
 ---
-title: "README"
-author: "Victor"
-date: "November 15, 2018"
-output: 
-  md_document:
+output: github_document
 editor_options: 
   chunk_output_type: console
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 # plmec
 
-`plmec` is an R package for inferring ethnicity from placental DNA methylation microarray data. 
+`plmec` is an R package for inferring ethnicity from placental DNA methylation microarray data [1]. 
 
 ## Installation
+
+You can install from this github repo with:
 
 ```{r message = F, eval = F}
 library(devtools)
 install_github('wvictor14/plmec')
 ```
 
+
 ## Usage
 
 ### Example Data
 
-For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196), which contains samples collected 
-in an Australian population. To save on memory, I only use 8/24 samples, which I have saved in
-this repo as a `minfi::RGChannelSet` object.
+For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) [2], which contains samples 
+collected in an Australian population. To save on memory, I only use 8/24 samples, which I have 
+saved in this repo as a `minfi::RGChannelSet` object.
 
 ```{r, message = F, warning = F}
 library(plmec)
@@ -39,11 +46,15 @@ pl_rgset # 8 samples
 
 ### Preprocessing data
 
-Ideally, your data should be normalized in the same manner as the training data used to develop the
-ethnicity-predictive model. If IDATs are supplied, you can apply both [noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and [BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) normalization. 
-If only methylated and unmethylated data matrices are available, you can apply just BMIQ. If neither
-are available, then you can still run the algorithm but any differences resulting from the different
-normalizations may impact accuracy. 
+I highly recommend to normalize your data using the same methods I used to normalize the training 
+data. 
+
+This is because every normalization method addresses technical variability differently, and 
+so other normalizations may not result in data on the same scale. Just note that using the same 
+normalization methods will not gaurantee removal of *all* systemic dataset -specific effects. If 
+IDATs are supplied, you can apply both [noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/)
+[3] and [BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) [4] normalization. If only
+methylated and unmethylated data matrices are available, you can apply just `BMIQ`. 
 
 To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ()`: 
 
@@ -54,7 +65,7 @@ pl_bmiq <- BMIQ(pl_noob)
 
 Combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC):
 
-```{r}
+```{r combine_betas_snps}
 pl_snps <- getSnpBeta(pl_rgset)
 pl_dat <- rbind(pl_bmiq, pl_snps)
 dim(pl_dat) # 485577     8
@@ -84,7 +95,7 @@ the classification which is determined by the highest class-specific probability
 first applies a cutoff to the highest class-specific probability to determine if a sample can be
 confidently classified to a single ethnicity group. If a sample fails this threshold, this 
 indicates mixed ancestry, and the sample is given an `Ambiguous` label. The default threshold is 
-0.75. 
+`0.75`. 
 
 ```{r plot_results}
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
@@ -97,7 +108,7 @@ qplot(data = results, x = Prob_Caucasian, y = Prob_Asian,
 Asian.
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
-were collected in Sydney, Australia, and are therefore likely mostly European with some Asian 
+were collected in Sydney, Australia, and are therefore likely mostly European with some East Asian 
 ancestries. 
 
 ```{r}
@@ -110,6 +121,22 @@ Because 'Ambiguous' samples might have different mixtures of ancestries, it migh
 inaccurate to adjust for them as one group in an analysis of admixed populations. (In retrospect, I 
 should have called samples `African/Asian`, `African/Caucasian`, `Asian/Caucasian` as opposed to all
 as `Ambiguous`). Instead, I recommend adjusting for the actual probabilities in a linear modelling 
-analysis, and to use only 2/3 of the probabilities, since the third will be redundant (probabilities 
-sum to 1). 
+analysis, and to use only two of the three probabilities, since the third will be redundant 
+(probabilities sum to 1). 
+
+
+## References
+
+[1] Yuan V, Price M, Del Gobbo G, Cox B, Binder AM, Michels KB, Marsit C, Robinson W: Inferring
+population structure from placental DNA methylation studies. *In prep.*
+
+[2] Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in
+preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
+
+[3] Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD, Siegmund KD: Low-level
+processing of Illumina Infinium DNA Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.
+
+[4] Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J, Gomez-Cabrero D, Beck S: A
+beta-mixture quantile normalization method for correcting probe design bias in Illumina Infinium 
+450 k DNA methylation data. Bioinformatics 2013, 29:189–96.
 
