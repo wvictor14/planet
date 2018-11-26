@@ -10,7 +10,8 @@ Description: This package contains a single function: a glmnet model which was d
   samples.
 Imports: 
   glmnet,
-  Matrix
+  Matrix,
+  methods
 Suggests:
   minfi,
   minfiData,
