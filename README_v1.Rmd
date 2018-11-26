@@ -1,0 +1,115 @@
+---
+title: "README"
+author: "Victor"
+date: "November 15, 2018"
+output: 
+  md_document:
+editor_options: 
+  chunk_output_type: console
+---
+
+# plmec
+
+`plmec` is an R package for inferring ethnicity from placental DNA methylation microarray data. 
+
+## Installation
+
+```{r message = F, eval = F}
+library(devtools)
+install_github('wvictor14/plmec')
+```
+
+## Usage
+
+### Example Data
+
+For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196), which contains samples collected 
+in an Australian population. To save on memory, I only use 8/24 samples, which I have saved in
+this repo as a `minfi::RGChannelSet` object.
+
+```{r, message = F, warning = F}
+library(plmec)
+library(minfi)      # for normalization
+library(wateRmelon) # for normalization
+library(ggplot2)    
+
+data(pl_rgset)
+pl_rgset # 8 samples
+```
+
+### Preprocessing data
+
+Ideally, your data should be normalized in the same manner as the training data used to develop the
+ethnicity-predictive model. If IDATs are supplied, you can apply both [noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and [BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) normalization. 
+If only methylated and unmethylated data matrices are available, you can apply just BMIQ. If neither
+are available, then you can still run the algorithm but any differences resulting from the different
+normalizations may impact accuracy. 
+
+To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ()`: 
+
+```{r normalization, message = F, warning = F}
+pl_noob <- preprocessNoob(pl_rgset)
+pl_bmiq <- BMIQ(pl_noob)
+```
+
+Combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC):
+
+```{r}
+pl_snps <- getSnpBeta(pl_rgset)
+pl_dat <- rbind(pl_bmiq, pl_snps)
+dim(pl_dat) # 485577     8
+```
+
+### Infer ethnicity
+
+The reason we added the snp data onto the betas matrix was because a subset of those are used to 
+predict ethnicity. The input data needs to contain all 1860 features in the final model. We can
+check our data for these features with the `pl_ethnicity_features` vector:
+
+```{r}
+all(pl_ethnicity_features %in% rownames(pl_dat))
+```
+
+You don't need to subset to these 1860 features before running `pl_ethnicity_infer()` to obtain 
+ethnicity calls:
+
+```{r}
+dim(pl_dat)
+results <- pl_infer_ethnicity(pl_dat)
+print(results, row.names = F)
+```
+
+Note the two columns `Predicted_ethnicity_nothresh` and `Predicted_ethnicity`. The latter refers to
+the classification which is determined by the highest class-specific probability. The former
+first applies a cutoff to the highest class-specific probability to determine if a sample can be
+confidently classified to a single ethnicity group. If a sample fails this threshold, this 
+indicates mixed ancestry, and the sample is given an `Ambiguous` label. The default threshold is 
+0.75. 
+
+```{r plot_results}
+qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
+     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
+     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+```
+
+\*For the entire dataset (not just the subset shown here), 22/24 were predicted Caucasian and 2/24 
+Asian.
+
+We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
+were collected in Sydney, Australia, and are therefore likely mostly European with some Asian 
+ancestries. 
+
+```{r}
+table(results$Predicted_ethnicity)
+```
+
+### Adjustment in differential methylation analysis
+
+Because 'Ambiguous' samples might have different mixtures of ancestries, it might be
+inaccurate to adjust for them as one group in an analysis of admixed populations. (In retrospect, I 
+should have called samples `African/Asian`, `African/Caucasian`, `Asian/Caucasian` as opposed to all
+as `Ambiguous`). Instead, I recommend adjusting for the actual probabilities in a linear modelling 
+analysis, and to use only 2/3 of the probabilities, since the third will be redundant (probabilities 
+sum to 1). 
+
