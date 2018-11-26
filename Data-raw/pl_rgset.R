@@ -15,4 +15,4 @@ sapply(idatFiles, gunzip, overwrite = TRUE)
 pl_rgset <- read.metharray.exp("GSE75196/idat")
 pl_rgset <- pl_rgset[,17:24] # save 8 samples
 
-use_data(pl_rgset, overwrite = T)
+use_data(pl_rgset, overwrite = T, internal = F)
