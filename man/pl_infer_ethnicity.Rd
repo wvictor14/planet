@@ -8,7 +8,8 @@ pl_infer_ethnicity(betas, threshold = 0.75)
 }
 \arguments{
 \item{betas}{n x m dataframe of methylation values on the beta scale (0, 1), where the variables
-are arranged in rows, and samples in columns. Should contain all 1860 predictors.}
+are arranged in rows, and samples in columns. Should contain all 1860 predictors and be
+normalized with NOOB and BMIQ.}
 
 \item{threshold}{A probability threshold ranging from (0, 1) to call samples 'ambiguous'.
 Defaults to 0.75.}
@@ -20,17 +21,28 @@ A m x 7 dataframe of predicted ethnicity information and associated probabilitie
 \code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA methylation data.
 }
 \details{
+Predicts self-reported ethnicity from 3 classes: Africans, Asians, and Caucasians, using
+placental DNA methylation data measured on the Infinium 450k/EPIC methylation array. Will return
+membership probabilities that often reflect genetic ancestry composition.
+
 A glmnet model fit using the package caret is applied to the data. The input data should
 contain all 1860 predictors of the final model.
+
+In some datasets I find that the predictions can become skewed towards one class without any
+normalization. Therefore, I highly recommend normalizing before running the model, ideally with
+NOOB and BMIQ because those were used on the training data.
 }
 \examples{
 ## To predict ethnicity on 450k/850k samples
 
 # Load placenta DNAm data
+library(wateRmelon)
+library(minfi)
 data(pl_rgset)
 
-b <- getBeta(pl_rgset)     # 450k/850k methylation data
-s <- getSnpBeta(pl_rgset)  # 450k/850k SNP data
+n <- minfi::preprocessNoob(pl_rgset)
+b <- wateRmelon::BMIQ(n)                # normalize 450k/850k methylation data
+s <- getSnpBeta(pl_rgset)               # 450k/850k SNP data
 
 testDat <- rbind(b, s)
 
