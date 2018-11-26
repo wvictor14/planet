@@ -7,11 +7,16 @@
 #' normalized with NOOB and BMIQ.
 #' @param threshold A probability threshold ranging from (0, 1) to call samples 'ambiguous'.
 #' Defaults to 0.75.
-#' @details A glmnet model fit using the package caret is applied to the data. The input data should
-#' contain all 1860 predictors of the final model. In some datasets I find that the predictions can
-#' become skewed towards one class without any normalization. Therefore, I highly recommend
-#' normalizing before running the model, ideally with NOOB and BMIQ because those were used on the
-#' training data.
+#' @details Predicts self-reported ethnicity from 3 classes: Africans, Asians, and Caucasians, using
+#' placental DNA methylation data measured on the Infinium 450k/EPIC methylation array. Will return
+#' membership probabilities that often reflect genetic ancestry composition.
+#'
+#' A glmnet model fit using the package caret is applied to the data. The input data should
+#' contain all 1860 predictors of the final model.
+#'
+#' In some datasets I find that the predictions can become skewed towards one class without any
+#' normalization. Therefore, I highly recommend normalizing before running the model, ideally with
+#' NOOB and BMIQ because those were used on the training data.
 #'
 #' @return A m x 7 dataframe of predicted ethnicity information and associated probabilities.
 #' @examples
@@ -19,9 +24,11 @@
 #'
 #' # Load placenta DNAm data
 #' library(wateRmelon)
+#' library(minfi)
 #' data(pl_rgset)
 #'
-#' b <- BMIQ(preprocessNoob(pl_rgset))     # normalize 450k/850k methylation data
+#' n <- minfi::preprocessNoob(pl_rgset)
+#' b <- wateRmelon::BMIQ(n)                # normalize 450k/850k methylation data
 #' s <- getSnpBeta(pl_rgset)               # 450k/850k SNP data
 #'
 #' testDat <- rbind(b, s)
@@ -54,14 +61,14 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75){
   }
 
   if (inherits(betas, "sparseMatrix"))
-    betas <- as(betas, "dgCMatrix")
+    betas <- methods::as(betas, "dgCMatrix")
   npred <-nrow(betas) # number of samples
   dn <- list(names(nbeta), dimnames(nbeta[[1]])[[2]], dimnames(betas)[[1]])
   dp <- array(0, c(nclass, nlambda, npred), dimnames = dn) # set up for results output
 
   # cross product with coeeficients
   for (i in seq(nclass)) {
-    fitk <- cbind2(1, betas) %*% matrix(nbeta[[i]][c("(Intercept)", colnames(betas)),])
+    fitk <- methods::cbind2(1, betas) %*% matrix(nbeta[[i]][c("(Intercept)", colnames(betas)),])
     dp[i, , ] = dp[i, , ] + t(as.matrix(fitk))
   }
 
