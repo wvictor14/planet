@@ -29,10 +29,10 @@ coef <- data.frame(do.call("cbind", lapply(coef, function(x) x[,1])) )
 
 # Remove coefficients = to 0
 non_zero <- abs(rowSums(coef)) > 0
-coef <- coef[non_zero,] # 1860, drops intercept automatically
+coef <- coef[non_zero,] # 1860 + 1 intercept
 
 # take out feature names
-pl_ethnicity_features <- rownames(coef)
+pl_ethnicity_features <- rownames(coef)[2:nrow(coef)] # remove intercept
 
 ############### save
 usethis::use_data(pl_ethnicity_features, a0, nclass, nbeta, lamlist, s, nlambda,
