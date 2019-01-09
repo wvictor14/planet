@@ -1,8 +1,8 @@
 
-plmec
-=====
+planet
+======
 
-`plmec` is an R package for inferring ethnicity from placental DNA methylation microarray data \[1\].
+`planet` is an R package for inferring ethnicity from placental DNA methylation microarray data \[1\].
 
 Installation
 ------------
@@ -11,7 +11,7 @@ You can install from this github repo with:
 
 ``` r
 library(devtools)
-install_github('wvictor14/plmec')
+install_github('wvictor14/planet')
 ```
 
 Usage
@@ -22,7 +22,7 @@ Usage
 For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) \[2\], which contains samples collected in an Australian population. To save on memory, I only use 8/24 samples, which I have saved in this repo as a `minfi::RGChannelSet` object.
 
 ``` r
-library(plmec)
+library(planet)
 library(minfi)      # for normalization
 library(wateRmelon) # for normalization
 library(ggplot2)    
@@ -93,14 +93,14 @@ print(results, row.names = F)
 #>  GSM1944965_9376561070_R05C02                    Caucasian
 #>  GSM1944966_9376561070_R06C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0125312749 0.9592702657     0.02819846    0.9592703
-#>            Caucasian 0.0157535416 0.1746568102     0.80958965    0.8095896
-#>                Asian 0.0195976066 0.8948468381     0.08555556    0.8948468
-#>            Caucasian 0.0006803084 0.0007479852     0.99857171    0.9985717
-#>            Caucasian 0.0022916097 0.0027075185     0.99500087    0.9950009
-#>            Caucasian 0.0064293920 0.0110986536     0.98247195    0.9824720
-#>            Caucasian 0.0016189745 0.0018583281     0.99652270    0.9965227
-#>            Caucasian 0.0011262783 0.0017927473     0.99708097    0.9970810
+#>                Asian 0.0124513140 0.9584462251     0.02910246    0.9584462
+#>            Caucasian 0.0141162763 0.1544372024     0.83144652    0.8314465
+#>                Asian 0.0205772390 0.9018655683     0.07755719    0.9018656
+#>            Caucasian 0.0008458130 0.0008029022     0.99835128    0.9983513
+#>            Caucasian 0.0019442248 0.0022184401     0.99583734    0.9958373
+#>            Caucasian 0.0071830296 0.0140615995     0.97875537    0.9787554
+#>            Caucasian 0.0019147107 0.0022251463     0.99586014    0.9958601
+#>            Caucasian 0.0009092847 0.0013969009     0.99769381    0.9976938
 ```
 
 Note the two columns `Predicted_ethnicity_nothresh` and `Predicted_ethnicity`. The latter refers to the classification which is determined by the highest class-specific probability. The former first applies a cutoff to the highest class-specific probability to determine if a sample can be confidently classified to a single ethnicity group. If a sample fails this threshold, this indicates mixed ancestry, and the sample is given an `Ambiguous` label. The default threshold is `0.75`.
