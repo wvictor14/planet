@@ -1,10 +1,10 @@
-Package: plmec
-Title: Placenta DNA methylation ethnicity classifier
+Package: planet
+Title: Placenta elastic net DNA methylation ethnicity classifier
 Version: 0.0.1
 Authors@R: person("Victor", "Yuan", email = "victor.2wy@gmail.com", role = c("aut", "cre"))
 Maintainer: Victor Yuan <victor.2wy@gmail.com>
-URL: http://github.com/wvictor14/plmec
-BugReports: http://github.com/wvictor14/plmec
+URL: http://github.com/wvictor14/planet
+BugReports: http://github.com/wvictor14/planet
 Description: This package contains a single function: a glmnet model which was developed on 450k DNA
   methylation data (but is compatible with 850k data as well) to infer ethnicity in placental 
   samples.
