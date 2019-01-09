@@ -93,14 +93,14 @@ print(results, row.names = F)
 #>  GSM1944965_9376561070_R05C02                    Caucasian
 #>  GSM1944966_9376561070_R06C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0124513140 0.9584462251     0.02910246    0.9584462
-#>            Caucasian 0.0141162763 0.1544372024     0.83144652    0.8314465
-#>                Asian 0.0205772390 0.9018655683     0.07755719    0.9018656
-#>            Caucasian 0.0008458130 0.0008029022     0.99835128    0.9983513
-#>            Caucasian 0.0019442248 0.0022184401     0.99583734    0.9958373
-#>            Caucasian 0.0071830296 0.0140615995     0.97875537    0.9787554
-#>            Caucasian 0.0019147107 0.0022251463     0.99586014    0.9958601
-#>            Caucasian 0.0009092847 0.0013969009     0.99769381    0.9976938
+#>                Asian 0.0119344626 0.9627524244     0.02531311    0.9627524
+#>            Caucasian 0.0130629704 0.1321891259     0.85474790    0.8547479
+#>                Asian 0.0224537960 0.9039812094     0.07356499    0.9039812
+#>            Caucasian 0.0007112243 0.0007702949     0.99851848    0.9985185
+#>            Caucasian 0.0020719286 0.0024536562     0.99547442    0.9954744
+#>            Caucasian 0.0057217954 0.0100173977     0.98426081    0.9842608
+#>            Caucasian 0.0022700584 0.0025490402     0.99518090    0.9951809
+#>            Caucasian 0.0009750296 0.0015562219     0.99746875    0.9974687
 ```
 
 Note the two columns `Predicted_ethnicity_nothresh` and `Predicted_ethnicity`. The latter refers to the classification which is determined by the highest class-specific probability. The former first applies a cutoff to the highest class-specific probability to determine if a sample can be confidently classified to a single ethnicity group. If a sample fails this threshold, this indicates mixed ancestry, and the sample is given an `Ambiguous` label. The default threshold is `0.75`.
@@ -137,7 +137,7 @@ Because 'Ambiguous' samples might have different mixtures of ancestries, it migh
 References
 ----------
 
-\[1\] Yuan V, Price M, Del Gobbo G, Cox B, Binder AM, Michels KB, Marsit C, Robinson W: Inferring population structure from placental DNA methylation studies. *In prep.*
+\[1\] Yuan V, Price M, Del Gobbo G, Mostafavi S, Cox B, Binder AM, Michels KB, Marsit C, Robinson W: Inferring population structure from placental DNA methylation studies. *In prep.*
 
 \[2\] Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
 
