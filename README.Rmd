@@ -12,9 +12,9 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# plmec
+# planet
 
-`plmec` is an R package for inferring ethnicity from placental DNA methylation microarray data [1]. 
+`planet` is an R package for inferring ethnicity from placental DNA methylation microarray data [1]. 
 
 ## Installation
 
@@ -22,9 +22,8 @@ You can install from this github repo with:
 
 ```{r message = F, eval = F}
 library(devtools)
-install_github('wvictor14/plmec')
+install_github('wvictor14/planet')
 ```
-
 
 ## Usage
 
@@ -35,7 +34,7 @@ collected in an Australian population. To save on memory, I only use 8/24 sample
 saved in this repo as a `minfi::RGChannelSet` object.
 
 ```{r, message = F, warning = F}
-library(plmec)
+library(planet)
 library(minfi)      # for normalization
 library(wateRmelon) # for normalization
 library(ggplot2)    
@@ -123,7 +122,6 @@ should have called samples `African/Asian`, `African/Caucasian`, `Asian/Caucasia
 as `Ambiguous`). Instead, I recommend adjusting for the actual probabilities in a linear modelling 
 analysis, and to use only two of the three probabilities, since the third will be redundant 
 (probabilities sum to 1). 
-
 
 ## References
 
