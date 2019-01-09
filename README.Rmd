@@ -125,8 +125,8 @@ analysis, and to use only two of the three probabilities, since the third will b
 
 ## References
 
-[1] Yuan V, Price M, Del Gobbo G, Cox B, Binder AM, Michels KB, Marsit C, Robinson W: Inferring
-population structure from placental DNA methylation studies. *In prep.*
+[1] Yuan V, Price M, Del Gobbo G, Mostafavi S, Cox B, Binder AM, Michels KB, Marsit C, Robinson W: 
+Inferring population structure from placental DNA methylation studies. *In prep.*
 
 [2] Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in
 preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
