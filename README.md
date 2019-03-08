@@ -27,6 +27,7 @@ library(minfi)      # for normalization
 library(wateRmelon) # for normalization
 library(ggplot2)    
 
+#load example data
 data(pl_rgset)
 pl_rgset # 8 samples
 #> class: RGChannelSet 
@@ -46,9 +47,9 @@ pl_rgset # 8 samples
 
 ### Preprocessing data
 
-I highly recommend to normalize your data using the same methods I used to normalize the training data.
+I recommend to normalize your data using the same methods I used to normalize the training data. Performance on datasets normalized by other methods has not been evaluated yet.
 
-This is because every normalization method addresses technical variability differently, and so other normalizations may not result in data on the same scale. Just note that using the same normalization methods will not gaurantee removal of *all* systemic dataset -specific effects. If IDATs are supplied, you can apply both [noob](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) \[3\] and [BMIQ](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) \[4\] normalization. If only methylated and unmethylated data matrices are available, you can apply just `BMIQ`.
+If IDATs are supplied, you can apply both `noob`[\[3\]](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and `BMIQ`[\[4\]](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) normalization. If only methylated and unmethylated data matrices are available, you can apply just `BMIQ`.
 
 To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ()`:
 
@@ -57,7 +58,7 @@ pl_noob <- preprocessNoob(pl_rgset)
 pl_bmiq <- BMIQ(pl_noob)
 ```
 
-Combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC):
+Note that `preprocessNoob` will drop SNP probes automatically. Because we need these to infer ethnicity, we need to combine the methylation data with the 65 snp probe data (59 SNPs, if using EPIC):
 
 ``` r
 pl_snps <- getSnpBeta(pl_rgset)
@@ -68,14 +69,14 @@ dim(pl_dat) # 485577     8
 
 ### Infer ethnicity
 
-The reason we added the snp data onto the betas matrix was because a subset of those are used to predict ethnicity. The input data needs to contain all 1860 features in the final model. We can check our data for these features with the `pl_ethnicity_features` vector:
+The input data needs to contain all 1860 features in the final model. We can check our data for these features with the `pl_ethnicity_features` vector:
 
 ``` r
 all(pl_ethnicity_features %in% rownames(pl_dat))
 #> [1] TRUE
 ```
 
-You don't need to subset to these 1860 features before running `pl_ethnicity_infer()` to obtain ethnicity calls:
+To obtain ethnicity calls, you can supply the full DNA methylation data to `pl_ethnicity_infer()`, as long as all 1860 features are present.
 
 ``` r
 dim(pl_dat)
@@ -93,17 +94,21 @@ print(results, row.names = F)
 #>  GSM1944965_9376561070_R05C02                    Caucasian
 #>  GSM1944966_9376561070_R06C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0119344626 0.9627524244     0.02531311    0.9627524
-#>            Caucasian 0.0130629704 0.1321891259     0.85474790    0.8547479
-#>                Asian 0.0224537960 0.9039812094     0.07356499    0.9039812
-#>            Caucasian 0.0007112243 0.0007702949     0.99851848    0.9985185
-#>            Caucasian 0.0020719286 0.0024536562     0.99547442    0.9954744
-#>            Caucasian 0.0057217954 0.0100173977     0.98426081    0.9842608
-#>            Caucasian 0.0022700584 0.0025490402     0.99518090    0.9951809
-#>            Caucasian 0.0009750296 0.0015562219     0.99746875    0.9974687
+#>                Asian 0.0117835849 0.9556626331     0.03255378    0.9556626
+#>            Caucasian 0.0179616353 0.1816147175     0.80042365    0.8004236
+#>                Asian 0.0207439535 0.8989024015     0.08035365    0.8989024
+#>            Caucasian 0.0008720409 0.0008876071     0.99824035    0.9982404
+#>            Caucasian 0.0022153372 0.0029391706     0.99484549    0.9948455
+#>            Caucasian 0.0062014651 0.0111391607     0.98265937    0.9826594
+#>            Caucasian 0.0019404738 0.0022063530     0.99585317    0.9958532
+#>            Caucasian 0.0011189112 0.0017528260     0.99712826    0.9971283
 ```
 
-Note the two columns `Predicted_ethnicity_nothresh` and `Predicted_ethnicity`. The latter refers to the classification which is determined by the highest class-specific probability. The former first applies a cutoff to the highest class-specific probability to determine if a sample can be confidently classified to a single ethnicity group. If a sample fails this threshold, this indicates mixed ancestry, and the sample is given an `Ambiguous` label. The default threshold is `0.75`.
+`pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final classification is determined in two ways:
+
+1.  `Predicted_ethnicity_nothresh` - returns a classification corresponding to the highest class-specific probability.
+
+2.  `Predicted_ethnicity` - if the highest class-specific probability is below `0.75`, then the the sample is assigned an `Amibiguous` label. This threshold can be adjusted with the `threshold` argument. Samples with this label might require special attention in downstream analyses.
 
 ``` r
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
@@ -132,7 +137,7 @@ table(results$Predicted_ethnicity)
 
 ### Adjustment in differential methylation analysis
 
-Because 'Ambiguous' samples might have different mixtures of ancestries, it might be inaccurate to adjust for them as one group in an analysis of admixed populations. (In retrospect, I should have called samples `African/Asian`, `African/Caucasian`, `Asian/Caucasian` as opposed to all as `Ambiguous`). Instead, I recommend adjusting for the actual probabilities in a linear modelling analysis, and to use only two of the three probabilities, since the third will be redundant (probabilities sum to 1).
+Because 'Ambiguous' samples might have different mixtures of ancestries, it might be inadequate to adjust for them as one group in an analysis of admixed populations (e.g. 50/50 Asian/African should not be considered the same group as 50/50 Caucasian/African). One solution would be to simply remove these samples. Another would be to adjust for the raw probabilities-in this case, use only two of the three probabilities, since the third will be redundant (probabilities sum to 1). If sample numbers are large enough in each group, stratifying downstream analyses by ethnicity might also be a valid option.
 
 References
 ----------
