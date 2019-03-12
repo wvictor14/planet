@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# planet
+# planet :earth_americas:
 
 `planet` is an R package for inferring ethnicity from placental DNA methylation microarray data [1]. 
 
