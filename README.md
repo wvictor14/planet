@@ -1,6 +1,6 @@
 
-planet
-======
+planet :earth\_americas:
+========================
 
 `planet` is an R package for inferring ethnicity from placental DNA methylation microarray data \[1\].
 
@@ -94,14 +94,14 @@ print(results, row.names = F)
 #>  GSM1944965_9376561070_R05C02                    Caucasian
 #>  GSM1944966_9376561070_R06C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0117835849 0.9556626331     0.03255378    0.9556626
-#>            Caucasian 0.0179616353 0.1816147175     0.80042365    0.8004236
-#>                Asian 0.0207439535 0.8989024015     0.08035365    0.8989024
-#>            Caucasian 0.0008720409 0.0008876071     0.99824035    0.9982404
-#>            Caucasian 0.0022153372 0.0029391706     0.99484549    0.9948455
-#>            Caucasian 0.0062014651 0.0111391607     0.98265937    0.9826594
-#>            Caucasian 0.0019404738 0.0022063530     0.99585317    0.9958532
-#>            Caucasian 0.0011189112 0.0017528260     0.99712826    0.9971283
+#>                Asian 0.0127138127 0.9552363704     0.03204982    0.9552364
+#>            Caucasian 0.0118014134 0.1172642378     0.87093435    0.8709343
+#>                Asian 0.0202598482 0.8998896168     0.07985053    0.8998896
+#>            Caucasian 0.0006788990 0.0006991062     0.99862199    0.9986220
+#>            Caucasian 0.0018404533 0.0023112871     0.99584826    0.9958483
+#>            Caucasian 0.0072402825 0.0121289538     0.98063076    0.9806308
+#>            Caucasian 0.0016560781 0.0017611636     0.99658276    0.9965828
+#>            Caucasian 0.0009574405 0.0015229362     0.99751962    0.9975196
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final classification is determined in two ways:
