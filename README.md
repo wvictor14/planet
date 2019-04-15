@@ -2,6 +2,8 @@
 planet :earth\_americas:
 ========================
 
+[![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
+
 `planet` is an R package for inferring ethnicity from placental DNA methylation microarray data \[1\].
 
 Installation
@@ -94,14 +96,14 @@ print(results, row.names = F)
 #>  GSM1944965_9376561070_R05C02                    Caucasian
 #>  GSM1944966_9376561070_R06C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0127138127 0.9552363704     0.03204982    0.9552364
-#>            Caucasian 0.0118014134 0.1172642378     0.87093435    0.8709343
-#>                Asian 0.0202598482 0.8998896168     0.07985053    0.8998896
-#>            Caucasian 0.0006788990 0.0006991062     0.99862199    0.9986220
-#>            Caucasian 0.0018404533 0.0023112871     0.99584826    0.9958483
-#>            Caucasian 0.0072402825 0.0121289538     0.98063076    0.9806308
-#>            Caucasian 0.0016560781 0.0017611636     0.99658276    0.9965828
-#>            Caucasian 0.0009574405 0.0015229362     0.99751962    0.9975196
+#>                Asian 0.0122758068 0.9590700822     0.02865411    0.9590701
+#>            Caucasian 0.0132492742 0.1419980177     0.84475271    0.8447527
+#>                Asian 0.0196212609 0.9027189463     0.07765979    0.9027189
+#>            Caucasian 0.0007131557 0.0007289441     0.99855790    0.9985579
+#>            Caucasian 0.0026481857 0.0033193569     0.99403246    0.9940325
+#>            Caucasian 0.0052998305 0.0097882725     0.98491190    0.9849119
+#>            Caucasian 0.0015112737 0.0015834922     0.99690523    0.9969052
+#>            Caucasian 0.0010310358 0.0017265910     0.99724237    0.9972424
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final classification is determined in two ways:
