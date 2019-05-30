@@ -39,9 +39,9 @@
 #'
 pl_infer_ethnicity <- function(betas, threshold = 0.75){
 
-  pf <- intersect(rownames(betas), pl_ethnicity_features)
-  if(length(pf) < length(pl_ethnicity_features)){
-    warning(paste('Only', length(pf), 'out of', length(pl_ethnicity_features), 'present.'))
+  pf <- intersect(rownames(betas), planet::pl_ethnicity_features)
+  if(length(pf) < length(planet::pl_ethnicity_features)){
+    warning(paste('Only', length(pf), 'out of', length(planet::pl_ethnicity_features), 'present.'))
   } else {
     print(paste(length(pf), 'of 1860 predictors present.'))
   }
