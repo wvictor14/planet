@@ -13,10 +13,11 @@ Imports:
   Matrix,
   methods
 Suggests:
+  ggplot2,
   minfi,
   minfiData,
-  wateRmelon,
-  ggplot2
+  SummarizedExperiment,
+  wateRmelon
 Depends: R (>= 3.5.0)
 License: GPL (>= 2)
 Encoding: UTF-8
