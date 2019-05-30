@@ -30,7 +30,7 @@ install_github('wvictor14/planet')
 ### Example Data
 
 For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) [2], which contains samples 
-collected in an Australian population. To save on memory, I only use 8/24 samples, which I have 
+collected in an Australian population. To save on memory, I only use 6/24 samples, which I have 
 saved in this repo as a `minfi::RGChannelSet` object.
 
 ```{r, message = F, warning = F}
@@ -41,7 +41,7 @@ library(ggplot2)
 
 #load example data
 data(pl_rgset)
-pl_rgset # 8 samples
+pl_rgset # 6 samples
 ```
 
 ### Preprocessing data
@@ -57,7 +57,7 @@ To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ
 
 ```{r normalization, message = F, warning = F}
 pl_noob <- preprocessNoob(pl_rgset)
-pl_bmiq <- BMIQ(pl_noob)
+pl_bmiq <- wateRmelon::BMIQ(pl_noob)
 ```
 
 Note that `preprocessNoob` will drop SNP probes automatically. Because we need these to infer 
@@ -67,7 +67,7 @@ EPIC):
 ```{r combine_betas_snps}
 pl_snps <- getSnpBeta(pl_rgset)
 pl_dat <- rbind(pl_bmiq, pl_snps)
-dim(pl_dat) # 485577     8
+dim(pl_dat) # 485577     6
 ```
 
 ### Infer ethnicity
@@ -99,7 +99,7 @@ sample is assigned an `Amibiguous` label. This threshold can be adjusted with th
 argument. Samples with this label might require special attention in downstream analyses.
 
 
-```{r plot_results}
+```{r plot_results, fig.width=5, fig.height=4}
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
      col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
