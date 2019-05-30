@@ -1,14 +1,10 @@
 
 # planet :earth\_americas:
 
-<<<<<<< HEAD
-`planet` is an R package for inferring ethnicity from placental DNA
-methylation microarray data \[1\].
-=======
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
 
-`planet` is an R package for inferring ethnicity from placental DNA methylation microarray data \[1\].
->>>>>>> a244b6c28a5decd45a7b0f39f523edcf4b0275e4
+`planet` is an R package for inferring ethnicity from placental DNA
+methylation microarray data \[1\].
 
 ## Installation
 
@@ -111,27 +107,13 @@ print(results, row.names = F)
 #>  GSM1944962_9376561070_R02C02                    Caucasian
 #>  GSM1944963_9376561070_R03C02                    Caucasian
 #>  GSM1944964_9376561070_R04C02                    Caucasian
-<<<<<<< HEAD
-#>  Predicted_ethnicity Prob_African  Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0121564996 0.957348158     0.03049534    0.9573482
-#>            Caucasian 0.0154760813 0.144242815     0.84028110    0.8402811
-#>                Asian 0.0199110737 0.911726186     0.06836274    0.9117262
-#>            Caucasian 0.0006755487 0.000700343     0.99862411    0.9986241
-#>            Caucasian 0.0020932408 0.002915546     0.99499121    0.9949912
-#>            Caucasian 0.0050434837 0.008100477     0.98685604    0.9868560
-=======
-#>  GSM1944965_9376561070_R05C02                    Caucasian
-#>  GSM1944966_9376561070_R06C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0122758068 0.9590700822     0.02865411    0.9590701
-#>            Caucasian 0.0132492742 0.1419980177     0.84475271    0.8447527
-#>                Asian 0.0196212609 0.9027189463     0.07765979    0.9027189
-#>            Caucasian 0.0007131557 0.0007289441     0.99855790    0.9985579
-#>            Caucasian 0.0026481857 0.0033193569     0.99403246    0.9940325
-#>            Caucasian 0.0052998305 0.0097882725     0.98491190    0.9849119
-#>            Caucasian 0.0015112737 0.0015834922     0.99690523    0.9969052
-#>            Caucasian 0.0010310358 0.0017265910     0.99724237    0.9972424
->>>>>>> a244b6c28a5decd45a7b0f39f523edcf4b0275e4
+#>                Asian 0.0123696461 0.9593950737     0.02823528    0.9593951
+#>            Caucasian 0.0156684101 0.1672797219     0.81705187    0.8170519
+#>                Asian 0.0230160188 0.9086999663     0.06828401    0.9087000
+#>            Caucasian 0.0006193453 0.0006078842     0.99877277    0.9987728
+#>            Caucasian 0.0026674323 0.0034159950     0.99391657    0.9939166
+#>            Caucasian 0.0047242556 0.0081101573     0.98716559    0.9871656
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each
