@@ -23,6 +23,7 @@
 #' ## To predict ethnicity on 450k/850k samples
 #'
 #' # Load placenta DNAm data
+#' library(planet)
 #' library(wateRmelon)
 #' library(minfi)
 #' data(pl_rgset)
