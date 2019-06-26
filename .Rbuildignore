@@ -1,5 +1,6 @@
 ^README\.Rmd$
 ^plmec\.Rproj$
+^planet\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
 ^GSE75196$
