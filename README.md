@@ -10,9 +10,16 @@ methylation microarray data \[1\].
 
 You can install from this github repo with:
 
+*Note: currently, installing with R 3.6.0 results in an warning that can
+be circumvented with by setting
+R\_REMOTES\_NO\_ERRORS\_FROM\_WARNINGS=“true” for the system
+environment variables*
+
 ``` r
-library(devtools)
-install_github('wvictor14/planet')
+withr::with_envvar(
+  c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
+  remotes::install_github('wvictor14/planet')
+)
 ```
 
 ## Usage
@@ -108,12 +115,12 @@ print(results, row.names = F)
 #>  GSM1944963_9376561070_R03C02                    Caucasian
 #>  GSM1944964_9376561070_R04C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0123696461 0.9593950737     0.02823528    0.9593951
-#>            Caucasian 0.0156684101 0.1672797219     0.81705187    0.8170519
-#>                Asian 0.0230160188 0.9086999663     0.06828401    0.9087000
-#>            Caucasian 0.0006193453 0.0006078842     0.99877277    0.9987728
-#>            Caucasian 0.0026674323 0.0034159950     0.99391657    0.9939166
-#>            Caucasian 0.0047242556 0.0081101573     0.98716559    0.9871656
+#>                Asian 0.0119402594 0.9565399597     0.03151978    0.9565400
+#>            Caucasian 0.0178050631 0.1901766023     0.79201833    0.7920183
+#>                Asian 0.0246155867 0.9026522029     0.07273221    0.9026522
+#>            Caucasian 0.0005646118 0.0005805319     0.99885486    0.9988549
+#>            Caucasian 0.0019890763 0.0025232914     0.99548763    0.9954876
+#>            Caucasian 0.0049671778 0.0084665538     0.98656627    0.9865663
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each
