@@ -45,9 +45,9 @@ collected in an Australian population. I only use 6/24 samples in this example, 
 
 ```{r, message = F, warning = F}
 library(planet)
-library(minfi)      # for normalization
+library(minfi)      
 library(wateRmelon) # for normalization
-library(ggplot2)    
+library(tidyverse)    
 
 #load example data
 data(pl_rgset)
@@ -109,11 +109,14 @@ sample is assigned an `Amibiguous` label. This threshold can be adjusted with th
 argument. Samples with this label might require special attention in downstream analyses.
 
 
-```{r plot_results, fig.width=5, fig.height=2.5}
-qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
-     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
-qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
-     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+```{r plot_results, fig.width = 5, fig.height = 2.5, dpi = 300}
+results %>%
+  ggplot(aes(x = Prob_Caucasian, y = Prob_African, col = Predicted_ethnicity)) +
+  geom_point()
+
+results %>%
+  ggplot(aes(x = Prob_Caucasian, y = Prob_Asian, col = Predicted_ethnicity)) +
+  geom_point()
 ```
 
 \*For the entire dataset (not just the subset shown here), 22/24 were predicted Caucasian and 2/24 

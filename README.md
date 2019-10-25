@@ -39,9 +39,9 @@ as a `minfi::RGChannelSet` object called `pl_rgset`.
 
 ``` r
 library(planet)
-library(minfi)      # for normalization
+library(minfi)      
 library(wateRmelon) # for normalization
-library(ggplot2)    
+library(tidyverse)    
 
 #load example data
 data(pl_rgset)
@@ -120,12 +120,12 @@ print(results, row.names = F)
 #>  GSM1944963_9376561070_R03C02                    Caucasian
 #>  GSM1944964_9376561070_R04C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0108003807 0.9612884161     0.02791120    0.9612884
-#>            Caucasian 0.0136223176 0.1367474624     0.84963022    0.8496302
-#>                Asian 0.0211490895 0.8941256888     0.08472522    0.8941257
-#>            Caucasian 0.0007534018 0.0007145747     0.99853202    0.9985320
-#>            Caucasian 0.0032739711 0.0038907797     0.99283525    0.9928352
-#>            Caucasian 0.0063225437 0.0119839156     0.98169354    0.9816935
+#>                Asian 0.0126283879 0.9564660155     0.03090560    0.9564660
+#>            Caucasian 0.0146398259 0.1531630881     0.83219709    0.8321971
+#>                Asian 0.0214513203 0.9011942414     0.07735444    0.9011942
+#>            Caucasian 0.0009104591 0.0009523592     0.99813718    0.9981372
+#>            Caucasian 0.0021968332 0.0028382432     0.99496492    0.9949649
+#>            Caucasian 0.0067227880 0.0113072486     0.98196996    0.9819700
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each
@@ -144,15 +144,18 @@ ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`,
 <!-- end list -->
 
 ``` r
-qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
-     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+results %>%
+  ggplot(aes(x = Prob_Caucasian, y = Prob_African, col = Predicted_ethnicity)) +
+  geom_point()
 ```
 
 <img src="man/figures/README-plot_results-1.png" width="100%" />
 
 ``` r
-qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
-     col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
+
+results %>%
+  ggplot(aes(x = Prob_Caucasian, y = Prob_Asian, col = Predicted_ethnicity)) +
+  geom_point()
 ```
 
 <img src="man/figures/README-plot_results-2.png" width="100%" />
