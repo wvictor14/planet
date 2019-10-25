@@ -22,9 +22,14 @@ knitr::opts_chunk$set(
 
 You can install from this github repo with:
 
-*Note: currently, installing with R 3.6.0 results in an warning that can be circumvented with by setting  R_REMOTES_NO_ERRORS_FROM_WARNINGS="true" for the system environment variables*
+```{r eval = FALSE}
+remotes::install_github('wvictor14/planet')
+```
 
-```{r message = F, eval = F}
+*Note: currently, installing with R 3.6.0 results in an warning that can be circumvented with by setting  R_REMOTES_NO_ERRORS_FROM_WARNINGS="true" for the system environment variables #2*
+
+```{r message = FALSE, eval = FALSE}
+# Run this if you encounter the above error during install:
 withr::with_envvar(
   c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
   remotes::install_github('wvictor14/planet')
@@ -35,9 +40,8 @@ withr::with_envvar(
 
 ### Example Data
 
-For demonstration purposes, I downloaded a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) [2], which contains samples 
-collected in an Australian population. To save on memory, I only use 6/24 samples, which I have 
-saved in this repo as a `minfi::RGChannelSet` object.
+For demonstration, I use 6/24 samples from a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) [2], which contains samples 
+collected in an Australian population. I only use 6/24 samples in this example, which I have saved in this repo as a `minfi::RGChannelSet` object called `pl_rgset`.
 
 ```{r, message = F, warning = F}
 library(planet)
@@ -105,7 +109,7 @@ sample is assigned an `Amibiguous` label. This threshold can be adjusted with th
 argument. Samples with this label might require special attention in downstream analyses.
 
 
-```{r plot_results, fig.width=5, fig.height=4}
+```{r plot_results, fig.width=5, fig.height=2.5}
 qplot(data = results, x = Prob_Caucasian, y = Prob_African, 
      col = Predicted_ethnicity, xlim = c(0,1), ylim = c(0,1))
 qplot(data = results, x = Prob_Caucasian, y = Prob_Asian, 
@@ -135,16 +139,11 @@ analyses by ethnicity might also be a valid option.
 
 ## References
 
-[1] Yuan V, Price M, Del Gobbo G, Mostafavi S, Cox B, Binder AM, Michels KB, Marsit C, Robinson W: 
-Inferring population structure from placental DNA methylation studies. *In prep.*
+1. [Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
-[2] Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in
-preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
+2. Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
 
-[3] Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD, Siegmund KD: Low-level
-processing of Illumina Infinium DNA Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.
+3. Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD, Siegmund KD: Low-level processing of Illumina Infinium DNA Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.
 
-[4] Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J, Gomez-Cabrero D, Beck S: A
-beta-mixture quantile normalization method for correcting probe design bias in Illumina Infinium 
-450 k DNA methylation data. Bioinformatics 2013, 29:189–96.
+4. Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J, Gomez-Cabrero D, Beck S: A beta-mixture quantile normalization method for correcting probe design bias in Illumina Infinium  450 k DNA methylation data. Bioinformatics 2013, 29:189–96.
 

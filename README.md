@@ -10,12 +10,17 @@ methylation microarray data \[1\].
 
 You can install from this github repo with:
 
+``` r
+remotes::install_github('wvictor14/planet')
+```
+
 *Note: currently, installing with R 3.6.0 results in an warning that can
 be circumvented with by setting
 R\_REMOTES\_NO\_ERRORS\_FROM\_WARNINGS=“true” for the system
-environment variables*
+environment variables \#2*
 
 ``` r
+# Run this if you encounter the above error during install:
 withr::with_envvar(
   c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
   remotes::install_github('wvictor14/planet')
@@ -26,11 +31,11 @@ withr::with_envvar(
 
 ### Example Data
 
-For demonstration purposes, I downloaded a [placental DNAm dataset from
-GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) \[2\],
-which contains samples collected in an Australian population. To save on
-memory, I only use 6/24 samples, which I have saved in this repo as a
-`minfi::RGChannelSet` object.
+For demonstration, I use 6/24 samples from a [placental DNAm dataset
+from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)
+\[2\], which contains samples collected in an Australian population. I
+only use 6/24 samples in this example, which I have saved in this repo
+as a `minfi::RGChannelSet` object called `pl_rgset`.
 
 ``` r
 library(planet)
@@ -115,12 +120,12 @@ print(results, row.names = F)
 #>  GSM1944963_9376561070_R03C02                    Caucasian
 #>  GSM1944964_9376561070_R04C02                    Caucasian
 #>  Predicted_ethnicity Prob_African   Prob_Asian Prob_Caucasian Highest_Prob
-#>                Asian 0.0119402594 0.9565399597     0.03151978    0.9565400
-#>            Caucasian 0.0178050631 0.1901766023     0.79201833    0.7920183
-#>                Asian 0.0246155867 0.9026522029     0.07273221    0.9026522
-#>            Caucasian 0.0005646118 0.0005805319     0.99885486    0.9988549
-#>            Caucasian 0.0019890763 0.0025232914     0.99548763    0.9954876
-#>            Caucasian 0.0049671778 0.0084665538     0.98656627    0.9865663
+#>                Asian 0.0108003807 0.9612884161     0.02791120    0.9612884
+#>            Caucasian 0.0136223176 0.1367474624     0.84963022    0.8496302
+#>                Asian 0.0211490895 0.8941256888     0.08472522    0.8941257
+#>            Caucasian 0.0007534018 0.0007145747     0.99853202    0.9985320
+#>            Caucasian 0.0032739711 0.0038907797     0.99283525    0.9928352
+#>            Caucasian 0.0063225437 0.0119839156     0.98169354    0.9816935
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each
@@ -180,19 +185,20 @@ by ethnicity might also be a valid option.
 
 ## References
 
-\[1\] Yuan V, Price M, Del Gobbo G, Mostafavi S, Cox B, Binder AM,
-Michels KB, Marsit C, Robinson W: Inferring population structure from
-placental DNA methylation studies. *In prep.*
+1.  [Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et
+    al. Accurate ethnicity prediction from placental DNA methylation
+    data. Epigenetics & Chromatin. 2019
+    Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
-\[2\] Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA
-methylation profiles in preeclampsia and healthy control placentas. Am J
-Physiol Circ Physiol 2016, 310:H1295–H1303.
+2.  Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA
+    methylation profiles in preeclampsia and healthy control placentas.
+    Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
 
-\[3\] Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD,
-Siegmund KD: Low-level processing of Illumina Infinium DNA Methylation
-BeadArrays. Nucleic Acids Res 2013, 41:e90.
+3.  Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD,
+    Siegmund KD: Low-level processing of Illumina Infinium DNA
+    Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.
 
-\[4\] Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J,
-Gomez-Cabrero D, Beck S: A beta-mixture quantile normalization method
-for correcting probe design bias in Illumina Infinium 450 k DNA
-methylation data. Bioinformatics 2013, 29:189–96.
+4.  Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J,
+    Gomez-Cabrero D, Beck S: A beta-mixture quantile normalization
+    method for correcting probe design bias in Illumina Infinium 450 k
+    DNA methylation data. Bioinformatics 2013, 29:189–96.
