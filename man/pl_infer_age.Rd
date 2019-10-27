@@ -7,8 +7,8 @@
 pl_infer_age(betas, type = "RPC")
 }
 \arguments{
-\item{betas}{`n` x `m`` dataframe of methylation values on the beta scale (0, 1), where the 
-variablesare arranged in rows, and samples in columns. Should contain all predictors.}
+\item{betas}{An n by m dataframe of methylation values on the beta scale (0, 1), where the 
+CpGs are arranged in rows, and samples in columns. Should contain all CpGs used in each clock}
 
 \item{type}{One of the following: "RPC" (Robust), "CPC", (Control) or "RRPC" (Refined Robust).}
 }
@@ -16,12 +16,13 @@ variablesare arranged in rows, and samples in columns. Should contain all predic
 A vector of length `m`, containing inferred gestational age. `
 }
 \description{
-\code{pl_infer_age} Uses a glmnet model to predict ethnicity using DNA methylation data.
+\code{pl_infer_age} Multiplies the coefficients from one of three epigenetic gestational age 
+clocks by the corresponding CpGs in a supplied betas `data.frame`.
 }
 \details{
 Predicts gestational age using one of 3 placental gestational age clocks: RPC, CPC, or 
 refined RPC. Requires placental DNA methylation measured on the Infinium 27K/450k/EPIC 
-methylation array.
+methylation array. If CpGs are missing, a warning is returned.
 }
 \examples{
 
