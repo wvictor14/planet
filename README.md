@@ -3,8 +3,16 @@
 
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
 
-`planet` is an R package for inferring ethnicity from placental DNA
-methylation microarray data \[1\].
+`planet` is an R package for inferring ethnicity and gestational age
+from placental DNA methylation microarray data
+[\[1\]\[2\]](#references).
+
+  - [Installation](#installation)
+  - [Usage](#usage)
+      - [Example Data](#example-data)
+      - [Infer Ethnicity](#infer-ethnicity)
+      - [Infer Gestational Age](#infer-gestational-age)
+  - [References](#references---references-)
 
 ## Installation
 
@@ -31,14 +39,14 @@ withr::with_envvar(
 
 ### Example Data
 
-For demonstration, I use 24 samples from a [placental DNAm dataset from
+For demonstration, I use 24 samples from a placental DNAm dataset from
 GEO
-(GSE75196)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)
-\[2\], which contains samples collected in an Australian population. The
-DNA methylation data (in betas) can be accessed with `data(pl_betas)`
-and corresponding sample information from `data(pl_pDat)`. Note that
-cpgs have been filtered to a random \~10,000 + CpGs used in the models
-from this package.
+([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196))
+[\[3\]](#references), which contains samples collected in an Australian
+population. The DNA methylation data (in betas) can be accessed with
+`data(pl_betas)` and corresponding sample information from
+`data(pl_pDat)`. Note that cpgs have been filtered to a random \~10,000
+CpGs, plus the CpGs used in all of the models from this package.
 
 ``` r
 library(planet) 
@@ -67,7 +75,7 @@ pl_pDat
 #> # ... with 14 more rows
 ```
 
-### Infer ethnicity
+### Infer Ethnicity
 
 **Requirements:**
 
@@ -91,11 +99,11 @@ a warning, but will still work.*
     betas `data.frame` using the same normalization methods used on the
     training data:
     [**noob**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/)
-    \[3\] and
+    [\[4\]](#references) and
     [**BMIQ**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/)
-    \[4\]. To apply these, run `minfi::preprocessNoob()` on an `rgset`
-    object and then `wateRmelon::BMIQ()`. This has already applied to
-    the example data.
+    [\[5\]](#references). To apply these, run `minfi::preprocessNoob()`
+    on an `rgset` object and then `wateRmelon::BMIQ()`. This has already
+    applied to the example data.
 
 <!-- end list -->
 
@@ -218,6 +226,43 @@ since the third will be redundant (probabilities sum to 1). If sample
 numbers are large enough in each group, stratifying downstream analyses
 by ethnicity might also be a valid option.
 
+### Infer Gestational Age
+
+There are 3 gestational age clocks for placental DNA methylation data
+from [Lee Y. et al. 2019 \[2\]](#references):
+
+1.  Robust Placental Clock (RPC)
+2.  Control Placental Clock (CPC)
+3.  Refined Robust Placental Clock (RRPC)
+
+To use each, we can specify the `type` argument in `pl_infer_age`:
+
+``` r
+# We will add this information the sample information data.frame, pl_pDat
+pl_pDat %>%
+  mutate(ga_RPC = pl_infer_age(pl_betas, type = 'RPC'),
+         ga_CPC = pl_infer_age(pl_betas, type = 'CPC'),
+         ga_RRPC = pl_infer_age(pl_betas, type = 'RRPC')) %>%
+  
+  # reshape, to plot
+  pivot_longer(cols = contains('ga'),
+               names_to = 'clock_type',
+               names_prefix = 'ga_',
+               values_to = 'ga') %>%
+  
+  ggplot(aes(x = gestation_wk, y = ga, col = disease)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  facet_wrap(~clock_type) +
+  labs(x = 'Reported GA (weeks)', y = 'Inferred GA (weeks)', col = '')
+#> [1] "558 of 558 predictors present."
+#> [1] "546 of 546 predictors present."
+#> [1] "395 of 395 predictors present."
+```
+
+<img src="man/figures/README-pl_infer_age-1.png" width="100%" /> *GA:
+gestational age*
+
 ## References
 
 1.  [Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et
@@ -225,15 +270,20 @@ by ethnicity might also be a valid option.
     data. Epigenetics & Chromatin. 2019
     Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
-2.  Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA
+2.  [Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
+    estimating gestational age using placental DNA methylation levels.
+    Aging (Albany NY). 2019;11(12):4238–4253.
+    doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
+
+3.  Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA
     methylation profiles in preeclampsia and healthy control placentas.
     Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
 
-3.  Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD,
+4.  Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD,
     Siegmund KD: Low-level processing of Illumina Infinium DNA
     Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.
 
-4.  Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J,
+5.  Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J,
     Gomez-Cabrero D, Beck S: A beta-mixture quantile normalization
     method for correcting probe design bias in Illumina Infinium 450 k
     DNA methylation data. Bioinformatics 2013, 29:189–96.
