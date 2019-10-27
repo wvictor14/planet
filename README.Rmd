@@ -1,5 +1,7 @@
 ---
-output: github_document
+output: 
+  github_document:
+    df_print: kable
 editor_options: 
   chunk_output_type: console
 ---
@@ -17,7 +19,7 @@ knitr::opts_chunk$set(
 
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
 
-`planet` is an R package for inferring ethnicity and gestational age from placental DNA methylation microarray data [\[1\]\[2\]](#references). 
+`planet` is an R package for inferring **ethnicity** and **gestational age** from placental DNA methylation data [\[1\]\[2\]](#references). 
 
 - [Installation](#installation)
 - [Usage](#usage)
@@ -55,14 +57,14 @@ cpgs have been filtered to a random ~10,000 CpGs, plus the CpGs used in all of t
 
 ```{r, message = F, warning = F}
 library(planet) 
-library(tidyverse)    
+library(tidyverse)
 
 #load example data
 data(pl_betas)
 data(pl_pDat)
 
 dim(pl_betas)
-pl_pDat
+head(pl_pDat)
 ```
 
 ### Infer Ethnicity
@@ -85,9 +87,12 @@ same normalization methods used on the training data:
 [**BMIQ**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) [\[5\]](#references). To apply these, run `minfi::preprocessNoob()` on an `rgset` object and then `wateRmelon::BMIQ()`. This has already 
 applied to the example data.
 
-```{r}
+```{r, message = F}
 results <- pl_infer_ethnicity(pl_betas)
-print(results, row.names = F)
+
+# show last 8 rows
+results %>%
+  tail(8)
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for each sample (e.g 
@@ -164,9 +169,9 @@ pl_pDat %>%
 
 ## References {#references}
 
-1. [Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
+1. [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
-2. [Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels. Aging (Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
+2. [Lee Y, Choufani S, Weksberg R, Wilson SL, **Yuan V**, et al. Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels. Aging (Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
 
 3. Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
 
