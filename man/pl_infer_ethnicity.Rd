@@ -25,28 +25,16 @@ Predicts self-reported ethnicity from 3 classes: Africans, Asians, and Caucasian
 placental DNA methylation data measured on the Infinium 450k/EPIC methylation array. Will return
 membership probabilities that often reflect genetic ancestry composition.
 
-A glmnet model fit using the package caret is applied to the data. The input data should
-contain all 1860 predictors of the final model.
+The input data should contain all 1860 predictors (cpgs) of the final GLMNET model.
 
-In some datasets I find that the predictions can become skewed towards one class without any
-normalization. Therefore, I highly recommend normalizing before running the model, ideally with
-NOOB and BMIQ because those were used on the training data.
+It's recommended to use the same normalization methods used on the training data: NOOB and BMIQ.
 }
 \examples{
 ## To predict ethnicity on 450k/850k samples
 
 # Load placenta DNAm data
 library(planet)
-library(wateRmelon)
-library(minfi)
-data(pl_rgset)
-
-n <- minfi::preprocessNoob(pl_rgset)
-b <- wateRmelon::BMIQ(n)                # normalize 450k/850k methylation data
-s <- getSnpBeta(pl_rgset)               # 450k/850k SNP data
-
-testDat <- rbind(b, s)
-
-pl_infer_ethnicity(testDat)
+data(pl_betas)
+pl_infer_ethnicity(pl_betas)
 
 }
