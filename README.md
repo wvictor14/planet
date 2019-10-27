@@ -3,9 +3,8 @@
 
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
 
-`planet` is an R package for inferring ethnicity and gestational age
-from placental DNA methylation microarray data
-[\[1\]\[2\]](#references).
+`planet` is an R package for inferring **ethnicity** and **gestational
+age** from placental DNA methylation data [\[1\]\[2\]](#references).
 
   - [Installation](#installation)
   - [Usage](#usage)
@@ -50,7 +49,7 @@ CpGs, plus the CpGs used in all of the models from this package.
 
 ``` r
 library(planet) 
-library(tidyverse)    
+library(tidyverse)
 
 #load example data
 data(pl_betas)
@@ -58,22 +57,21 @@ data(pl_pDat)
 
 dim(pl_betas)
 #> [1] 12897    24
-pl_pDat
-#> # A tibble: 24 x 4
-#>    sample_id  sex    disease        gestation_wk
-#>    <fct>      <chr>  <chr>                 <dbl>
-#>  1 GSM1944936 Male   preeclampsia             36
-#>  2 GSM1944939 Male   preeclampsia             32
-#>  3 GSM1944942 Female preeclampsia             32
-#>  4 GSM1944944 Male   preeclampsia             35
-#>  5 GSM1944946 Female preeclampsia             38
-#>  6 GSM1944948 Female preeclampsia             36
-#>  7 GSM1944949 Female preeclampsia             37
-#>  8 GSM1944950 Male   preeclampsia             35
-#>  9 GSM1944951 Female normal/healthy           39
-#> 10 GSM1944952 Male   normal/healthy           38
-#> # ... with 14 more rows
+head(pl_pDat)
 ```
+
+<div class="kable-table">
+
+| sample\_id | sex    | disease      | gestation\_wk |
+| :--------- | :----- | :----------- | ------------: |
+| GSM1944936 | Male   | preeclampsia |            36 |
+| GSM1944939 | Male   | preeclampsia |            32 |
+| GSM1944942 | Female | preeclampsia |            32 |
+| GSM1944944 | Male   | preeclampsia |            35 |
+| GSM1944946 | Female | preeclampsia |            38 |
+| GSM1944948 | Female | preeclampsia |            36 |
+
+</div>
 
 ### Infer Ethnicity
 
@@ -94,7 +92,7 @@ all(pl_ethnicity_features %in% rownames(pl_betas))
 a warning, but will still work.*
 
   - The betas `data.frame` needs to have *samples in columns* and
-    *CpGs/snps* in rows. The rownames mustbe CpG/rs identifiers.
+    *CpGs/snps* in rows. The rownames must be CpG/rs identifiers.
   - If you have IDAT files available, then I recommend normalizing your
     betas `data.frame` using the same normalization methods used on the
     training data:
@@ -110,64 +108,26 @@ a warning, but will still work.*
 ``` r
 results <- pl_infer_ethnicity(pl_betas)
 #> [1] "1860 of 1860 predictors present."
-#> Loading required package: Matrix
-#> 
-#> Attaching package: 'Matrix'
-#> The following objects are masked from 'package:tidyr':
-#> 
-#>     expand, pack, unpack
-print(results, row.names = F)
-#>   Sample_ID Predicted_ethnicity_nothresh Predicted_ethnicity Prob_African
-#>  GSM1944936                    Caucasian           Caucasian 0.0032635194
-#>  GSM1944939                    Caucasian           Caucasian 0.0007510622
-#>  GSM1944942                    Caucasian           Caucasian 0.0008438397
-#>  GSM1944944                    Caucasian           Caucasian 0.0006315807
-#>  GSM1944946                    Caucasian           Caucasian 0.0011125222
-#>  GSM1944948                    Caucasian           Caucasian 0.0010425633
-#>  GSM1944949                    Caucasian           Caucasian 0.0007091564
-#>  GSM1944950                    Caucasian           Caucasian 0.0016598901
-#>  GSM1944951                    Caucasian           Caucasian 0.0012222637
-#>  GSM1944952                    Caucasian           Caucasian 0.0023798383
-#>  GSM1944953                    Caucasian           Caucasian 0.0014259287
-#>  GSM1944954                    Caucasian           Caucasian 0.0003693372
-#>  GSM1944955                    Caucasian           Caucasian 0.0008445218
-#>  GSM1944956                    Caucasian           Caucasian 0.0011051312
-#>  GSM1944957                    Caucasian           Caucasian 0.0022290390
-#>  GSM1944958                    Caucasian           Caucasian 0.0012032757
-#>  GSM1944959                        Asian               Asian 0.0124173980
-#>  GSM1944960                    Caucasian           Caucasian 0.0146145824
-#>  GSM1944961                        Asian               Asian 0.0191661019
-#>  GSM1944962                    Caucasian           Caucasian 0.0005813799
-#>  GSM1944963                    Caucasian           Caucasian 0.0022575598
-#>  GSM1944964                    Caucasian           Caucasian 0.0055464301
-#>  GSM1944965                    Caucasian           Caucasian 0.0019000186
-#>  GSM1944966                    Caucasian           Caucasian 0.0009131231
-#>    Prob_Asian Prob_Caucasian Highest_Prob
-#>  0.0161050230     0.98063146    0.9806315
-#>  0.0004868869     0.99876205    0.9987621
-#>  0.0007381152     0.99841805    0.9984180
-#>  0.0005670175     0.99880140    0.9988014
-#>  0.0017893281     0.99709815    0.9970981
-#>  0.0011664212     0.99779102    0.9977910
-#>  0.0014162003     0.99787464    0.9978746
-#>  0.0021329910     0.99620712    0.9962071
-#>  0.0028102429     0.99596749    0.9959675
-#>  0.0029861681     0.99463399    0.9946340
-#>  0.0014420359     0.99713204    0.9971320
-#>  0.0005942298     0.99903643    0.9990364
-#>  0.0007400218     0.99841546    0.9984155
-#>  0.0018314111     0.99706346    0.9970635
-#>  0.0029181362     0.99485282    0.9948528
-#>  0.0019664758     0.99683025    0.9968302
-#>  0.9555934915     0.03198911    0.9555935
-#>  0.1581146636     0.82727075    0.8272708
-#>  0.9054384627     0.07539544    0.9054385
-#>  0.0005910620     0.99882756    0.9988276
-#>  0.0028351975     0.99490724    0.9949072
-#>  0.0091593270     0.98529424    0.9852942
-#>  0.0021322348     0.99596775    0.9959677
-#>  0.0013954427     0.99769143    0.9976914
+
+# show last 8 rows
+results %>%
+  tail(8)
 ```
+
+<div class="kable-table">
+
+|            | Sample\_ID | Predicted\_ethnicity\_nothresh | Predicted\_ethnicity | Prob\_African | Prob\_Asian | Prob\_Caucasian | Highest\_Prob |
+| ---------- | :--------- | :----------------------------- | :------------------- | ------------: | ----------: | --------------: | ------------: |
+| GSM1944959 | GSM1944959 | Asian                          | Asian                |     0.0124174 |   0.9555935 |       0.0319891 |     0.9555935 |
+| GSM1944960 | GSM1944960 | Caucasian                      | Caucasian            |     0.0146146 |   0.1581147 |       0.8272708 |     0.8272708 |
+| GSM1944961 | GSM1944961 | Asian                          | Asian                |     0.0191661 |   0.9054385 |       0.0753954 |     0.9054385 |
+| GSM1944962 | GSM1944962 | Caucasian                      | Caucasian            |     0.0005814 |   0.0005911 |       0.9988276 |     0.9988276 |
+| GSM1944963 | GSM1944963 | Caucasian                      | Caucasian            |     0.0022576 |   0.0028352 |       0.9949072 |     0.9949072 |
+| GSM1944964 | GSM1944964 | Caucasian                      | Caucasian            |     0.0055464 |   0.0091593 |       0.9852942 |     0.9852942 |
+| GSM1944965 | GSM1944965 | Caucasian                      | Caucasian            |     0.0019000 |   0.0021322 |       0.9959677 |     0.9959677 |
+| GSM1944966 | GSM1944966 | Caucasian                      | Caucasian            |     0.0009131 |   0.0013954 |       0.9976914 |     0.9976914 |
+
+</div>
 
 `pl_infer_ethnicity` returns probabilities corresponding to each
 ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`,
@@ -265,14 +225,15 @@ gestational age*
 
 ## References
 
-1.  [Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et
-    al. Accurate ethnicity prediction from placental DNA methylation
-    data. Epigenetics & Chromatin. 2019
-    Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
+1.  [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM,
+    et al. Accurate ethnicity prediction from placental DNA methylation
+    data. Epigenetics & Chromatin. 2019 Aug
+    9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
-2.  [Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
-    estimating gestational age using placental DNA methylation levels.
-    Aging (Albany NY). 2019;11(12):4238–4253.
+2.  [Lee Y, Choufani S, Weksberg R, Wilson SL, **Yuan V**, et
+    al. Placental epigenetic clocks: estimating gestational age using
+    placental DNA methylation levels. Aging (Albany NY).
+    2019;11(12):4238–4253.
     doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
 
 3.  Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA

@@ -15,7 +15,7 @@ normalized with NOOB and BMIQ.}
 Defaults to 0.75.}
 }
 \value{
-A m x 7 dataframe of predicted ethnicity information and associated probabilities.
+a [tibble][tibble::tibble-package]
 }
 \description{
 \code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA methylation data.

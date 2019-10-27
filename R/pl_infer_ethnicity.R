@@ -15,7 +15,7 @@
 #'
 #' It's recommended to use the same normalization methods used on the training data: NOOB and BMIQ.
 #'
-#' @return A m x 7 dataframe of predicted ethnicity information and associated probabilities.
+#' @return a [tibble][tibble::tibble-package]
 #' @examples
 #' ## To predict ethnicity on 450k/850k samples
 #'
@@ -81,5 +81,5 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75){
   p$Sample_ID <- rownames(p)
   p <- p[,c(7,1,6, 2:5)]
 
-  return(p)
+  return(as_tibble(p))
 }
