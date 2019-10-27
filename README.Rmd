@@ -40,61 +40,44 @@ withr::with_envvar(
 
 ### Example Data
 
-For demonstration, I use 6/24 samples from a [placental DNAm dataset from GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) [2], which contains samples 
-collected in an Australian population. I only use 6/24 samples in this example, which I have saved in this repo as a `minfi::RGChannelSet` object called `pl_rgset`.
+For demonstration, I use 24 samples from a [placental DNAm dataset from GEO (GSE75196)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196) [2], which contains samples 
+collected in an Australian population. The DNA methylation data (in betas) can be accessed with `data(pl_betas)` and corresponding sample information from `data(pl_pDat)`. Note that cpgs have been filtered to a random ~10,000 + CpGs used in the models from this package.
 
 ```{r, message = F, warning = F}
-library(planet)
-library(minfi)      
-library(wateRmelon) # for normalization
+library(planet) 
 library(tidyverse)    
 
 #load example data
-data(pl_rgset)
-pl_rgset # 6 samples
-```
+data(pl_betas)
+data(pl_pDat)
 
-### Preprocessing data
-
-I recommend to normalize your data using the same methods I used to normalize the training 
-data. Performance on datasets normalized by other methods has not been evaluated yet. 
-
-If IDATs are supplied, you can apply both `noob`[[3]](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/)
- and `BMIQ`[[4]](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) normalization. If only
-methylated and unmethylated data matrices are available, you can apply just `BMIQ`. 
-
-To apply normalization, run `minfi::preprocessNoob()` and then `wateRmelon::BMIQ()`: 
-
-```{r normalization, message = F, warning = F}
-pl_noob <- preprocessNoob(pl_rgset)
-pl_bmiq <- wateRmelon::BMIQ(pl_noob)
-```
-
-Note that `preprocessNoob` will drop SNP probes automatically. Because we need these to infer 
-ethnicity, we need to combine the methylation data with the 65 snp probe data (59 SNPs, if using 
-EPIC):
-
-```{r combine_betas_snps}
-pl_snps <- getSnpBeta(pl_rgset)
-pl_dat <- rbind(pl_bmiq, pl_snps)
-dim(pl_dat) # 485577     6
+dim(pl_betas)
+pl_pDat
 ```
 
 ### Infer ethnicity
 
-The input data needs to contain all 1860 features in the final model. We can check our data for
-these features with the `pl_ethnicity_features` vector:
+**Requirements:**
+
+- CpGs and SNPs that are used in `pl_infer_ethnicity` need to be in your betas `data.frame`. You can ensure that you have all features with the `pl_ethnicity_features` vector:
 
 ```{r}
-all(pl_ethnicity_features %in% rownames(pl_dat))
+all(pl_ethnicity_features %in% rownames(pl_betas))
 ```
 
-To obtain ethnicity calls, you can supply the full DNA methylation data to `pl_ethnicity_infer()`, 
-as long as all  1860 features are present.
+*Note that if some features are missing, `pl_infer_ethnicity` will throw a warning, but will still work.*
+
+- The betas `data.frame` needs to have *samples in columns* and *CpGs/snps* in rows. The rownames 
+mustbe CpG/rs identifiers.
+- If you have IDAT files available, then I recommend normalizing your betas `data.frame` using the 
+same normalization methods used on the training data:
+[**noob**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) [3] and 
+[**BMIQ**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) [4]. To apply these, run
+`minfi::preprocessNoob()` on an `rgset` object and then `wateRmelon::BMIQ()`. This has already 
+applied to the example data.
 
 ```{r}
-dim(pl_dat)
-results <- pl_infer_ethnicity(pl_dat)
+results <- pl_infer_ethnicity(pl_betas)
 print(results, row.names = F)
 ```
 
@@ -112,15 +95,14 @@ argument. Samples with this label might require special attention in downstream 
 ```{r plot_results, fig.width = 5, fig.height = 2.5, dpi = 300}
 results %>%
   ggplot(aes(x = Prob_Caucasian, y = Prob_African, col = Predicted_ethnicity)) +
-  geom_point()
+  geom_point(alpha = 0.7) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
 
 results %>%
   ggplot(aes(x = Prob_Caucasian, y = Prob_Asian, col = Predicted_ethnicity)) +
-  geom_point()
+  geom_point(alpha = 0.7) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
 ```
-
-\*For the entire dataset (not just the subset shown here), 22/24 were predicted Caucasian and 2/24 
-Asian.
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
 were collected in Sydney, Australia, and are therefore likely mostly European with some East Asian 
@@ -130,7 +112,7 @@ ancestries.
 table(results$Predicted_ethnicity)
 ```
 
-### Adjustment in differential methylation analysis
+**A note on adjustment in differential methylation analysis**
 
 Because 'Ambiguous' samples might have different mixtures of ancestries, it might be
 inadequate to adjust for them as one group in an analysis of admixed populations (e.g. 50/50 
