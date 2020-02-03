@@ -70,7 +70,7 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75){
   #classification
   link <- aperm(dp, c(3, 1, 2))
   dpp <- aperm(dp, c(3, 1, 2))
-  preds <- data.frame(apply(dpp, 3, glmnet::glmnet_softmax))
+  preds <- data.frame(apply(dpp, 3, glmnet_softmax))
   colnames(preds) <- 'Predicted_ethnicity_nothresh'
 
   # combine and apply thresholding
@@ -81,5 +81,36 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75){
   p$Sample_ID <- rownames(p)
   p <- p[,c(7,1,6, 2:5)]
 
-  return(as_tibble(p))
+  return(tibble::as_tibble(p))
 }
+
+# taken from glmnet v3.0.2 source
+glmnet_softmax <-
+  function (x,ignore_labels=FALSE)
+  {
+    d <- dim(x)
+    dd <- dimnames(x)[[2]]
+    if(is.null(dd) || !length(dd)) ignore_labels=TRUE
+
+    nas=apply(is.na(x),1,any)
+    if(any(nas)){
+      pclass=rep(NA,d[1])
+      if(sum(nas)<d[1]){
+        pclass2=glmnet_softmax(x[!nas,],ignore_labels)
+        pclass[!nas]=pclass2
+        if(is.factor(pclass2))pclass=factor(pclass,levels = seq(d[2]),labels=levels(pclass2))
+      }
+    }
+    else{
+      maxdist <- x[, 1]
+      pclass <- rep(1, d[1])
+      for (i in seq(2, d[2])) {
+        l <- x[, i] > maxdist
+        pclass[l] <- i
+        maxdist[l] <- x[l, i]
+      }
+      dd <- dimnames(x)[[2]]
+      if(!ignore_labels) pclass=factor(pclass, levels = seq(d[2]), labels = dd)
+    }
+    pclass
+  }
