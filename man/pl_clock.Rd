@@ -9,7 +9,7 @@
 pl_clock
 }
 \description{
-Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks: estimating 
+Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks: estimating
 gestational age using placental DNA methylation levels. Aging (Albany NY). 2019;11(12):4238–4253.
  doi:10.18632/aging.102049.
 PMID: 31235674

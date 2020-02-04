@@ -18,9 +18,9 @@ in placental samples. Samples included 16 samples from healthy uncomplicated pre
 samples from pregnancies affected by preeclampsia."
 }
 \details{
-The DNA methylation data for 24 placental samples were downloaded from 
-[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196). After normalizing using 
-`minfi::preprocessNoob` and `wateRmelon::BMIQ`, the betas were filtered to 10,000 random CpGs + 
+The DNA methylation data for 24 placental samples were downloaded from
+[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196). After normalizing using
+`minfi::preprocessNoob` and `wateRmelon::BMIQ`, the betas were filtered to 10,000 random CpGs +
 those CpGs used in the gestational age clock and ethnicity classifier.
 
 Reference: Yeung KR, Chiu CL, Pidsley R, Makris A et al. DNA methylation profiles in preeclampsia
