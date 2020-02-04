@@ -19,17 +19,20 @@ pl_rgset <- read.metharray.exp("GSE75196/idat")
 
 # normalize
 n <- minfi::preprocessNoob(pl_rgset)
-b <- wateRmelon::BMIQ(n)   
+b <- wateRmelon::BMIQ(n)
 
 # SNP data
-s <- getSnpBeta(pl_rgset)               
+s <- getSnpBeta(pl_rgset)
 pl_betas <- rbind(b, s)
 
 # filter
 set.seed(1)
 cpgs <- unique(c(pl_ethnicity_features,
-                 pl_clock$CpGs[2:nrow(pl_clock)], # drop intercept 
-                 sample(rownames(pl_betas), 10000)))
+                 pl_clock$CpGs[2:nrow(pl_clock)], # drop intercept
+                 sample(rownames(pl_betas), 10000),
+                 rownames(pl_cell_cpgs_first),
+                 rownames(pl_cell_cpgs_third)))
+
 pl_betas <- pl_betas[cpgs,]
 
 # get pData
@@ -38,7 +41,7 @@ pl_pDat <- read_tsv('ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE75nnn/GSE75196/mat
 
 # fix pDat
 pl_pDat <- pl_pDat %>%
-  
+
   # clean variable names
   mutate(Variable = gsub('!Sample_', '', `!Sample_geo_accession`),
          Variable = case_when(
@@ -46,7 +49,7 @@ pl_pDat <- pl_pDat %>%
            TRUE ~ Variable
          )) %>%
   select(Variable, everything(), -`!Sample_geo_accession`) %>%
-  
+
   # transpose
   pivot_longer(cols = -Variable,
                names_to = 'sample_id',
@@ -55,7 +58,7 @@ pl_pDat <- pl_pDat %>%
               names_from = Variable,
               values_from = value) %>%
   select(sample_id, Sex:`gestation (wk)`) %>%
-  
+
   # fix values
   mutate_all(list(~ gsub('.*\\:\\s', '', .))) %>%
   mutate(`gestation (wk)` = as.numeric(`gestation (wk)`))
@@ -66,7 +69,7 @@ pl_pDat <- pl_pDat %>%
   filter(sample_id %in% colnames(pl_rgset)) %>%
   mutate(sample_id = factor(sample_id, levels = colnames(pl_rgset))) %>%
   arrange(sample_id) %>%
-  clean_names() 
+  clean_names()
 
 usethis::use_data(pl_betas, overwrite = T, internal = F)
 usethis::use_data(pl_pDat, overwrite = T, internal = F)
