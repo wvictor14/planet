@@ -1,3 +1,7 @@
+# planet 0.2.0
+
+* added `pl_cell_cpgs_first` and `pl_cell_cpgs_third` for cell composition inference
+
 # planet 0.1.1
 
 * copied glmnet:::glment_softmax code to be compatible with new glmnet version
