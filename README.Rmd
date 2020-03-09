@@ -26,6 +26,7 @@ knitr::opts_chunk$set(
   - [Example Data](#example-data)
   - [Infer Ethnicity](#infer-ethnicity)
   - [Infer Gestational Age](#infer-gestational-age)
+  - [Infer Cell Composition](#infer-cell-composition)
 - [References](#references---references-)
 
 ## Installation
@@ -58,6 +59,7 @@ cpgs have been filtered to a random ~10,000 CpGs, plus the CpGs used in all of t
 ```{r, message = F, warning = F}
 library(planet) 
 library(tidyverse)
+theme_set(theme_bw(base_size = 8))
 
 #load example data
 data(pl_betas)
@@ -106,16 +108,22 @@ sample is assigned an `Amibiguous` label. This threshold can be adjusted with th
 argument. Samples with this label might require special attention in downstream analyses.
 
 
-```{r plot_results, fig.width = 5, fig.height = 2.5, dpi = 300}
+```{r plot_results, fig.width = 5, fig.height = 2.5, dpi = 200}
 results %>%
   ggplot(aes(x = Prob_Caucasian, y = Prob_African, col = Predicted_ethnicity)) +
   geom_point(alpha = 0.7) +
-  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = 'P(Caucasian)', y = 'P(African)')
 
 results %>%
   ggplot(aes(x = Prob_Caucasian, y = Prob_Asian, col = Predicted_ethnicity)) +
   geom_point(alpha = 0.7) +
-  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = 'P(Caucasian)', y = 'P(Asian)')
 ```
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
@@ -146,7 +154,7 @@ There are 3 gestational age clocks for placental DNA methylation data from [Lee 
 
 To use each, we can specify the `type` argument in `pl_infer_age`:
 
-```{r pl_infer_age, dpi = 300}
+```{r pl_infer_age, dpi = 200}
 # We will add this information the sample information data.frame, pl_pDat
 pl_pDat %>%
   mutate(ga_RPC = pl_infer_age(pl_betas, type = 'RPC'),
@@ -171,19 +179,18 @@ pl_pDat %>%
 
 To infer cell composition on placental villi DNAm samples, we can use the reference cpgs identified in [3]. These are provided in this package as `pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and first trimester samples, respectively. 
 
-In this example we are using term villi DNAm data, so we first load the reference cpgs `pl_cell_cpgs_third`.
+In this example we are using term villi DNAm data, so we first load the reference cpgs `pl_cell_cpgs_third`. This is a data frame of 500 cpgs, with mean methylation levels for each cell type.
 
 ```{r}
 data('pl_cell_cpgs_third')
-pl_cell_cpgs_third
+head(pl_cell_cpgs_third)
 ```
 
-Next, we can apply either the Constrained Projection approach implemented by the R packages `minfi` or `EpiDISH`, or a non-constrained approach by `EpiDish`. 
+After our reference cpg data is loaded, we can estimate cell composition by applying either the Constrained Projection approach implemented by the R packages `minfi` or `EpiDISH`, or a non-constrained approach by `EpiDish`. 
 
+#### Minfi
 
-## Minfi
-
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(minfi)
 
 houseman_estimates <- minfi:::projectCellType(
@@ -194,9 +201,9 @@ houseman_estimates <- minfi:::projectCellType(
 head(houseman_estimates)
 ```
 
-## EpiDish
+#### EpiDish
 
-```{r}
+```{r, message = FALSE}
 library(EpiDISH)
 
 # robust partial correlations
@@ -216,6 +223,34 @@ epidish_CP <- epidish(
   beta.m = pl_betas[rownames(pl_cell_cpgs_third),],
   ref.m = pl_cell_cpgs_third,
   method = 'CP')
+```
+
+#### Compare
+
+We can compare the different cell composition estimates.
+
+```{r, fig.height = 4, fig.width = 4, dpi = 250}
+bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (Houseman)'),
+          epidish_RPC$estF %>% as.data.frame %>% mutate(algorithm = 'RPC'),
+          epidish_CBS$estF %>% as.data.frame %>% mutate(algorithm = 'CBS'),
+          epidish_CP$estF %>% as.data.frame %>% mutate(algorithm = 'CP (EpiDISH)')) %>%
+  mutate(sample = rep(rownames(houseman_estimates),4)) %>%
+  as_tibble() %>%
+  pivot_longer(cols = -c(algorithm, sample),
+               names_to = 'component',
+               values_to = 'estimate') %>%
+  
+
+  ggplot(aes(x = sample, y = estimate, fill = component)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~algorithm, ncol = 1) +
+  scale_fill_brewer(palette = 'Accent') +
+  theme_minimal(base_size = 5) +
+  scale_y_continuous(limits = c(-0.1,1.1), breaks = c(0, 0.5, 1), labels = scales::percent) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  coord_cartesian(ylim = c(0,1)) +
+  labs(x = '', fill = '')
+ 
 ```
 
 ## References {#references}
