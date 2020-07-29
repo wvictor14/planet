@@ -5,7 +5,7 @@
 \alias{pl_cell_cpgs_first}
 \title{First trimester coefficients for placental cellular deconvolution from Yuan V et al. 2020.}
 \format{A [tibble][tibble::tibble-package] with coefficients for Trophoblasts, Stromal,
-Endothelial, Hofbauer cells, and nRBCs.}
+Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.}
 \usage{
 pl_cell_cpgs_first
 }

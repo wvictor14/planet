@@ -48,7 +48,7 @@ pl_pDat <- pl_pDat %>%
            grepl('characteristics', Variable) ~ gsub('\\:.*', '', GSM1944936),
            TRUE ~ Variable
          )) %>%
-  select(Variable, everything(), -`!Sample_geo_accession`) %>%
+  dplyr::select(Variable, everything(), -`!Sample_geo_accession`) %>%
 
   # transpose
   pivot_longer(cols = -Variable,
@@ -57,7 +57,7 @@ pl_pDat <- pl_pDat %>%
   pivot_wider(id_cols = sample_id,
               names_from = Variable,
               values_from = value) %>%
-  select(sample_id, Sex:`gestation (wk)`) %>%
+  dplyr::select(sample_id, Sex:`gestation (wk)`) %>%
 
   # fix values
   mutate_all(list(~ gsub('.*\\:\\s', '', .))) %>%
@@ -69,7 +69,7 @@ pl_pDat <- pl_pDat %>%
   filter(sample_id %in% colnames(pl_rgset)) %>%
   mutate(sample_id = factor(sample_id, levels = colnames(pl_rgset))) %>%
   arrange(sample_id) %>%
-  clean_names()
+  janitor::clean_names()
 
 usethis::use_data(pl_betas, overwrite = T, internal = F)
 usethis::use_data(pl_pDat, overwrite = T, internal = F)

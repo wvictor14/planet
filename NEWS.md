@@ -1,3 +1,7 @@
+# planet 0.2.1
+
+* added syncytiotrophoblast reference cpgs
+
 # planet 0.2.0
 
 * added `pl_cell_cpgs_first` and `pl_cell_cpgs_third` for cell composition inference
