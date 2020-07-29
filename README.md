@@ -59,7 +59,7 @@ data(pl_betas)
 data(pl_pDat)
 
 dim(pl_betas)
-#> [1] 13759    24
+#> [1] 13918    24
 head(pl_pDat)
 ```
 
@@ -121,14 +121,14 @@ results %>%
 
 | Sample\_ID | Predicted\_ethnicity\_nothresh | Predicted\_ethnicity | Prob\_African | Prob\_Asian | Prob\_Caucasian | Highest\_Prob |
 | :--------- | :----------------------------- | :------------------- | ------------: | ----------: | --------------: | ------------: |
-| GSM1944959 | Asian                          | Asian                |     0.0122143 |   0.9606649 |       0.0271208 |     0.9606649 |
-| GSM1944960 | Caucasian                      | Caucasian            |     0.0142632 |   0.1545644 |       0.8311723 |     0.8311723 |
-| GSM1944961 | Asian                          | Asian                |     0.0215369 |   0.9122843 |       0.0661789 |     0.9122843 |
-| GSM1944962 | Caucasian                      | Caucasian            |     0.0007293 |   0.0007500 |       0.9985207 |     0.9985207 |
-| GSM1944963 | Caucasian                      | Caucasian            |     0.0023903 |   0.0030573 |       0.9945524 |     0.9945524 |
-| GSM1944964 | Caucasian                      | Caucasian            |     0.0058691 |   0.0097200 |       0.9844109 |     0.9844109 |
-| GSM1944965 | Caucasian                      | Caucasian            |     0.0016010 |   0.0017434 |       0.9966556 |     0.9966556 |
-| GSM1944966 | Caucasian                      | Caucasian            |     0.0009399 |   0.0015500 |       0.9975101 |     0.9975101 |
+| GSM1944959 | Asian                          | Asian                |     0.0123073 |   0.9523544 |       0.0353383 |     0.9523544 |
+| GSM1944960 | Caucasian                      | Caucasian            |     0.0156961 |   0.1595213 |       0.8247827 |     0.8247827 |
+| GSM1944961 | Asian                          | Asian                |     0.0208421 |   0.8954518 |       0.0837061 |     0.8954518 |
+| GSM1944962 | Caucasian                      | Caucasian            |     0.0009276 |   0.0008801 |       0.9981923 |     0.9981923 |
+| GSM1944963 | Caucasian                      | Caucasian            |     0.0022635 |   0.0028007 |       0.9949358 |     0.9949358 |
+| GSM1944964 | Caucasian                      | Caucasian            |     0.0065973 |   0.0112013 |       0.9822014 |     0.9822014 |
+| GSM1944965 | Caucasian                      | Caucasian            |     0.0021578 |   0.0024196 |       0.9954226 |     0.9954226 |
+| GSM1944966 | Caucasian                      | Caucasian            |     0.0011397 |   0.0017651 |       0.9970952 |     0.9970952 |
 
 </div>
 
@@ -227,6 +227,7 @@ pl_pDat %>%
 #> [1] "558 of 558 predictors present."
 #> [1] "546 of 546 predictors present."
 #> [1] "395 of 395 predictors present."
+#> `geom_smooth()` using formula 'y ~ x'
 ```
 
 <img src="man/figures/README-pl_infer_age-1.png" width="100%" /> *GA:
@@ -240,19 +241,26 @@ package as `pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third
 trimester (term) and first trimester samples, respectively.
 
 In this example we are using term villi DNAm data, so we first load the
-reference cpgs `pl_cell_cpgs_third`. This is a data frame of 500 cpgs,
+reference cpgs `pl_cell_cpgs_third`. This is a data frame of 600 cpgs,
 with mean methylation levels for each cell type.
 
 ``` r
 data('pl_cell_cpgs_third')
 head(pl_cell_cpgs_third)
 #>            Trophoblasts   Stromal  Hofbauer Endothelial      nRBC
-#> cg10590657    0.1014098 0.9345796 0.9016368   0.8963641 0.8448382
-#> cg14923398    0.1282030 0.8902107 0.9339555   0.9383641 0.9508709
-#> cg05348366    0.1305697 0.9519820 0.9088860   0.9065136 0.9278057
-#> cg11862144    0.1561991 0.9430855 0.9419634   0.9341671 0.9647331
-#> cg17907628    0.1215249 0.9278777 0.9036880   0.8914412 0.9143601
-#> cg11552829    0.1436501 0.8783793 0.9561899   0.9446054 0.9490943
+#> cg10590657    0.1014098 0.9345796 0.8655285   0.8963641 0.8448382
+#> cg14923398    0.1282030 0.8902107 0.9036769   0.9383641 0.9508709
+#> cg05348366    0.1305697 0.9519820 0.8803082   0.9065136 0.9278057
+#> cg17907628    0.1215249 0.9278777 0.8727841   0.8914412 0.9143601
+#> cg26799656    0.1259953 0.9482014 0.8803863   0.8791004 0.9010419
+#> cg11862144    0.1561991 0.9430855 0.9114967   0.9341671 0.9647331
+#>            Syncytiotrophoblast
+#> cg10590657          0.05460441
+#> cg14923398          0.05383193
+#> cg05348366          0.06546727
+#> cg17907628          0.05325227
+#> cg26799656          0.06823985
+#> cg11862144          0.06044207
 ```
 
 After our reference cpg data is loaded, we can estimate cell composition
@@ -271,13 +279,20 @@ houseman_estimates <- minfi:::projectCellType(
   lessThanOne = FALSE)
 
 head(houseman_estimates)
-#>            Trophoblasts      Stromal     Hofbauer Endothelial       nRBC
-#> GSM1944936    0.9036406 0.000000e+00 0.0001173050  0.05715579 0.06975103
-#> GSM1944939    0.9467667 0.000000e+00 0.0006780647  0.03398968 0.03850730
-#> GSM1944942    0.9165590 4.470134e-19 0.0000000000  0.05881142 0.03790619
-#> GSM1944944    0.8493527 1.017575e-03 0.0070579159  0.09159188 0.05578747
-#> GSM1944946    0.8747275 2.122237e-02 0.0109528806  0.08365519 0.06530729
-#> GSM1944948    0.9081046 1.539855e-02 0.0000000000  0.07604194 0.04153465
+#>            Trophoblasts    Stromal      Hofbauer Endothelial       nRBC
+#> GSM1944936    0.1091279 0.04891919  0.000000e+00  0.08983998 0.05294062
+#> GSM1944939    0.2299918 0.00000000 -1.806592e-19  0.07888007 0.03374149
+#> GSM1944942    0.1934287 0.03483540  0.000000e+00  0.09260353 0.02929310
+#> GSM1944944    0.2239896 0.06249135  1.608645e-03  0.11040693 0.04447951
+#> GSM1944946    0.1894152 0.07935955  0.000000e+00  0.10587439 0.05407587
+#> GSM1944948    0.2045124 0.07657717  0.000000e+00  0.09871149 0.02269798
+#>            Syncytiotrophoblast
+#> GSM1944936           0.6979477
+#> GSM1944939           0.6377822
+#> GSM1944942           0.6350506
+#> GSM1944944           0.5467642
+#> GSM1944946           0.6022329
+#> GSM1944948           0.6085825
 ```
 
 #### EpiDish
@@ -309,6 +324,9 @@ epidish_CP <- epidish(
 We can compare the different cell composition estimates.
 
 ``` r
+library(viridis)
+#> Loading required package: viridisLite
+
 bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (Houseman)'),
           epidish_RPC$estF %>% as.data.frame %>% mutate(algorithm = 'RPC'),
           epidish_CBS$estF %>% as.data.frame %>% mutate(algorithm = 'CBS'),
@@ -323,7 +341,7 @@ bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (House
   ggplot(aes(x = sample, y = estimate, fill = component)) +
   geom_bar(stat = 'identity') +
   facet_wrap(~algorithm, ncol = 1) +
-  scale_fill_brewer(palette = 'Accent') +
+  scale_fill_viridis_d() +
   theme_minimal(base_size = 5) +
   scale_y_continuous(limits = c(-0.1,1.1), breaks = c(0, 0.5, 1), labels = scales::percent) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
