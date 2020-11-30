@@ -14,9 +14,10 @@ Imports:
     magrittr,
     dplyr
 Suggests:
-  ggplot2
+    ggplot2,
+    testthat
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
