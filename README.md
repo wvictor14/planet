@@ -20,20 +20,7 @@ age**, and **cell composition** from placental DNA methylation data
 You can install from this github repo with:
 
 ``` r
-remotes::install_github('wvictor14/planet')
-```
-
-*Note: currently, installing with R 3.6.0 results in an warning that can
-be circumvented with by setting
-R\_REMOTES\_NO\_ERRORS\_FROM\_WARNINGS=“true” for the system
-environment variables \#2*
-
-``` r
-# Run this if you encounter the above error during install:
-withr::with_envvar(
-  c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
-  remotes::install_github('wvictor14/planet')
-)
+devtools::install_github('wvictor14/planet')
 ```
 
 ## Usage
@@ -299,6 +286,7 @@ head(houseman_estimates)
 
 ``` r
 library(EpiDISH)
+#> Warning: package 'EpiDISH' was built under R version 4.0.3
 
 # robust partial correlations
 epidish_RPC <- epidish(
@@ -349,7 +337,7 @@ bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (House
   labs(x = '', fill = '')
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 ## References
 
