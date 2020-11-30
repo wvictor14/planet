@@ -6,9 +6,7 @@
 \alias{planet-package}
 \title{planet: Placenta elastic net DNA methylation ethnicity classifier}
 \description{
-This package contains a single function: a glmnet model which was developed on 450k DNA
-  methylation data (but is compatible with 850k data as well) to infer ethnicity in placental 
-  samples.
+This package contains R functions to infer ethnicity/ancestry, gestational age, and cell composition from placental DNA methylation data.
 }
 \seealso{
 Useful links:
