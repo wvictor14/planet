@@ -4,7 +4,9 @@
 \name{pl_clock}
 \alias{pl_clock}
 \title{Coefficients from the three placental gestational age clocks from Lee Y et al. 2019.}
-\format{A [tibble][tibble::tibble-package] with coefficients for the RPC, CPC, and refined RPC.}
+\format{
+A [tibble][tibble::tibble-package] with coefficients for the RPC, CPC, and refined RPC.
+}
 \usage{
 pl_clock
 }

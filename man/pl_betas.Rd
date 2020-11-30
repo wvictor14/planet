@@ -4,7 +4,9 @@
 \name{pl_betas}
 \alias{pl_betas}
 \title{6 DNA methylation profiles from preeclampsia and healthy control placentas}
-\format{A matrix}
+\format{
+A matrix
+}
 \source{
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
 }
