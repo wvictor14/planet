@@ -3,7 +3,7 @@
 #' The features on the 450k/850k DNAm microarry used to predict ethnicity.
 #'
 #' @format A character vector of length 1860
-#' @source \url{https://github.com/wvictor14/Ethnicity_Inference_450k}
+#' @source \url{https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3}
 #'
 "pl_ethnicity_features"
 
