@@ -71,5 +71,5 @@ pl_pDat <- pl_pDat %>%
   arrange(sample_id) %>%
   janitor::clean_names()
 
-usethis::use_data(pl_betas, overwrite = T, internal = F)
-usethis::use_data(pl_pDat, overwrite = T, internal = F)
+usethis::use_data(pl_betas, overwrite = TRUE, internal = FALSE)
+usethis::use_data(pl_pDat, overwrite = TRUE, internal = FALSE)
