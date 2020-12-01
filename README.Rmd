@@ -37,6 +37,15 @@ You can install from this github repo with:
 devtools::install_github('wvictor14/planet')
 ```
 
+This can result in an error where a workaround can be using this install code instead:
+
+```{r eval = FALSE}
+withr::with_envvar(c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
+  remotes::install_github('wvictor14/planet')
+)
+```
+
+
 ## Usage
 
 ### Example Data

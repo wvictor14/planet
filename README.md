@@ -23,6 +23,15 @@ You can install from this github repo with:
 devtools::install_github('wvictor14/planet')
 ```
 
+This can result in an error where a workaround can be using this install
+code instead:
+
+``` r
+withr::with_envvar(c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
+  remotes::install_github('wvictor14/planet')
+)
+```
+
 ## Usage
 
 ### Example Data
@@ -337,7 +346,7 @@ bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (House
   labs(x = '', fill = '')
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
 
 ## References
 
