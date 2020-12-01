@@ -16,3 +16,10 @@ test_that("pl_infer_ethnicity() output contains all columns", {
         output_colnames))
 })
 
+test_that("pl_infer_ethnicity() returns probabilities that sum to 1", {
+  sums <- pl_infer_ethnicity(pl_betas) %>%
+    dplyr::mutate(sum_of_prob = Prob_African + Prob_Asian + Prob_Caucasian) %>%
+    pull(sum_of_prob)
+  expect_equal(sums, rep(1, 24))
+})
+
