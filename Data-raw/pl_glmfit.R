@@ -17,7 +17,7 @@ nclass <- 3
 
 # lambda tuning grid
 lambda <- pl_glmnet$lambda
-lamlist <- glmnet::lambda.interp(lambda, 0.01) # or this
+lamlist <- glmnet:::lambda.interp(lambda, 0.01) # or this
 
 # lambda
 s <- pl_glmnet$lambdaOpt
