@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+*Note: Currently this package does not seem to work on some linux installations. It appears that the data objects are not properly exported, for some reason that I cannot figure out.*
 
 # planet :earth_americas:
 
@@ -36,15 +37,6 @@ You can install from this github repo with:
 ```{r eval = FALSE}
 devtools::install_github('wvictor14/planet')
 ```
-
-This can result in an error where a workaround can be using this install code instead:
-
-```{r eval = FALSE}
-withr::with_envvar(c(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"), 
-  remotes::install_github('wvictor14/planet')
-)
-```
-
 
 ## Usage
 
