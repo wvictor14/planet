@@ -27,7 +27,6 @@ methylation array. If CpGs are missing, a warning is returned.
 \examples{
 
 # Load placenta DNAm data
-library(planet)
 library(dplyr)
 data(pl_betas)
 data(pl_pDat)
