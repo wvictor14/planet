@@ -39,4 +39,5 @@ usethis::use_data(a0, nclass,
                   #nbeta, 
                   lamlist, s, nlambda,
                    internal = TRUE)
+usethis::use_data(nbeta, internal = FALSE) # ideally this should be internal but this causes installation errors on linux (and maybe mac?)
 usethis::use_data(pl_ethnicity_features, internal = FALSE, overwrite = TRUE)
