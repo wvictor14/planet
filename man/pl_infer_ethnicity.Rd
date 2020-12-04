@@ -33,7 +33,6 @@ It's recommended to use the same normalization methods used on the training data
 ## To predict ethnicity on 450k/850k samples
 
 # Load placenta DNAm data
-library(planet)
 data(pl_betas)
 pl_infer_ethnicity(pl_betas)
 
