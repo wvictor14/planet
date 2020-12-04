@@ -1,3 +1,9 @@
+# planet 0.2.2
+
+* Export `nbeta`, instead of keeping internal
+* This fixes the install errors
+* On linux, data objects are not properly exported. See [#2](https://github.com/wvictor14/planet/issues/2)
+
 # planet 0.2.1
 
 * added syncytiotrophoblast reference cpgs
