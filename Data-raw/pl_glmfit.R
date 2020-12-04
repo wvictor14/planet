@@ -35,6 +35,8 @@ coef <- coef[non_zero,] # 1860 + 1 intercept
 pl_ethnicity_features <- rownames(coef)[2:nrow(coef)] # remove intercept
 
 ############### save
-usethis::use_data(a0, nclass, nbeta, lamlist, s, nlambda,
-                   internal = TRUE, overwrite = TRUE)
+usethis::use_data(a0, nclass, 
+                  #nbeta, 
+                  lamlist, s, nlambda,
+                   internal = TRUE)
 usethis::use_data(pl_ethnicity_features, internal = FALSE, overwrite = TRUE)
