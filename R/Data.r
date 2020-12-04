@@ -28,8 +28,8 @@
 #'
 "pl_betas"
 
-#' Sex, disease, and gestational age information associated with `pl_betas`. Taken from
-#' [GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
+#' Sex, disease, and gestational age information associated with `pl_betas`. 
+#' Taken from [GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
 #'
 #' @format A [tibble][tibble::tibble-package]
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
@@ -64,3 +64,8 @@
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 "pl_cell_cpgs_third"
 
+#' An internal object containing coefficients to predict ethnicity.
+#'
+#' @format A [list] with three matrices corresponding to the three ethnicity classes
+#'
+"nbeta"
