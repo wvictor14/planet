@@ -1,13 +1,11 @@
 Package: planet
 Title: Placenta elastic net DNA methylation ethnicity classifier
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: person("Victor", "Yuan", email = "victor.2wy@gmail.com", role = c("aut", "cre"))
-Maintainer: Victor Yuan <victor.2wy@gmail.com>
 URL: http://github.com/wvictor14/planet
 BugReports: http://github.com/wvictor14/planet
 Description: This package contains R functions to infer ethnicity/ancestry, gestational age, and cell composition from placental DNA methylation data.
 Imports: 
-    glmnet,
     Matrix,
     methods,
     tibble,
