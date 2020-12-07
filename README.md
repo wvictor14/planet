@@ -1,4 +1,8 @@
 
+*Note: Currently this package does not seem to work on some linux
+installations. It appears that the data objects are not properly
+exported, for some reason that I cannot figure out.*
+
 # planet :earth\_americas:
 
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)

@@ -17,7 +17,7 @@ nclass <- 3
 
 # lambda tuning grid
 lambda <- pl_glmnet$lambda
-lamlist <- glmnet::lambda.interp(lambda, 0.01) # or this
+lamlist <- glmnet:::lambda.interp(lambda, 0.01) # or this
 
 # lambda
 s <- pl_glmnet$lambdaOpt
@@ -35,6 +35,9 @@ coef <- coef[non_zero,] # 1860 + 1 intercept
 pl_ethnicity_features <- rownames(coef)[2:nrow(coef)] # remove intercept
 
 ############### save
-usethis::use_data(a0, nclass, nbeta, lamlist, s, nlambda,
-                   internal = T, overwrite = T)
-usethis::use_data(pl_ethnicity_features, internal = F, overwrite = T)
+usethis::use_data(a0, nclass, 
+                  #nbeta, 
+                  lamlist, s, nlambda,
+                   internal = TRUE)
+usethis::use_data(nbeta, internal = FALSE) # ideally this should be internal but this causes installation errors on linux (and maybe mac?)
+usethis::use_data(pl_ethnicity_features, internal = FALSE, overwrite = TRUE)
