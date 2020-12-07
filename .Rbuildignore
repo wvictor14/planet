@@ -5,3 +5,7 @@
 ^data-raw$
 ^GSE75196$
 ^LICENSE\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
