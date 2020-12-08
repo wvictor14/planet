@@ -60,7 +60,7 @@ pl_pDat %>%
 
 *GA: gestational age*
 
-#### References
+### References
 
 1.  [Lee Y, Choufani S, Weksberg R, Wilson SL, **Yuan V**, et al. Placental
     epigenetic clocks: estimating gestational age using placental DNA
