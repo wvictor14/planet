@@ -1,6 +1,6 @@
 Package: planet
 Title: Placenta elastic net DNA methylation ethnicity classifier
-Version: 0.2.3.9000
+Version: 0.2.3.9001
 Authors@R: person("Victor", "Yuan", email = "victor.2wy@gmail.com", role = c("aut", "cre"))
 URL: https://wvictor14.github.io/planet/
 BugReports: http://github.com/wvictor14/planet
