@@ -51,7 +51,7 @@
 #' Reference:
 #' PMID:
 #'
-#' @format A [tibble][tibble::tibble-package] with coefficients for Trophoblasts, Stromal,
+#' @format A [data.frame] with coefficients for Trophoblasts, Stromal,
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 "pl_cell_cpgs_first"
 
@@ -60,7 +60,7 @@
 #' Reference:
 #' PMID:
 #'
-#' @format A [matrix] with coefficients for Trophoblasts, Stromal,
+#' @format A [data.frame] with coefficients for Trophoblasts, Stromal,
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 "pl_cell_cpgs_third"
 
