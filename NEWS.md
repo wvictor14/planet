@@ -1,6 +1,7 @@
 # planet (development version)
 
 * Added vignettes
+* Reduced README significantly
 
 # planet 0.2.3
 
