@@ -5,14 +5,14 @@
 \alias{pl_cell_cpgs_third}
 \title{Third trimester coefficients for placental cellular deconvolution from Yuan V et al. 2020.}
 \format{
-A [data.frame] with coefficients for Trophoblasts, Stromal,
+A [matrix] with coefficients for Trophoblasts, Stromal,
 Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 }
 \usage{
 pl_cell_cpgs_third
 }
 \description{
-Reference:
-PMID:
+Reference: to be edited
+PMID: to be edited
 }
 \keyword{datasets}
