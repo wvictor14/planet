@@ -17,7 +17,7 @@ There are 3 gestational age clocks for placental DNA methylation data from Lee Y
 
 To predict gestational, we load the example data:
 
-- `pl_betas` - DNAm data for 6 placental samples
+- `pl_betas` - DNAm data for 24 placental samples
 - `pl_pDat` - Matching sample information
 
 ```{r pl_infer_age, message = FALSE, warning = FALSE}
