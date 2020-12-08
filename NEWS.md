@@ -1,3 +1,8 @@
+# planet 0.2.3
+
+* Fixes data export error on linux. See [#6](https://github.com/wvictor14/planet/pull/6#issuecomment-740147118)
+
+
 # planet 0.2.2
 
 * Export `nbeta`, instead of keeping internal
