@@ -14,9 +14,10 @@ Imports:
 Suggests:
     ggplot2,
     testthat,
+    tidyr,
+    scales,
     knitr,
     rmarkdown
-Depends: R (>= 4.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
