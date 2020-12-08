@@ -5,15 +5,19 @@
 
 `planet` is an R package for inferring **ethnicity**, **gestational
 age**, and **cell composition** from placental DNA methylation data
-[\[1\]\[2\]\[3\]](#references).
+[\[1\]\[2\]\[3\]](#references). See full documentation at
+<https://wvictor14.github.io/planet/>
 
-  - [Installation](#installation)
-  - [Usage](#usage)
-      - [Example Data](#example-data)
-      - [Infer Ethnicity](#infer-ethnicity)
-      - [Infer Gestational Age](#infer-gestational-age)
-      - [Infer Cell Composition](#infer-cell-composition)
-  - [References](#references---references-)
+-   [Installation](#installation)
+
+-   [Usage](#usage)
+
+    -   [Example Data](#example-data)
+    -   [Infer Ethnicity](#infer-ethnicity)
+    -   [Infer Gestational Age](#infer-gestational-age)
+    -   [Infer Cell Composition](#infer-cell-composition)
+
+-   [References](#references---references-)
 
 ## Installation
 
@@ -53,7 +57,7 @@ head(pl_pDat)
 <div class="kable-table">
 
 | sample\_id | sex    | disease      | gestation\_wk |
-| :--------- | :----- | :----------- | ------------: |
+|:-----------|:-------|:-------------|--------------:|
 | GSM1944936 | Male   | preeclampsia |            36 |
 | GSM1944939 | Male   | preeclampsia |            32 |
 | GSM1944942 | Female | preeclampsia |            32 |
@@ -67,11 +71,9 @@ head(pl_pDat)
 
 **Requirements:**
 
-  - CpGs and SNPs that are used in `pl_infer_ethnicity` need to be in
+-   CpGs and SNPs that are used in `pl_infer_ethnicity` need to be in
     your betas `data.frame`. You can ensure that you have all features
     with the `pl_ethnicity_features` vector:
-
-<!-- end list -->
 
 ``` r
 all(pl_ethnicity_features %in% rownames(pl_betas))
@@ -81,9 +83,9 @@ all(pl_ethnicity_features %in% rownames(pl_betas))
 *Note that if some features are missing, `pl_infer_ethnicity` will throw
 a warning, but will still work.*
 
-  - The betas `data.frame` needs to have *samples in columns* and
+-   The betas `data.frame` needs to have *samples in columns* and
     *CpGs/snps* in rows. The rownames must be CpG/rs identifiers.
-  - If you have IDAT files available, then I recommend normalizing your
+-   If you have IDAT files available, then I recommend normalizing your
     betas `data.frame` using the same normalization methods used on the
     training data:
     [**noob**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/)
@@ -92,8 +94,6 @@ a warning, but will still work.*
     [\[6\]](#references). To apply these, run `minfi::preprocessNoob()`
     on an `rgset` object and then `wateRmelon::BMIQ()`. This has already
     applied to the example data.
-
-<!-- end list -->
 
 ``` r
 results <- pl_infer_ethnicity(pl_betas)
@@ -107,7 +107,7 @@ results %>%
 <div class="kable-table">
 
 | Sample\_ID | Predicted\_ethnicity\_nothresh | Predicted\_ethnicity | Prob\_African | Prob\_Asian | Prob\_Caucasian | Highest\_Prob |
-| :--------- | :----------------------------- | :------------------- | ------------: | ----------: | --------------: | ------------: |
+|:-----------|:-------------------------------|:---------------------|--------------:|------------:|----------------:|--------------:|
 | GSM1944959 | Asian                          | Asian                |     0.0123073 |   0.9523544 |       0.0353383 |     0.9523544 |
 | GSM1944960 | Caucasian                      | Caucasian            |     0.0156961 |   0.1595213 |       0.8247827 |     0.8247827 |
 | GSM1944961 | Asian                          | Asian                |     0.0208421 |   0.8954518 |       0.0837061 |     0.8954518 |
@@ -132,8 +132,6 @@ ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`,
     Samples with this label might require special attention in
     downstream analyses.
 
-<!-- end list -->
-
 ``` r
 results %>%
   ggplot(aes(x = Prob_Caucasian, y = Prob_African, col = Predicted_ethnicity)) +
@@ -147,7 +145,6 @@ results %>%
 <img src="man/figures/README-plot_results-1.png" width="100%" />
 
 ``` r
-
 results %>%
   ggplot(aes(x = Prob_Caucasian, y = Prob_Asian, col = Predicted_ethnicity)) +
   geom_point(alpha = 0.7) +
@@ -217,8 +214,9 @@ pl_pDat %>%
 #> `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="man/figures/README-pl_infer_age-1.png" width="100%" /> *GA:
-gestational age*
+<img src="man/figures/README-pl_infer_age-1.png" width="100%" />
+
+*GA: gestational age*
 
 ### Infer Cell Composition
 
@@ -339,10 +337,10 @@ bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (House
 
 <img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
-## References
+## References {\#references}
 
 1.  [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM,
-    et al. Accurate ethnicity prediction from placental DNA methylation
+    et al. Accurate ethnicity prediction from placental DNA methylation
     data. Epigenetics & Chromatin. 2019 Aug
     9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
