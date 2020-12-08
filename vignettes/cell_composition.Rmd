@@ -60,7 +60,7 @@ epidish_CP <- epidish(
   method = 'CP')
 ```
 
-#### Compare
+### Compare
 
 We can compare the different cell composition estimates.
 
@@ -90,6 +90,6 @@ bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (House
  
 ```
 
-# References
+### References
 
 1. [Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific Characterization of the Placental Methylome, 29 October 2020, PREPRINT (Version 3) available at Research Square](https://www.researchsquare.com/article/rs-38223/v3)
