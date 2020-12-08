@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">planet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3.9000</span>
       </span>
     </div>
 
@@ -87,11 +87,12 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="planet-earth_americas" class="section level1">
+<div id="planet" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#planet-earth_americas" class="anchor"></a>planet :earth_americas:</h1></div>
+<a href="#planet" class="anchor"></a>planet</h1></div>
 
-<p><code>planet</code> is an R package for inferring <strong>ethnicity</strong>, <strong>gestational age</strong>, and <strong>cell composition</strong> from placental DNA methylation data <a href="#references"><span class="math display">1</span><span class="math display">2</span><span class="math display">3</span></a>. See full documentation at <a href="https://wvictor14.github.io/planet/" class="uri">https://wvictor14.github.io/planet/</a></p>
+<p><code>planet</code> is an R package for inferring <strong>ethnicity</strong>, <strong>gestational age</strong>, and <strong>cell composition</strong> from placental DNA methylation data <span class="math display"><sup>1</sup></span>(#references)<span class="math display"><sup>2</sup></span>(#references)<span class="math display"><sup>3</sup></span>(#references).</p>
+<p>See full documentation at <a href="https://wvictor14.github.io/planet/" class="uri">https://wvictor14.github.io/planet/</a></p>
 <ul>
 <li><p><a href="#installation">Installation</a></p></li>
 <li>
@@ -112,376 +113,139 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">'wvictor14/planet'</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="usage" class="section level2">
+<div id="quick-usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<a href="#quick-usage" class="anchor"></a>Quick Usage</h2>
 <div id="example-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example Data</h3>
-<p>For demonstration, I use 24 samples from a placental DNAm dataset from GEO (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196">GSE7519</a>) <a href="#references"><span class="math display">4</span></a>, which contains samples collected in an Australian population. The DNA methylation data (in betas) can be accessed with <code><a href="https://rdrr.io/r/utils/data.html">data(pl_betas)</a></code> and corresponding sample information from <code><a href="https://rdrr.io/r/utils/data.html">data(pl_pDat)</a></code>. Note that cpgs have been filtered to a random ~10,000 CpGs, plus the CpGs used in all of the models from this package.</p>
+<p>All functions in this package take as input DNAm data. An example dataset, <code>pl_betas</code>, is provided to show the format that this data should be in. The output of all <code>planet</code> functions is a <code>data.frame</code>.</p>
+<p>A quick example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/wvictor14/planet">planet</a></span><span class="op">)</span> 
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hansenlab/minfi">minfi</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="fu">theme_set</span><span class="op">(</span><span class="fu">theme_bw</span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/wvictor14/planet">planet</a></span><span class="op">)</span>
 
 <span class="co">#load example data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">pl_betas</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">pl_pDat</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">pl_betas</span><span class="op">)</span>
-<span class="co">#&gt; [1] 13918    24</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pl_pDat</span><span class="op">)</span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<thead><tr class="header">
-<th align="left">sample_id</th>
-<th align="left">sex</th>
-<th align="left">disease</th>
-<th align="right">gestation_wk</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">GSM1944936</td>
-<td align="left">Male</td>
-<td align="left">preeclampsia</td>
-<td align="right">36</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944939</td>
-<td align="left">Male</td>
-<td align="left">preeclampsia</td>
-<td align="right">32</td>
-</tr>
-<tr class="odd">
-<td align="left">GSM1944942</td>
-<td align="left">Female</td>
-<td align="left">preeclampsia</td>
-<td align="right">32</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944944</td>
-<td align="left">Male</td>
-<td align="left">preeclampsia</td>
-<td align="right">35</td>
-</tr>
-<tr class="odd">
-<td align="left">GSM1944946</td>
-<td align="left">Female</td>
-<td align="left">preeclampsia</td>
-<td align="right">38</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944948</td>
-<td align="left">Female</td>
-<td align="left">preeclampsia</td>
-<td align="right">36</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="infer-ethnicity" class="section level3">
-<h3 class="hasAnchor">
-<a href="#infer-ethnicity" class="anchor"></a>Infer Ethnicity</h3>
-<p><strong>Requirements:</strong></p>
-<ul>
-<li>CpGs and SNPs that are used in <code>pl_infer_ethnicity</code> need to be in your betas <code>data.frame</code>. You can ensure that you have all features with the <code>pl_ethnicity_features</code> vector:</li>
-</ul>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">pl_pDat</span><span class="op">)</span> <span class="co"># sample information</span></code></pre></div>
+<div id="infer-ethnicity" class="section level4">
+<h4 class="hasAnchor">
+<a href="#infer-ethnicity" class="anchor"></a>Infer Ethnicity</h4>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">pl_ethnicity_features</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">pl_betas</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
-<p><em>Note that if some features are missing, <code>pl_infer_ethnicity</code> will throw a warning, but will still work.</em></p>
-<ul>
-<li>The betas <code>data.frame</code> needs to have <em>samples in columns</em> and <em>CpGs/snps</em> in rows. The rownames must be CpG/rs identifiers.</li>
-<li>If you have IDAT files available, then I recommend normalizing your betas <code>data.frame</code> using the same normalization methods used on the training data: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/"><strong>noob</strong></a> <a href="#references"><span class="math display">5</span></a> and <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/"><strong>BMIQ</strong></a> <a href="#references"><span class="math display">6</span></a>. To apply these, run <code><a href="https://rdrr.io/pkg/minfi/man/preprocessNoob.html">minfi::preprocessNoob()</a></code> on an <code>rgset</code> object and then <code><a href="https://rdrr.io/pkg/wateRmelon/man/BMIQ.html">wateRmelon::BMIQ()</a></code>. This has already applied to the example data.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/pl_infer_ethnicity.html">pl_infer_ethnicity</a></span><span class="op">(</span><span class="va">pl_betas</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="reference/pl_infer_ethnicity.html">pl_infer_ethnicity</a></span><span class="op">(</span><span class="va">pl_betas</span><span class="op">)</span>
 <span class="co">#&gt; [1] "1860 of 1860 predictors present."</span>
-
-<span class="co"># show last 8 rows</span>
-<span class="va">results</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></code></pre></div>
-<div class="kable-table">
-<table class="table">
-<colgroup>
-<col width="9%">
-<col width="25%">
-<col width="17%">
-<col width="11%">
-<col width="10%">
-<col width="13%">
-<col width="11%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Sample_ID</th>
-<th align="left">Predicted_ethnicity_nothresh</th>
-<th align="left">Predicted_ethnicity</th>
-<th align="right">Prob_African</th>
-<th align="right">Prob_Asian</th>
-<th align="right">Prob_Caucasian</th>
-<th align="right">Highest_Prob</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">GSM1944959</td>
-<td align="left">Asian</td>
-<td align="left">Asian</td>
-<td align="right">0.0123073</td>
-<td align="right">0.9523544</td>
-<td align="right">0.0353383</td>
-<td align="right">0.9523544</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944960</td>
-<td align="left">Caucasian</td>
-<td align="left">Caucasian</td>
-<td align="right">0.0156961</td>
-<td align="right">0.1595213</td>
-<td align="right">0.8247827</td>
-<td align="right">0.8247827</td>
-</tr>
-<tr class="odd">
-<td align="left">GSM1944961</td>
-<td align="left">Asian</td>
-<td align="left">Asian</td>
-<td align="right">0.0208421</td>
-<td align="right">0.8954518</td>
-<td align="right">0.0837061</td>
-<td align="right">0.8954518</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944962</td>
-<td align="left">Caucasian</td>
-<td align="left">Caucasian</td>
-<td align="right">0.0009276</td>
-<td align="right">0.0008801</td>
-<td align="right">0.9981923</td>
-<td align="right">0.9981923</td>
-</tr>
-<tr class="odd">
-<td align="left">GSM1944963</td>
-<td align="left">Caucasian</td>
-<td align="left">Caucasian</td>
-<td align="right">0.0022635</td>
-<td align="right">0.0028007</td>
-<td align="right">0.9949358</td>
-<td align="right">0.9949358</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944964</td>
-<td align="left">Caucasian</td>
-<td align="left">Caucasian</td>
-<td align="right">0.0065973</td>
-<td align="right">0.0112013</td>
-<td align="right">0.9822014</td>
-<td align="right">0.9822014</td>
-</tr>
-<tr class="odd">
-<td align="left">GSM1944965</td>
-<td align="left">Caucasian</td>
-<td align="left">Caucasian</td>
-<td align="right">0.0021578</td>
-<td align="right">0.0024196</td>
-<td align="right">0.9954226</td>
-<td align="right">0.9954226</td>
-</tr>
-<tr class="even">
-<td align="left">GSM1944966</td>
-<td align="left">Caucasian</td>
-<td align="left">Caucasian</td>
-<td align="right">0.0011397</td>
-<td align="right">0.0017651</td>
-<td align="right">0.9970952</td>
-<td align="right">0.9970952</td>
-</tr>
-</tbody>
-</table>
+<span class="co">#&gt; # A tibble: 24 x 7</span>
+<span class="co">#&gt;    Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African Prob_Asian</span>
+<span class="co">#&gt;    &lt;chr&gt;     &lt;chr&gt;            &lt;chr&gt;                   &lt;dbl&gt;      &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 GSM19449~ Caucasian        Caucasian            0.00331    0.0164  </span>
+<span class="co">#&gt;  2 GSM19449~ Caucasian        Caucasian            0.000772   0.000514</span>
+<span class="co">#&gt;  3 GSM19449~ Caucasian        Caucasian            0.000806   0.000699</span>
+<span class="co">#&gt;  4 GSM19449~ Caucasian        Caucasian            0.000883   0.000792</span>
+<span class="co">#&gt;  5 GSM19449~ Caucasian        Caucasian            0.000885   0.00130 </span>
+<span class="co">#&gt;  6 GSM19449~ Caucasian        Caucasian            0.000852   0.000973</span>
+<span class="co">#&gt;  7 GSM19449~ Caucasian        Caucasian            0.000902   0.00176 </span>
+<span class="co">#&gt;  8 GSM19449~ Caucasian        Caucasian            0.00174    0.00223 </span>
+<span class="co">#&gt;  9 GSM19449~ Caucasian        Caucasian            0.000962   0.00231 </span>
+<span class="co">#&gt; 10 GSM19449~ Caucasian        Caucasian            0.00287    0.00356 </span>
+<span class="co">#&gt; # ... with 14 more rows, and 2 more variables: Prob_Caucasian &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   Highest_Prob &lt;dbl&gt;</span></code></pre></div>
 </div>
-<p><code>pl_infer_ethnicity</code> returns probabilities corresponding to each ethnicity for each sample (e.g <code>Prob_Caucasian</code>, <code>Prob_African</code>, <code>Prob_Asian</code>). A final classification is determined in two ways:</p>
-<ol>
-<li><p><code>Predicted_ethnicity_nothresh</code> - returns a classification corresponding to the highest class-specific probability.</p></li>
-<li><p><code>Predicted_ethnicity</code> - if the highest class-specific probability is below <code>0.75</code>, then the the sample is assigned an <code>Amibiguous</code> label. This threshold can be adjusted with the <code>threshold</code> argument. Samples with this label might require special attention in downstream analyses.</p></li>
-</ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">%&gt;%</span>
-  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Prob_Caucasian</span>, y <span class="op">=</span> <span class="va">Prob_African</span>, col <span class="op">=</span> <span class="va">Predicted_ethnicity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">'P(Caucasian)'</span>, y <span class="op">=</span> <span class="st">'P(African)'</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-plot_results-1.png" width="100%"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">%&gt;%</span>
-  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Prob_Caucasian</span>, y <span class="op">=</span> <span class="va">Prob_Asian</span>, col <span class="op">=</span> <span class="va">Predicted_ethnicity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">'P(Caucasian)'</span>, y <span class="op">=</span> <span class="st">'P(Asian)'</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-plot_results-2.png" width="100%"></p>
-<p>We can’t compare this to self-reported ethnicity as it is unavailable. But we know these samples were collected in Sydney, Australia, and are therefore likely mostly European with some East Asian ancestries.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">Predicted_ethnicity</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     Asian Caucasian </span>
-<span class="co">#&gt;         2        22</span></code></pre></div>
-<p><strong>A note on adjustment in differential methylation analysis</strong></p>
-<p>Because ‘Ambiguous’ samples might have different mixtures of ancestries, it might be inadequate to adjust for them as one group in an analysis of admixed populations (e.g. 50/50 Asian/African should not be considered the same group as 50/50 Caucasian/African). One solution would be to simply remove these samples. Another would be to adjust for the raw probabilities-in this case, use only two of the three probabilities, since the third will be redundant (probabilities sum to 1). If sample numbers are large enough in each group, stratifying downstream analyses by ethnicity might also be a valid option.</p>
-</div>
-<div id="infer-gestational-age" class="section level3">
-<h3 class="hasAnchor">
-<a href="#infer-gestational-age" class="anchor"></a>Infer Gestational Age</h3>
-<p>There are 3 gestational age clocks for placental DNA methylation data from <a href="#references">Lee Y. et al. 2019 <span class="math display">2</span></a>:</p>
+<div id="infer-gestational-age" class="section level4">
+<h4 class="hasAnchor">
+<a href="#infer-gestational-age" class="anchor"></a>Infer Gestational Age</h4>
+<p>There are 3 gestational age clocks for placental DNA methylation data from <span class="math display">$$Lee Y. et al. 2019 \[^2$$</span>(#references):</p>
 <ol>
 <li>Robust Placental Clock (RPC)</li>
 <li>Control Placental Clock (CPC)</li>
 <li>Refined Robust Placental Clock (RRPC)</li>
 </ol>
-<p>To use each, we can specify the <code>type</code> argument in <code>pl_infer_age</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># We will add this information the sample information data.frame, pl_pDat</span>
-<span class="va">pl_pDat</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>ga_RPC <span class="op">=</span> <span class="fu"><a href="reference/pl_infer_age.html">pl_infer_age</a></span><span class="op">(</span><span class="va">pl_betas</span>, type <span class="op">=</span> <span class="st">'RPC'</span><span class="op">)</span>,
-         ga_CPC <span class="op">=</span> <span class="fu"><a href="reference/pl_infer_age.html">pl_infer_age</a></span><span class="op">(</span><span class="va">pl_betas</span>, type <span class="op">=</span> <span class="st">'CPC'</span><span class="op">)</span>,
-         ga_RRPC <span class="op">=</span> <span class="fu"><a href="reference/pl_infer_age.html">pl_infer_age</a></span><span class="op">(</span><span class="va">pl_betas</span>, type <span class="op">=</span> <span class="st">'RRPC'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  
-  <span class="co"># reshape, to plot</span>
-  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu">contains</span><span class="op">(</span><span class="st">'ga'</span><span class="op">)</span>,
-               names_to <span class="op">=</span> <span class="st">'clock_type'</span>,
-               names_prefix <span class="op">=</span> <span class="st">'ga_'</span>,
-               values_to <span class="op">=</span> <span class="st">'ga'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  
-  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gestation_wk</span>, y <span class="op">=</span> <span class="va">ga</span>, col <span class="op">=</span> <span class="va">disease</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">'lm'</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">clock_type</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">'Reported GA (weeks)'</span>, y <span class="op">=</span> <span class="st">'Inferred GA (weeks)'</span>, col <span class="op">=</span> <span class="st">''</span><span class="op">)</span>
+<p>To use a specific one, we can use the <code>type</code> argument in <code>pl_infer_age</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/pl_infer_age.html">pl_infer_age</a></span><span class="op">(</span><span class="va">pl_betas</span>, type <span class="op">=</span> <span class="st">'RPC'</span><span class="op">)</span>
 <span class="co">#&gt; [1] "558 of 558 predictors present."</span>
-<span class="co">#&gt; [1] "546 of 546 predictors present."</span>
-<span class="co">#&gt; [1] "395 of 395 predictors present."</span>
-<span class="co">#&gt; `geom_smooth()` using formula 'y ~ x'</span></code></pre></div>
-<p><img src="reference/figures/README-pl_infer_age-1.png" width="100%"></p>
-<p><em>GA: gestational age</em></p>
+<span class="co">#&gt;  [1] 38.46528 33.09680 34.32520 35.50937 37.63910 36.77051 38.16438 35.87109</span>
+<span class="co">#&gt;  [9] 40.15282 39.68453 39.70126 39.88097 39.69894 38.70228 40.46110 39.94836</span>
+<span class="co">#&gt; [17] 39.34447 39.17964 38.39203 38.90091 38.35389 39.57497 39.71251 38.23313</span></code></pre></div>
+</div>
 </div>
 <div id="infer-cell-composition" class="section level3">
 <h3 class="hasAnchor">
 <a href="#infer-cell-composition" class="anchor"></a>Infer Cell Composition</h3>
-<p>To infer cell composition on placental villi DNAm samples, we can use the reference cpgs identified in <span class="math display">3</span>. These are provided in this package as <code>pl_cell_cpgs_third</code> and <code>pl_cell_cpgs_first</code> for third trimester (term) and first trimester samples, respectively.</p>
-<p>In this example we are using term villi DNAm data, so we first load the reference cpgs <code>pl_cell_cpgs_third</code>. This is a data frame of 600 cpgs, with mean methylation levels for each cell type.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">'pl_cell_cpgs_third'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pl_cell_cpgs_third</span><span class="op">)</span>
-<span class="co">#&gt;            Trophoblasts   Stromal  Hofbauer Endothelial      nRBC</span>
-<span class="co">#&gt; cg10590657    0.1014098 0.9345796 0.8655285   0.8963641 0.8448382</span>
-<span class="co">#&gt; cg14923398    0.1282030 0.8902107 0.9036769   0.9383641 0.9508709</span>
-<span class="co">#&gt; cg05348366    0.1305697 0.9519820 0.8803082   0.9065136 0.9278057</span>
-<span class="co">#&gt; cg17907628    0.1215249 0.9278777 0.8727841   0.8914412 0.9143601</span>
-<span class="co">#&gt; cg26799656    0.1259953 0.9482014 0.8803863   0.8791004 0.9010419</span>
-<span class="co">#&gt; cg11862144    0.1561991 0.9430855 0.9114967   0.9341671 0.9647331</span>
-<span class="co">#&gt;            Syncytiotrophoblast</span>
-<span class="co">#&gt; cg10590657          0.05460441</span>
-<span class="co">#&gt; cg14923398          0.05383193</span>
-<span class="co">#&gt; cg05348366          0.06546727</span>
-<span class="co">#&gt; cg17907628          0.05325227</span>
-<span class="co">#&gt; cg26799656          0.06823985</span>
-<span class="co">#&gt; cg11862144          0.06044207</span></code></pre></div>
+<p>To infer cell composition on placental villi DNAm samples, we can use the reference cpgs identified in <span class="math display"><sup>3</sup></span>(#references). These are provided in this package as <code>pl_cell_cpgs_third</code> and <code>pl_cell_cpgs_first</code> for third trimester (term) and first trimester samples, respectively.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">'pl_cell_cpgs_third'</span><span class="op">)</span></code></pre></div>
 <p>After our reference cpg data is loaded, we can estimate cell composition by applying either the Constrained Projection approach implemented by the R packages <code>minfi</code> or <code>EpiDISH</code>, or a non-constrained approach by <code>EpiDish</code>.</p>
-<div id="minfi" class="section level4">
-<h4 class="hasAnchor">
-<a href="#minfi" class="anchor"></a>Minfi</h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hansenlab/minfi">minfi</a></span><span class="op">)</span>
-
-<span class="va">houseman_estimates</span> <span class="op">&lt;-</span> <span class="fu">minfi</span><span class="fu">:::</span><span class="fu">projectCellType</span><span class="op">(</span>
+<p>Below I show how to apply deconvolution using <code>minfi</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">minfi</span><span class="fu">:::</span><span class="fu">projectCellType</span><span class="op">(</span>
+  
+  <span class="co"># subset your data to cell cpgs</span>
   <span class="va">pl_betas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">pl_cell_cpgs_third</span><span class="op">)</span>,<span class="op">]</span>, 
+  
+  <span class="co"># input the reference cpg matrix</span>
   <span class="va">pl_cell_cpgs_third</span>,
+  
   lessThanOne <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">houseman_estimates</span><span class="op">)</span>
 <span class="co">#&gt;            Trophoblasts    Stromal      Hofbauer Endothelial       nRBC</span>
-<span class="co">#&gt; GSM1944936    0.1091279 0.04891919  0.000000e+00  0.08983998 0.05294062</span>
-<span class="co">#&gt; GSM1944939    0.2299918 0.00000000 -1.806592e-19  0.07888007 0.03374149</span>
-<span class="co">#&gt; GSM1944942    0.1934287 0.03483540  0.000000e+00  0.09260353 0.02929310</span>
-<span class="co">#&gt; GSM1944944    0.2239896 0.06249135  1.608645e-03  0.11040693 0.04447951</span>
-<span class="co">#&gt; GSM1944946    0.1894152 0.07935955  0.000000e+00  0.10587439 0.05407587</span>
-<span class="co">#&gt; GSM1944948    0.2045124 0.07657717  0.000000e+00  0.09871149 0.02269798</span>
+<span class="co">#&gt; GSM1944936   0.10912791 0.04891919  0.000000e+00  0.08983998 0.05294062</span>
+<span class="co">#&gt; GSM1944939   0.22999177 0.00000000 -1.806592e-19  0.07888007 0.03374149</span>
+<span class="co">#&gt; GSM1944942   0.19342866 0.03483540  0.000000e+00  0.09260353 0.02929310</span>
+<span class="co">#&gt; GSM1944944   0.22398964 0.06249135  1.608645e-03  0.11040693 0.04447951</span>
+<span class="co">#&gt; GSM1944946   0.18941519 0.07935955  0.000000e+00  0.10587439 0.05407587</span>
+<span class="co">#&gt; GSM1944948   0.20451244 0.07657717  0.000000e+00  0.09871149 0.02269798</span>
+<span class="co">#&gt; GSM1944949   0.14137082 0.04052886 -1.734723e-18  0.07104675 0.04844821</span>
+<span class="co">#&gt; GSM1944950   0.09041405 0.05403395  0.000000e+00  0.08599976 0.03292041</span>
+<span class="co">#&gt; GSM1944951   0.02453726 0.09480165  0.000000e+00  0.08224892 0.02811272</span>
+<span class="co">#&gt; GSM1944952   0.14319910 0.08987292  1.650890e-02  0.08158034 0.04056079</span>
+<span class="co">#&gt; GSM1944953   0.20069357 0.09189389  0.000000e+00  0.11088828 0.05554471</span>
+<span class="co">#&gt; GSM1944954   0.24492455 0.09551381  8.551038e-06  0.09558598 0.03519312</span>
+<span class="co">#&gt; GSM1944955   0.19093209 0.07728719  3.265148e-03  0.11260508 0.05682111</span>
+<span class="co">#&gt; GSM1944956   0.17337166 0.09842763  0.000000e+00  0.12279989 0.03565655</span>
+<span class="co">#&gt; GSM1944957   0.15127704 0.07934725  0.000000e+00  0.09614832 0.03678579</span>
+<span class="co">#&gt; GSM1944958   0.08555845 0.11611689  9.708612e-03  0.08682468 0.05888290</span>
+<span class="co">#&gt; GSM1944959   0.17999673 0.12913852  8.673617e-19  0.12087549 0.04388099</span>
+<span class="co">#&gt; GSM1944960   0.13084579 0.10356119  0.000000e+00  0.09795318 0.03517636</span>
+<span class="co">#&gt; GSM1944961   0.24055158 0.07167903  0.000000e+00  0.13002816 0.02868567</span>
+<span class="co">#&gt; GSM1944962   0.22849186 0.01999528  9.076153e-03  0.10098524 0.03515156</span>
+<span class="co">#&gt; GSM1944963   0.20752072 0.12765719  6.808943e-03  0.13704769 0.03779314</span>
+<span class="co">#&gt; GSM1944964   0.02937035 0.09247878  0.000000e+00  0.09778279 0.05986503</span>
+<span class="co">#&gt; GSM1944965   0.01639166 0.10901163  2.517471e-02  0.06414551 0.03813293</span>
+<span class="co">#&gt; GSM1944966   0.10572045 0.04972575  0.000000e+00  0.07686261 0.02219202</span>
 <span class="co">#&gt;            Syncytiotrophoblast</span>
 <span class="co">#&gt; GSM1944936           0.6979477</span>
 <span class="co">#&gt; GSM1944939           0.6377822</span>
 <span class="co">#&gt; GSM1944942           0.6350506</span>
 <span class="co">#&gt; GSM1944944           0.5467642</span>
 <span class="co">#&gt; GSM1944946           0.6022329</span>
-<span class="co">#&gt; GSM1944948           0.6085825</span></code></pre></div>
-</div>
-<div id="epidish" class="section level4">
-<h4 class="hasAnchor">
-<a href="#epidish" class="anchor"></a>EpiDish</h4>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sjczheng/EpiDISH">EpiDISH</a></span><span class="op">)</span>
-<span class="co">#&gt; Warning: package 'EpiDISH' was built under R version 4.0.3</span>
-
-<span class="co"># robust partial correlations</span>
-<span class="va">epidish_RPC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EpiDISH/man/epidish.html">epidish</a></span><span class="op">(</span>
-  beta.m <span class="op">=</span> <span class="va">pl_betas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">pl_cell_cpgs_third</span><span class="op">)</span>,<span class="op">]</span>,
-  ref.m <span class="op">=</span> <span class="va">pl_cell_cpgs_third</span>,
-  method <span class="op">=</span> <span class="st">'RPC'</span><span class="op">)</span>
-
-<span class="co"># CIBERSORT</span>
-<span class="va">epidish_CBS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EpiDISH/man/epidish.html">epidish</a></span><span class="op">(</span>
-  beta.m <span class="op">=</span> <span class="va">pl_betas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">pl_cell_cpgs_third</span><span class="op">)</span>,<span class="op">]</span>,
-  ref.m <span class="op">=</span> <span class="va">pl_cell_cpgs_third</span>,
-  method <span class="op">=</span> <span class="st">'CBS'</span><span class="op">)</span>
-
-<span class="co"># constrained projection (houseman 2012)</span>
-<span class="va">epidish_CP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/EpiDISH/man/epidish.html">epidish</a></span><span class="op">(</span>
-  beta.m <span class="op">=</span> <span class="va">pl_betas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">pl_cell_cpgs_third</span><span class="op">)</span>,<span class="op">]</span>,
-  ref.m <span class="op">=</span> <span class="va">pl_cell_cpgs_third</span>,
-  method <span class="op">=</span> <span class="st">'CP'</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="compare" class="section level4">
-<h4 class="hasAnchor">
-<a href="#compare" class="anchor"></a>Compare</h4>
-<p>We can compare the different cell composition estimates.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sjmgarnier/viridis">viridis</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: viridisLite</span>
-
-<span class="fu">bind_rows</span><span class="op">(</span><span class="va">houseman_estimates</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>algorithm <span class="op">=</span> <span class="st">'CP (Houseman)'</span><span class="op">)</span>,
-          <span class="va">epidish_RPC</span><span class="op">$</span><span class="va">estF</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>algorithm <span class="op">=</span> <span class="st">'RPC'</span><span class="op">)</span>,
-          <span class="va">epidish_CBS</span><span class="op">$</span><span class="va">estF</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>algorithm <span class="op">=</span> <span class="st">'CBS'</span><span class="op">)</span>,
-          <span class="va">epidish_CP</span><span class="op">$</span><span class="va">estF</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>algorithm <span class="op">=</span> <span class="st">'CP (EpiDISH)'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">houseman_estimates</span><span class="op">)</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">algorithm</span>, <span class="va">sample</span><span class="op">)</span>,
-               names_to <span class="op">=</span> <span class="st">'component'</span>,
-               values_to <span class="op">=</span> <span class="st">'estimate'</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  
-
-  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sample</span>, y <span class="op">=</span> <span class="va">estimate</span>, fill <span class="op">=</span> <span class="va">component</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_bar</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">'identity'</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">algorithm</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_fill_viridis_d</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_minimal</span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_y_continuous</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.1</span>,<span class="fl">1.1</span><span class="op">)</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">''</span>, fill <span class="op">=</span> <span class="st">''</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
+<span class="co">#&gt; GSM1944948           0.6085825</span>
+<span class="co">#&gt; GSM1944949           0.7065337</span>
+<span class="co">#&gt; GSM1944950           0.7494739</span>
+<span class="co">#&gt; GSM1944951           0.8098272</span>
+<span class="co">#&gt; GSM1944952           0.6334274</span>
+<span class="co">#&gt; GSM1944953           0.5643498</span>
+<span class="co">#&gt; GSM1944954           0.5492940</span>
+<span class="co">#&gt; GSM1944955           0.5725059</span>
+<span class="co">#&gt; GSM1944956           0.5883822</span>
+<span class="co">#&gt; GSM1944957           0.6462834</span>
+<span class="co">#&gt; GSM1944958           0.6803711</span>
+<span class="co">#&gt; GSM1944959           0.5509971</span>
+<span class="co">#&gt; GSM1944960           0.6477206</span>
+<span class="co">#&gt; GSM1944961           0.5148841</span>
+<span class="co">#&gt; GSM1944962           0.5932219</span>
+<span class="co">#&gt; GSM1944963           0.5186078</span>
+<span class="co">#&gt; GSM1944964           0.7645366</span>
+<span class="co">#&gt; GSM1944965           0.7834136</span>
+<span class="co">#&gt; GSM1944966           0.7666303</span></code></pre></div>
 </div>
 </div>
-</div>
-<div id="references-references" class="section level2">
+<div id="references" class="section level2">
 <h2 class="hasAnchor">
-<a href="#references-references" class="anchor"></a>References {#references}</h2>
+<a href="#references" class="anchor"></a>References</h2>
 <ol>
 <li><p><a href="https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3"><strong>Yuan V</strong>, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics &amp; Chromatin. 2019 Aug 9;12(1):51.</a></p></li>
 <li><p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/">Lee Y, Choufani S, Weksberg R, Wilson SL, <strong>Yuan V</strong>, et al. Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels. Aging (Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049</a></p></li>
-<li><p><a href="">Yuan V et al.</a></p></li>
-<li><p>Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.</p></li>
-<li><p>Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD, Siegmund KD: Low-level processing of Illumina Infinium DNA Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.</p></li>
-<li><p>Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J, Gomez-Cabrero D, Beck S: A beta-mixture quantile normalization method for correcting probe design bias in Illumina Infinium 450 k DNA methylation data. Bioinformatics 2013, 29:189–96.</p></li>
+<li><p><a href="https://www.researchsquare.com/article/rs-38223/v3">Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific Characterization of the Placental Methylome, 29 October 2020, PREPRINT (Version 3) available at Research Square</a></p></li>
 </ol>
 </div>
 </div>
