@@ -1,0 +1,87 @@
+---
+title: "Infer Ethnicity"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Infer Ethnicity}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### Example Data
+
+For demonstration, I use 24 samples from a placental DNAm dataset from GEO, ([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)), which contains samples collected in an Australian population. The DNA methylation data (in betas) can be accessed with `data(pl_betas)` and corresponding sample information from `data(pl_pDat)`. Note that cpgs have been filtered to a random \~10,000 CpGs, plus the CpGs used inall of the models from this package.
+
+```{r, message = F, warning = F}
+library(dplyr) # for data wrangling 
+library(ggplot2) #  plotting
+library(planet)
+
+#load example data
+data(pl_betas)
+data(pl_pDat)
+
+dim(pl_betas)
+head(pl_pDat)
+```
+
+### Infer Ethnicity
+
+**Requirements:**
+
+- CpGs and SNPs that are used in `pl_infer_ethnicity` need to be in your betas `data.frame`. You can ensure that you have all features with the `pl_ethnicity_features` vector:
+
+```{r}
+all(pl_ethnicity_features %in% rownames(pl_betas))
+```
+
+*Note that if some features are missing, `pl_infer_ethnicity` will throw a
+warning, but will still work.*
+
+- The betas `data.frame` needs to have *samples in columns* and *CpGs/snps* in rows. The rownames must be CpG/rs identifiers.
+- If you have IDAT files available, then I recommend normalizing your betas `data.frame` using the same normalization methods used on the training data: [**noob**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) and [**BMIQ**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/). To apply these, run `minfi::preprocessNoob()` on an `rgset` object and then `wateRmelon::BMIQ()`. This has already applied to the example data.
+
+```{r, message = F}
+results <- pl_infer_ethnicity(pl_betas)
+
+# show last 8 rows
+results %>%
+  tail(8)
+```
+
+`pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final classification is determined in two ways:
+
+1.  `Predicted_ethnicity_nothresh` - returns a classification corresponding to the highest class-specific probability.
+
+2.  `Predicted_ethnicity` - if the highest class-specific probability is below `0.75`, then the the sample is assigned an `Amibiguous` label. This threshold can be adjusted with the `threshold` argument. Samples with this label might require special attention in downstream analyses.
+
+```{r plot_results, fig.width = 5}
+results %>%
+  ggplot(aes(x = Prob_Caucasian, y = Prob_African, col = Predicted_ethnicity)) +
+  geom_point(alpha = 0.7) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = 'P(Caucasian)', y = 'P(African)')
+
+results %>%
+  ggplot(aes(x = Prob_Caucasian, y = Prob_Asian, col = Predicted_ethnicity)) +
+  geom_point(alpha = 0.7) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = 'P(Caucasian)', y = 'P(Asian)')
+```
+
+We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples were collected in Sydney, Australia, and are therefore likely mostly European with some East Asian ancestries.
+
+```{r}
+table(results$Predicted_ethnicity)
+```
+
+**A note on adjustment in differential methylation analysis**
+
+Because 'Ambiguous' samples might have different mixtures of ancestries, it might be inadequate to adjust for them as one group in an analysis of admixed populations (e.g. 50/50 Asian/African should not be considered the same group as 50/50 Caucasian/African). One solution would be to simply remove these samples. Another would be to adjust for the raw probabilities-in this case, use only two of the three probabilities, since the third will be redundant (probabilities sum to 1). If sample numbers are large enough in each group, stratifying downstream analyses by ethnicity might also be a valid option.
+
+### References
+
+1. [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
