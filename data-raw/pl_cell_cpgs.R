@@ -16,5 +16,4 @@ pl_cell_cpgs_first <- pl_cell_cpgs_first[,2:7] %>%
   as.matrix() %>%
   magrittr::set_rownames(pl_cell_cpgs_first$cpg)
 
-
 usethis::use_data(pl_cell_cpgs_third, pl_cell_cpgs_first, overwrite = TRUE, internal = FALSE)

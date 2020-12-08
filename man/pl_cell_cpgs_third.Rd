@@ -12,7 +12,7 @@ Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 pl_cell_cpgs_third
 }
 \description{
-Reference:
-PMID:
+Reference: to be edited
+PMID: to be edited
 }
 \keyword{datasets}
