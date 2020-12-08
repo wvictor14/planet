@@ -1,0 +1,68 @@
+---
+title: "Infer Gestational Age"
+output: 
+  rmarkdown::html_vignette:
+    df_print: kable
+vignette: >
+  %\VignetteIndexEntry{Infer Gestational Age}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+There are 3 gestational age clocks for placental DNA methylation data from Lee Y. et al. 2019:
+
+1.  Robust Placental Clock (RPC)
+2.  Control Placental Clock (CPC)
+3.  Refined Robust Placental Clock (RRPC)
+
+To predict gestational, we load the example data:
+
+- `pl_betas` - DNAm data for 6 placental samples
+- `pl_pDat` - Matching sample information
+
+```{r pl_infer_age, message = FALSE, warning = FALSE}
+library(tidyverse) # for data wrangling and plotting
+library(planet)
+data("pl_pDat")
+data("pl_betas")
+```
+
+To use each, we can specify the `type` argument in `pl_infer_age`.
+
+We will apply all three clocks on this data, and add the predicted age to the sample information data.frame, `pl_pDat`.
+
+```{r}
+pl_pDat <- pl_pDat %>%
+  mutate(ga_RPC = pl_infer_age(pl_betas, type = 'RPC'),
+         ga_CPC = pl_infer_age(pl_betas, type = 'CPC'),
+         ga_RRPC = pl_infer_age(pl_betas, type = 'RRPC')) 
+```
+
+Note that the number of predictors (CpGs) that were used in our data are printed. It's important to take note if a significant number of predictive CpGs are missing in your data, as this can affect the predicted gestational age accuracy.
+
+Next, I plot the difference between predicted and reported gestational age, for each of the 3 gestational age predictors.
+
+```{r, fig.width = 5}
+pl_pDat %>%
+  # reshape, to plot
+  pivot_longer(cols = contains('ga'),
+               names_to = 'clock_type',
+               names_prefix = 'ga_',
+               values_to = 'ga') %>%
+  
+  ggplot(aes(x = gestation_wk, y = ga, col = disease)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  facet_wrap(~clock_type) +
+  theme(legend.position = 'top') +
+  labs(x = 'Reported GA (weeks)', y = 'Inferred GA (weeks)', col = '')
+```
+
+*GA: gestational age*
+
+#### References
+
+1.  [Lee Y, Choufani S, Weksberg R, Wilson SL, **Yuan V**, et al. Placental
+    epigenetic clocks: estimating gestational age using placental DNA
+    methylation levels. Aging (Albany NY). 2019;11(12):4238–4253.
+    doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
