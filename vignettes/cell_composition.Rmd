@@ -13,7 +13,7 @@ editor_options:
 
 To infer cell composition on placental villi DNAm samples, we can use the reference cpgs identified in [3]. These are provided in this package as `pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and first trimester samples, respectively.
 
-In this example we are using term villi DNAm data, so we first load the reference cpgs pl_cell_cpgs_third. This is a data frame of 600 cpgs, with mean methylation levels for each cell type.
+In this example we are using term villi DNAm data, so we first load the reference cpgs `pl_cell_cpgs_third`. This is a data frame of 600 cpgs, with mean methylation levels for each cell type.
 
 ```{r, message = FALSE, warning = FALSE}
 # cell deconvolution packages
@@ -29,6 +29,7 @@ library(viridis)
 library(planet)
 
 # load example data
+data('pl_betas')
 data('pl_cell_cpgs_third')
 head(pl_cell_cpgs_third)
 ```

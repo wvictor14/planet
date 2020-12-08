@@ -1,6 +1,6 @@
 ---
 output: 
-  github_document
+  github_document:
 editor_options: 
   chunk_output_type: console
   markdown: 
@@ -20,40 +20,30 @@ knitr::opts_chunk$set(
 
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
 
-`planet` is an R package for inferring **ethnicity**, **gestational age**, and **cell composition** from placental DNA methylation data [^1](#references)[^2](#references)[^3](#references). 
+`planet` is an R package for inferring **ethnicity** [1], **gestational age** [2], and **cell composition** [3] from placental DNA methylation data. 
 
 See full documentation at <https://wvictor14.github.io/planet/>
 
--   [Installation](#installation)
+### Installation
 
--   [Usage](#usage)
-
-    -   [Example Data](#example-data)
-    -   [Infer Ethnicity](#infer-ethnicity)
-    -   [Infer Gestational Age](#infer-gestational-age)
-    -   [Infer Cell Composition](#infer-cell-composition)
-
--   [References](#references---references-)
-
-## Installation
-
-You can install from this github repo with:
+You can install `planet` from this github repo:
 
 ```{r eval = FALSE}
 devtools::install_github('wvictor14/planet')
 ```
 
-## Quick Usage
+### Usage
 
-### Example Data
+See [vignettes](https://wvictor14.github.io/planet/articles) for more detailed usage.
 
-All functions in this package take as input DNAm data. An example dataset, `pl_betas`, is provided to show the format that this data should be in. The output of all `planet` functions is a `data.frame`.
+#### Example Data
 
-A quick example:
+All functions in this package take as input DNAm data the 450k and EPIC DNAm microarray. For best performance I suggest providing unfiltered data normalized with noob and BMIQ. A processed example dataset, `pl_betas`, is provided to show the format that this data should be in. The output of all `planet` functions is a `data.frame`.
+
+A quick example of each major function is illustrated with this example data:
 
 ```{r, message = F, warning = F}
 library(minfi)
-library(tidyverse)
 library(planet)
 
 #load example data
@@ -64,38 +54,27 @@ data(pl_pDat) # sample information
 #### Infer Ethnicity
 
 ```{r}
-pl_infer_ethnicity(pl_betas)
+pl_infer_ethnicity(pl_betas) %>%
+  head()
 ```
 
 #### Infer Gestational Age
 
 There are 3 gestational age clocks for placental DNA methylation data from [Lee
-Y. et al. 2019 [^2](#references):
-
-1.  Robust Placental Clock (RPC)
-2.  Control Placental Clock (CPC)
-3.  Refined Robust Placental Clock (RRPC)
-
-To use a specific one, we can use the `type` argument in `pl_infer_age`:
+Y. et al. 2019 [2]. To use a specific one, we can use the `type` argument in `pl_infer_age`:
 
 ```{r pl_infer_age, dpi = 200}
-pl_infer_age(pl_betas, type = 'RPC')
+pl_infer_age(pl_betas, type = 'RPC') %>%
+  head()
 ```
 
-### Infer Cell Composition
+#### Infer Cell Composition
 
-To infer cell composition on placental villi DNAm samples, we can use the reference cpgs identified in [^3](#references). These are provided in this package as `pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and
-first trimester samples, respectively.
+Reference data to infer cell composition on placental villi DNAm samples [3] can be used with cell deconvolution from minfi or EpiDISH. These are provided in this package as `pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and first trimester samples, respectively.
 
 ```{r}
 data('pl_cell_cpgs_third')
-```
 
-After our reference cpg data is loaded, we can estimate cell composition by applying either the Constrained Projection approach implemented by the R packages `minfi` or `EpiDISH`, or a non-constrained approach by `EpiDish`.
-
-Below I show how to apply deconvolution using `minfi`:
-
-```{r, message = FALSE, warning = FALSE}
 minfi:::projectCellType(
   
   # subset your data to cell cpgs
@@ -104,10 +83,12 @@ minfi:::projectCellType(
   # input the reference cpg matrix
   pl_cell_cpgs_third,
   
-  lessThanOne = FALSE)
+  lessThanOne = FALSE) %>%
+  
+  head()
 ```
 
-## References
+### References
 
 1.  [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
