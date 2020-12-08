@@ -64,7 +64,7 @@ epidish_CP <- epidish(
 
 We can compare the different cell composition estimates.
 
-```{r}
+```{r, out.width="100%", dpi = 192}
 library(viridis)
 
 bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (Houseman)'),
