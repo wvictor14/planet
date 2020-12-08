@@ -4,6 +4,8 @@ output:
     df_print: kable
 editor_options: 
   chunk_output_type: console
+  markdown: 
+    wrap: 80
 ---
 
 ```{r setup, include = FALSE}
@@ -19,15 +21,21 @@ knitr::opts_chunk$set(
 
 [![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
 
-`planet` is an R package for inferring **ethnicity**, **gestational age**, and **cell composition** from placental DNA methylation data [\[1\]\[2\]\[3\]](#references). 
+`planet` is an R package for inferring **ethnicity**, **gestational age**, and
+**cell composition** from placental DNA methylation data
+[[1][2][3]](#references). See full documentation at
+<https://wvictor14.github.io/planet/>
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Example Data](#example-data)
-  - [Infer Ethnicity](#infer-ethnicity)
-  - [Infer Gestational Age](#infer-gestational-age)
-  - [Infer Cell Composition](#infer-cell-composition)
-- [References](#references---references-)
+-   [Installation](#installation)
+
+-   [Usage](#usage)
+
+    -   [Example Data](#example-data)
+    -   [Infer Ethnicity](#infer-ethnicity)
+    -   [Infer Gestational Age](#infer-gestational-age)
+    -   [Infer Cell Composition](#infer-cell-composition)
+
+-   [References](#references---references-)
 
 ## Installation
 
@@ -41,10 +49,13 @@ devtools::install_github('wvictor14/planet')
 
 ### Example Data
 
-For demonstration, I use 24 samples from a placental DNAm dataset from GEO ([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)) [\[4\]](#references), which 
-contains samples collected in an Australian population. The DNA methylation data (in betas) can be
-accessed with `data(pl_betas)` and corresponding sample information from `data(pl_pDat)`. Note that
-cpgs have been filtered to a random ~10,000 CpGs, plus the CpGs used in all of the models from this package.
+For demonstration, I use 24 samples from a placental DNAm dataset from GEO
+([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196))
+[[4]](#references), which contains samples collected in an Australian
+population. The DNA methylation data (in betas) can be accessed with
+`data(pl_betas)` and corresponding sample information from `data(pl_pDat)`. Note
+that cpgs have been filtered to a random \~10,000 CpGs, plus the CpGs used in
+all of the models from this package.
 
 ```{r, message = F, warning = F}
 library(planet) 
@@ -63,21 +74,27 @@ head(pl_pDat)
 
 **Requirements:**
 
-- CpGs and SNPs that are used in `pl_infer_ethnicity` need to be in your betas `data.frame`. You can ensure that you have all features with the `pl_ethnicity_features` vector:
+-   CpGs and SNPs that are used in `pl_infer_ethnicity` need to be in your betas
+    `data.frame`. You can ensure that you have all features with the
+    `pl_ethnicity_features` vector:
 
 ```{r}
 all(pl_ethnicity_features %in% rownames(pl_betas))
 ```
 
-*Note that if some features are missing, `pl_infer_ethnicity` will throw a warning, but will still work.*
+*Note that if some features are missing, `pl_infer_ethnicity` will throw a
+warning, but will still work.*
 
-- The betas `data.frame` needs to have *samples in columns* and *CpGs/snps* in rows. The rownames 
-must be CpG/rs identifiers.
-- If you have IDAT files available, then I recommend normalizing your betas `data.frame` using the 
-same normalization methods used on the training data:
-[**noob**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/) [\[5\]](#references) and 
-[**BMIQ**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/) [\[6\]](#references). To apply these, run `minfi::preprocessNoob()` on an `rgset` object and then `wateRmelon::BMIQ()`. This has already 
-applied to the example data.
+-   The betas `data.frame` needs to have *samples in columns* and *CpGs/snps* in
+    rows. The rownames must be CpG/rs identifiers.
+-   If you have IDAT files available, then I recommend normalizing your betas
+    `data.frame` using the same normalization methods used on the training data:
+    [**noob**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627582/)
+    [[5]](#references) and
+    [**BMIQ**](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3546795/)
+    [[6]](#references). To apply these, run `minfi::preprocessNoob()` on an
+    `rgset` object and then `wateRmelon::BMIQ()`. This has already applied to
+    the example data.
 
 ```{r, message = F}
 results <- pl_infer_ethnicity(pl_betas)
@@ -87,16 +104,17 @@ results %>%
   tail(8)
 ```
 
-`pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for each sample (e.g 
-`Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final classification is determined in two ways:
+`pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
+each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final
+classification is determined in two ways:
 
-1. `Predicted_ethnicity_nothresh` - returns a classification corresponding to the highest 
-class-specific probability. 
+1.  `Predicted_ethnicity_nothresh` - returns a classification corresponding to
+    the highest class-specific probability.
 
-2. `Predicted_ethnicity` - if the highest class-specific probability is below `0.75`, then the the
-sample is assigned an `Amibiguous` label. This threshold can be adjusted with the `threshold` 
-argument. Samples with this label might require special attention in downstream analyses.
-
+2.  `Predicted_ethnicity` - if the highest class-specific probability is below
+    `0.75`, then the the sample is assigned an `Amibiguous` label. This
+    threshold can be adjusted with the `threshold` argument. Samples with this
+    label might require special attention in downstream analyses.
 
 ```{r plot_results, fig.width = 5, fig.height = 2.5, dpi = 200}
 results %>%
@@ -116,9 +134,9 @@ results %>%
   labs(x = 'P(Caucasian)', y = 'P(Asian)')
 ```
 
-We can't compare this to self-reported ethnicity as it is unavailable. But we know these samples 
-were collected in Sydney, Australia, and are therefore likely mostly European with some East Asian 
-ancestries. 
+We can't compare this to self-reported ethnicity as it is unavailable. But we
+know these samples were collected in Sydney, Australia, and are therefore likely
+mostly European with some East Asian ancestries.
 
 ```{r}
 table(results$Predicted_ethnicity)
@@ -126,21 +144,23 @@ table(results$Predicted_ethnicity)
 
 **A note on adjustment in differential methylation analysis**
 
-Because 'Ambiguous' samples might have different mixtures of ancestries, it might be
-inadequate to adjust for them as one group in an analysis of admixed populations (e.g. 50/50 
-Asian/African should not be considered the same group as 50/50 Caucasian/African). One solution 
-would be to simply remove these samples. Another would be to adjust for the raw probabilities-in 
-this case, use only two of the three probabilities, since the third will be redundant 
-(probabilities sum to 1). If sample numbers are large enough in each group, stratifying downstream
+Because 'Ambiguous' samples might have different mixtures of ancestries, it
+might be inadequate to adjust for them as one group in an analysis of admixed
+populations (e.g. 50/50 Asian/African should not be considered the same group as
+50/50 Caucasian/African). One solution would be to simply remove these samples.
+Another would be to adjust for the raw probabilities-in this case, use only two
+of the three probabilities, since the third will be redundant (probabilities sum
+to 1). If sample numbers are large enough in each group, stratifying downstream
 analyses by ethnicity might also be a valid option.
 
 ### Infer Gestational Age
 
-There are 3 gestational age clocks for placental DNA methylation data from [Lee Y. et al. 2019 \[2\]](#references):
+There are 3 gestational age clocks for placental DNA methylation data from [Lee
+Y. et al. 2019 [2]](#references):
 
-1. Robust Placental Clock (RPC)
-2. Control Placental Clock (CPC)
-3. Refined Robust Placental Clock (RRPC)
+1.  Robust Placental Clock (RPC)
+2.  Control Placental Clock (CPC)
+3.  Refined Robust Placental Clock (RRPC)
 
 To use each, we can specify the `type` argument in `pl_infer_age`:
 
@@ -163,20 +183,28 @@ pl_pDat %>%
   facet_wrap(~clock_type) +
   labs(x = 'Reported GA (weeks)', y = 'Inferred GA (weeks)', col = '')
 ```
+
 *GA: gestational age*
 
 ### Infer Cell Composition
 
-To infer cell composition on placental villi DNAm samples, we can use the reference cpgs identified in [3]. These are provided in this package as `pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and first trimester samples, respectively. 
+To infer cell composition on placental villi DNAm samples, we can use the
+reference cpgs identified in [3]. These are provided in this package as
+`pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and
+first trimester samples, respectively.
 
-In this example we are using term villi DNAm data, so we first load the reference cpgs `pl_cell_cpgs_third`. This is a data frame of 600 cpgs, with mean methylation levels for each cell type.
+In this example we are using term villi DNAm data, so we first load the
+reference cpgs `pl_cell_cpgs_third`. This is a data frame of 600 cpgs, with mean
+methylation levels for each cell type.
 
 ```{r}
 data('pl_cell_cpgs_third')
 head(pl_cell_cpgs_third)
 ```
 
-After our reference cpg data is loaded, we can estimate cell composition by applying either the Constrained Projection approach implemented by the R packages `minfi` or `EpiDISH`, or a non-constrained approach by `EpiDish`. 
+After our reference cpg data is loaded, we can estimate cell composition by
+applying either the Constrained Projection approach implemented by the R
+packages `minfi` or `EpiDISH`, or a non-constrained approach by `EpiDish`.
 
 #### Minfi
 
@@ -245,17 +273,29 @@ bind_rows(houseman_estimates %>% as.data.frame %>% mutate(algorithm = 'CP (House
  
 ```
 
-## References {#references}
+## References {\#references}
 
-1. [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
+1.  [**Yuan V**, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al.
+    Accurate ethnicity prediction from placental DNA methylation data.
+    Epigenetics & Chromatin. 2019 Aug
+    9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
-2. [Lee Y, Choufani S, Weksberg R, Wilson SL, **Yuan V**, et al. Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels. Aging (Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
+2.  [Lee Y, Choufani S, Weksberg R, Wilson SL, **Yuan V**, et al. Placental
+    epigenetic clocks: estimating gestational age using placental DNA
+    methylation levels. Aging (Albany NY). 2019;11(12):4238–4253.
+    doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
 
-3. [Yuan V et al.]()
+3.  [Yuan V et al.]()
 
-4. Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation profiles in preeclampsia and healthy control placentas. Am J Physiol Circ Physiol 2016, 310:H1295–H1303.
+4.  Yeung KR, Chiu CL, Pidsley R, Makris A, Hennessy A, Lind JM: DNA methylation
+    profiles in preeclampsia and healthy control placentas. Am J Physiol Circ
+    Physiol 2016, 310:H1295–H1303.
 
-5. Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD, Siegmund KD: Low-level processing of Illumina Infinium DNA Methylation BeadArrays. Nucleic Acids Res 2013, 41:e90.
+5.  Triche TJ, Weisenberger DJ, Van Den Berg D, Laird PW, Siegmund KD, Siegmund
+    KD: Low-level processing of Illumina Infinium DNA Methylation BeadArrays.
+    Nucleic Acids Res 2013, 41:e90.
 
-6. Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J, Gomez-Cabrero D, Beck S: A beta-mixture quantile normalization method for correcting probe design bias in Illumina Infinium  450 k DNA methylation data. Bioinformatics 2013, 29:189–96.
-
+6.  Teschendorff AE, Marabita F, Lechner M, Bartlett T, Tegner J, Gomez-Cabrero
+    D, Beck S: A beta-mixture quantile normalization method for correcting probe
+    design bias in Illumina Infinium 450 k DNA methylation data. Bioinformatics
+    2013, 29:189–96.
