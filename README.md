@@ -7,7 +7,7 @@
 **gestational age** \[2\], and **cell composition** \[3\] from placental
 DNA methylation data.
 
-See full documentation at <https://wvictor14.github.io/planet/>
+See full documentation at <https://victor.rbind.io/planet>
 
 ### Installation
 
@@ -63,7 +63,7 @@ pl_infer_ethnicity(pl_betas) %>%
 #### Infer Gestational Age
 
 There are 3 gestational age clocks for placental DNA methylation data
-from \[Lee Y. et al. 2019 \[2\]. To use a specific one, we can use the
+from Lee Y. et al. 2019 \[2\]. To use a specific one, we can use the
 `type` argument in `pl_infer_age`:
 
 ``` r
