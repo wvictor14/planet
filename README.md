@@ -1,7 +1,11 @@
 
 # planet
 
-[![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)
+<!-- badges: start -->
+
+[![DOI](https://zenodo.org/badge/157781369.svg)](https://zenodo.org/badge/latestdoi/157781369)[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://img.shields.io/github/last-commit/GuangchuangYu/badger.svg)](https://github.com/GuangchuangYu/badger/commits/master)
+<!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** \[1\],
 **gestational age** \[2\], and **cell composition** \[3\] from placental
@@ -19,7 +23,7 @@ devtools::install_github('wvictor14/planet')
 
 ### Usage
 
-See [vignettes](https://wvictor14.github.io/planet/articles) for more
+See [vignettes](https://victor.rbind.io/planet/articles) for more
 detailed usage.
 
 #### Example Data
