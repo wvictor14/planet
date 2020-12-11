@@ -2,6 +2,11 @@
 
 * Added vignettes
 * Reduced README significantly
+* Format documentation for Bioconductor style
+  * Added BiocViews to DESCRIPTION
+  * Wrap lines max 80 characters
+* Create CITATION
+* Add Wendy Robinson to authors
 
 # planet 0.2.3
 
@@ -20,7 +25,8 @@
 
 # planet 0.2.0
 
-* added `pl_cell_cpgs_first` and `pl_cell_cpgs_third` for cell composition inference
+* added `pl_cell_cpgs_first` and `pl_cell_cpgs_third` for cell composition 
+  inference
 
 # planet 0.1.1
 
