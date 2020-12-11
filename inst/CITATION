@@ -18,16 +18,70 @@ c(
         note = pkgVer('planet'),
         doi = '10.18129/B9.bioc.planet'
     ),
+    
     bibentry(bibtype="article",
-        title = "PAccurate ethnicity prediction from placental DNA methylation data",
+        title = "Accurate ethnicity prediction from placental DNA methylation data",
         author = personList(
-            person("Victor", "Yuan", middle = NULL,
-                   email = "victor.2wy@gmail.com",
-                   role = c("aut", "cre"))
+            person("Victor", "Yuan"),
+            person("Magda E.", "Price"),
+            person("Giulia", "Del Gobbo"),
+            person("Sara", "Mostafavi"),
+            person("Brian", "Cox"),
+            person("Alexandra M.", "Binder"),
+            person("Karin B.", "Michels"),
+            person("Carmen", "Marsit"),
+            person("Wendy P.", "Robinson")
         ),
         year = 2019,
         journal = "BMC Epigenetics & Chromatin",
         doi = "10.1186/s13072-019-0296-3",
         url = "https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3"
+    ),
+    
+    bibentry(bibtype="article",
+        title = "Accurate ethnicity prediction from placental DNA methylation data",
+        author = personList(
+            person("Victor", "Yuan"),
+            person("Magda E.", "Price"),
+            person("Giulia", "Del Gobbo"),
+            person("Sara", "Mostafavi"),
+            person("Brian", "Cox"),
+            person("Alexandra M.", "Binder"),
+            person("Karin B.", "Michels"),
+            person("Carmen", "Marsit"),
+            person("Wendy P.", "Robinson")
+        ),
+        year = 2019,
+        journal = "BMC Epigenetics & Chromatin",
+        doi = "10.1186/s13072-019-0296-3",
+        url = "https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3"
+    ),
+    
+    bibentry(bibtype="article",
+        title = "Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels",
+        author = personList(
+            person("Yunsung", "Lee"),
+            person("Sanaa", "Choufani"),
+            person("Rosanna", "Weksberg"),
+            person("Samantha L.", "Wilson"),
+            person("Victor", "Yuan"),
+            person("Amber", "Burt"),
+            person("Carmen", "Marsit"),
+            person("Ake T.", "Lu"),
+            person("Beate", "Ritz"),
+            person("Jon", "Bohlin"),
+            person("Hakon K.", "Gjessing"),
+            person("Jennifer R.", "Harris"),
+            person("Per", "Magnus"),
+            person("Alexandra M.", "Binder"),
+            person("Wendy P.", "Robinson"),
+            person("Astanand", "Jugessur"),
+            person("Steve", "Horvath")
+        ),
+        year = 2019,
+        journal = "Aging (Albany NY)",
+        doi = "10.18632/aging.102049",
+        url = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/"
     )
+    
 )
