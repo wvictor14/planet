@@ -4,7 +4,8 @@
 \name{pl_pDat}
 \alias{pl_pDat}
 \title{Sex, disease, and gestational age information associated with `pl_betas`. 
-Taken from [GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).}
+Taken from 
+[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).}
 \format{
 A [tibble][tibble::tibble-package]
 }
@@ -16,6 +17,7 @@ pl_pDat
 }
 \description{
 Sex, disease, and gestational age information associated with `pl_betas`. 
-Taken from [GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
+Taken from 
+[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
 }
 \keyword{datasets}
