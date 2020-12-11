@@ -5,9 +5,12 @@
 \title{Pipe operator}
 \usage{
 lhs \%>\% rhs
-c(1, 2, 3) %>% sum()
 }
 \description{
 See \code{magrittr::\link[magrittr]{\%>\%}} for details.
+}
+\examples{
+
+c(1, 2, 3) \%>\% sum()
 }
 \keyword{internal}
