@@ -71,8 +71,9 @@
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 "pl_cell_cpgs_third"
 
-#' An internal object containing coefficients to predict ethnicity.
+#' Coefficients to predict ethnicity.
 #'
-#' @format A [list] with three matrices corresponding to the three ethnicity classes
+#' @format A [list] with three matrices corresponding to the three ethnicity 
+#' classes
 #'
 "nbeta"
