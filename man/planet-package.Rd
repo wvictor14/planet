@@ -9,7 +9,8 @@
 This package contains R functions to infer additional biological 
     variables to supplemental DNA methylation analysis of placental data. This 
     includes inferring ethnicity/ancestry, gestational age, and cell composition
-    from placental DNA methylation array (450k/850k) data.
+    from placental DNA methylation array (450k/850k) data. The package comes 
+    with an example processed placental dataset.
 }
 \seealso{
 Useful links:
