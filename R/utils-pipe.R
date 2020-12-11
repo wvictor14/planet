@@ -8,6 +8,7 @@
 #' @export
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
+#' @return lhs
 #' @examples
 #' 
 #' c(1, 2, 3) %>% sum()
