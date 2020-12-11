@@ -1,0 +1,33 @@
+pkgVer <- function(pkg) {
+    if (!exists("meta") || is.null(meta)) meta <- packageDescription(pkg)
+    ver <- meta$Version
+    paste0('https://github.com/wvictor14/', pkg, ' - R package version ', ver)
+}
+
+c(
+
+    bibentry(bibtype="manual",
+        title = "Placental DNA methylation analysis tools",
+        author = personList(
+            person("Victor", "Yuan", middle = NULL,
+                   email = "victor.2wy@gmail.com",
+                   role = c("aut", "cre"))
+        ),
+        year = format(Sys.Date(), "%Y"),
+        url = "http://www.bioconductor.org/packages/planet",
+        note = pkgVer('planet'),
+        doi = '10.18129/B9.bioc.planet'
+    ),
+    bibentry(bibtype="article",
+        title = "PAccurate ethnicity prediction from placental DNA methylation data",
+        author = personList(
+            person("Victor", "Yuan", middle = NULL,
+                   email = "victor.2wy@gmail.com",
+                   role = c("aut", "cre"))
+        ),
+        year = 2019,
+        journal = "BMC Epigenetics & Chromatin",
+        doi = "10.1186/s13072-019-0296-3",
+        url = "https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3"
+    )
+)
