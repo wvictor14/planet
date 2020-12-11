@@ -3,14 +3,15 @@
 \docType{data}
 \name{nbeta}
 \alias{nbeta}
-\title{An internal object containing coefficients to predict ethnicity.}
+\title{Coefficients to predict ethnicity.}
 \format{
-A [list] with three matrices corresponding to the three ethnicity classes
+A [list] with three matrices corresponding to the three ethnicity 
+classes
 }
 \usage{
 nbeta
 }
 \description{
-An internal object containing coefficients to predict ethnicity.
+Coefficients to predict ethnicity.
 }
 \keyword{datasets}
