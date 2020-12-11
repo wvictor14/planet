@@ -31,7 +31,6 @@ warning is returned.
 \examples{
 
 # Load placenta DNAm data
-library(dplyr)
 data(pl_betas)
 data(pl_pDat)
 
