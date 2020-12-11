@@ -11,7 +11,7 @@ This package contains R functions to infer ethnicity/ancestry, gestational age, 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://wvictor14.github.io/planet/}
+  \item \url{https://victor.rbind.io/planet}
   \item Report bugs at \url{http://github.com/wvictor14/planet/issues}
 }
 
