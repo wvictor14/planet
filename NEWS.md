@@ -1,5 +1,7 @@
 # planet (development version)
 
+# planet 0.2.32 (12-11-2020)
+
 * Added vignettes
 * Reduced README significantly
 * Format documentation for Bioconductor style
