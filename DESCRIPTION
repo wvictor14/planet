@@ -1,10 +1,17 @@
 Package: planet
 Title: Placental DNA methylation analysis tools
 Version: 0.2.31
-Authors@R: person("Victor", "Yuan", email = "victor.2wy@gmail.com", role = c("aut", "cre"))
+Authors@R: c(person("Victor", "Yuan",
+                    email = "victor.2wy@gmail.com",
+                    role = c("aut", "cre")),
+            person(c("Wendy", "P."), "Robinson", 
+                    role = "ctb"))
 URL: https://victor.rbind.io/planet
 BugReports: http://github.com/wvictor14/planet/issues
-Description: This package contains R functions to infer additional bioligical variables to supplemental DNA methylation analysis of placental data. This includes inferring ethnicity/ancestry, gestational age, and cell composition from placental DNA methylation array (450k/850k) data.
+Description: This package contains R functions to infer additional biological 
+    variables to supplemental DNA methylation analysis of placental data. This 
+    includes inferring ethnicity/ancestry, gestational age, and cell composition
+    from placental DNA methylation array (450k/850k) data.
 Imports: 
     Matrix,
     methods,
@@ -28,4 +35,5 @@ RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
-biocViews: Software
+biocViews: Software, DifferentialMethylation, Epigenetics, Microarray, 
+    MethylationArray, DNAMethylation, CpGIsland

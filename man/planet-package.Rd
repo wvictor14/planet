@@ -4,9 +4,12 @@
 \name{planet-package}
 \alias{planet}
 \alias{planet-package}
-\title{planet: Placenta elastic net DNA methylation ethnicity classifier}
+\title{planet: Placental DNA methylation analysis tools}
 \description{
-This package contains R functions to infer ethnicity/ancestry, gestational age, and cell composition from placental DNA methylation data.
+This package contains R functions to infer additional biological 
+    variables to supplemental DNA methylation analysis of placental data. This 
+    includes inferring ethnicity/ancestry, gestational age, and cell composition
+    from placental DNA methylation array (450k/850k) data.
 }
 \seealso{
 Useful links:
@@ -18,6 +21,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Victor Yuan \email{victor.2wy@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Wendy P. Robinson [contributor]
+}
 
 }
 \keyword{internal}
