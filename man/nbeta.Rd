@@ -14,4 +14,4 @@ nbeta
 \description{
 Coefficients to predict ethnicity.
 }
-\keyword{datasets}
+\keyword{internal}
