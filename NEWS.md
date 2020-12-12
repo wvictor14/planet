@@ -1,4 +1,8 @@
-# planet (development version)
+# planet 0.2.33 (12-11-2020)
+
+* Fixed `pl_infer_age()` when missing CpGs
+* Added tests for `pl_infer_age()` and `pl_infer_ethnicity()`
+* Updated documentation
 
 # planet 0.2.32 (12-11-2020)
 
