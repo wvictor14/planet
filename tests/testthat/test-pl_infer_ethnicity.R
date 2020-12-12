@@ -4,7 +4,11 @@ test_that("pl_infer_ethnicity() returns data.frame", {
 
 test_that("pl_infer_ethnicity() works when some CpGs missing", {
   pl_betas_missing_cpgs <- pl_betas[1:1500,]
-  expect_true(is.data.frame(pl_infer_ethnicity(pl_betas_missing_cpgs)))
+  expect_true(
+    suppressWarnings(
+      is.data.frame(
+        pl_infer_ethnicity(pl_betas_missing_cpgs))))
+  expect_warning(pl_infer_ethnicity(pl_betas_missing_cpgs))
 })
 
 test_that("pl_infer_ethnicity() output contains all columns", {
