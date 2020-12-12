@@ -1,3 +1,8 @@
+# planet 0.2.34 (12-11-2020)
+
+* Reduced `nbeta` from 4 mb to 30 kb
+* Removed `Matrix` dependency from imports
+
 # planet 0.2.33 (12-11-2020)
 
 * Fixed `pl_infer_age()` when missing CpGs

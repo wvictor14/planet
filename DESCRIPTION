@@ -1,6 +1,6 @@
 Package: planet
 Title: Placental DNA methylation analysis tools
-Version: 0.2.33
+Version: 0.2.34
 Authors@R: c(person("Victor", "Yuan",
                     email = "victor.2wy@gmail.com",
                     role = c("aut", "cre")),
