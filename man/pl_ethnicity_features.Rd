@@ -3,7 +3,9 @@
 \docType{data}
 \name{pl_ethnicity_features}
 \alias{pl_ethnicity_features}
-\title{Features from 450k/850k data used to predict ethnicity}
+\title{Features from 450k/850k data used to predict ethnicity
+
+The features on the 450k/850k DNAm microarry used to predict ethnicity.}
 \format{
 A character vector of length 1860
 }
@@ -14,6 +16,8 @@ A character vector of length 1860
 pl_ethnicity_features
 }
 \description{
+Features from 450k/850k data used to predict ethnicity
+
 The features on the 450k/850k DNAm microarry used to predict ethnicity.
 }
 \keyword{datasets}
