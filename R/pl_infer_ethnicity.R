@@ -41,11 +41,12 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
   betas <- t(betas[pf, ])
 
   # glmnet code
-  if (inherits(betas, "sparseMatrix")) {
-    betas <- methods::as(betas, "dgCMatrix")
-  }
+  #if (inherits(betas, "sparseMatrix")) {
+  #  betas <- methods::as(betas, "dgCMatrix")
+  #}
+  
   npred <- nrow(betas) # number of samples
-  dn <- list(names(nbeta), dimnames(nbeta[[1]])[[2]], dimnames(betas)[[1]])
+  dn <- list(names(nbeta), "1", dimnames(betas)[[1]])
   dp <- array(0, c(nclass, nlambda, npred), dimnames = dn) # set up for results
 
   # cross product with coeeficients
