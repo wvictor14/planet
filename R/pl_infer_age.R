@@ -29,37 +29,37 @@
 #' @export
 #'
 pl_infer_age <- function(betas, type = "RPC") {
-    RPC <- CPC <- RRPC <- CpGs <- NULL
-    
-    # Filter to coefficients
-    if (type == "RPC") {
-      coef <- planet::pl_clock %>%
-        dplyr::filter(RPC != 0)
-    } else if (type == "CPC") {
-      coef <- planet::pl_clock %>%
-        dplyr::filter(CPC != 0)
-    } else if (type == "RRPC") {
-      coef <- planet::pl_clock %>%
-        dplyr::filter(RRPC != 0)
-    } else {
-      stop('Type must be one of "CPC", "RPC", or "RRPC"')
-    }
-    
-    # intersection of cpgs
-    cpgs <- intersect(
-      coef %>%
-        dplyr::filter(CpGs != "(Intercept)") %>%
-        dplyr::pull(CpGs),
-      rownames(betas)
-    )
-    
-    # Check if CpGs missing
-    if (length(cpgs) / (nrow(coef) - 1) < 0.5) {
-      stop("Less than 50% of predictors were found.")
-    }
-    
-    
-    if (length(cpgs) < (nrow(coef) - 1)) {
+  RPC <- CPC <- RRPC <- CpGs <- NULL
+  
+  # Filter to coefficients
+  if (type == "RPC") {
+    coef <- planet::pl_clock %>%
+      dplyr::filter(RPC != 0)
+  } else if (type == "CPC") {
+    coef <- planet::pl_clock %>%
+      dplyr::filter(CPC != 0)
+  } else if (type == "RRPC") {
+    coef <- planet::pl_clock %>%
+      dplyr::filter(RRPC != 0)
+  } else {
+    stop('Type must be one of "CPC", "RPC", or "RRPC"')
+  }
+  
+  # intersection of cpgs
+  cpgs <- intersect(
+    coef %>%
+      dplyr::filter(CpGs != "(Intercept)") %>%
+      dplyr::pull(CpGs),
+    rownames(betas)
+  )
+  
+  # Check if CpGs missing
+  if (length(cpgs) / (nrow(coef) - 1) < 0.5) {
+    stop("Less than 50% of predictors were found.")
+  }
+  
+  
+  if (length(cpgs) < (nrow(coef) - 1)) {
       warning(paste(
         "Only", length(cpgs), "out of", (nrow(coef) - 1),
         "predictors present."

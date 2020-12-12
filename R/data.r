@@ -1,4 +1,4 @@
-#' Features from 450k/850k data used to predict ethnicity
+#' @title Features from 450k/850k data used to predict ethnicity
 #'
 #' The features on the 450k/850k DNAm microarry used to predict ethnicity.
 #'
@@ -7,7 +7,8 @@
 #'
 "pl_ethnicity_features"
 
-#' 6 DNA methylation profiles from preeclampsia and healthy control placentas
+#' @title 6 DNA methylation profiles from preeclampsia and healthy control 
+#' placentas
 #'
 #' "Genome wide DNA methylation profiling of normal and preeclampsia placental 
 #' samples. Illumina Infinium HumanMethylation450 BeadChip (450K array) was used
@@ -31,7 +32,9 @@
 #'
 "pl_betas"
 
-#' Sex, disease, and gestational age information associated with `pl_betas`. 
+#' @title Sex, disease, and gestational age information associated with 
+#' `pl_betas`. 
+#' 
 #' Taken from 
 #' [GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
 #'
@@ -40,8 +43,8 @@
 #'
 "pl_pDat"
 
-#' Coefficients from the three placental gestational age clocks from Lee Y et 
-#' al. 2019.
+#' @title Coefficients from the three placental gestational age clocks from Lee 
+#' Y et al. 2019.
 #'
 #' Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
 #' estimating gestational age using placental DNA methylation levels. Aging 
@@ -51,8 +54,8 @@
 #' CPC, and refined RPC.
 "pl_clock"
 
-#' First trimester coefficients for placental cellular deconvolution from Yuan V
-#' et al. 2020.
+#' @title First trimester coefficients for placental cellular 
+#' deconvolution from Yuan V et al. 2020.
 #'
 #' Reference: to be edited
 #' PMID: to be edited
@@ -61,8 +64,8 @@
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 "pl_cell_cpgs_first"
 
-#' Third trimester coefficients for placental cellular deconvolution from Yuan V
-#' et al. 2020.
+#' @title Third trimester coefficients for placental cellular 
+#' deconvolution from Yuan V et al. 2020.
 #'
 #' Reference: to be edited
 #' PMID: to be edited
@@ -71,7 +74,7 @@
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 "pl_cell_cpgs_third"
 
-#' Coefficients to predict ethnicity.
+#' @title Coefficients to predict ethnicity.
 #'
 #' @keywords internal
 #' @format A [list] with three matrices corresponding to the three ethnicity 
