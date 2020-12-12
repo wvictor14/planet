@@ -12,6 +12,18 @@ rownames(a0) <- rep("(Intercept)", nrow(a0))
 # nbeta
 nbeta <- pl_glmnet$beta # save this too
 
+for (i in seq(nclass)) {
+  kbeta <- methods::rbind2(a0[i, , drop = FALSE], nbeta[[i]]) # was rbind2
+  vnames <- dimnames(kbeta)[[1]]
+  dimnames(kbeta) <- list(NULL, NULL)
+  kbeta <- kbeta[, lamlist$left, drop = FALSE] %*% 
+    Matrix::Diagonal(x = lamlist$frac) +
+    kbeta[, lamlist$right, drop = FALSE] %*% 
+    Matrix::Diagonal(x = 1 - lamlist$frac)
+  dimnames(kbeta) <- list(vnames, paste(seq(along = s)))
+  nbeta[[i]] <- kbeta
+}
+
 # nclass
 nclass <- 3
 

@@ -40,19 +40,7 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
   # subset down to 1860 final features
   betas <- t(betas[pf, ])
 
-  # glmnet code:
-  for (i in seq(nclass)) {
-    kbeta <- methods::rbind2(a0[i, , drop = FALSE], nbeta[[i]]) # was rbind2
-    vnames <- dimnames(kbeta)[[1]]
-    dimnames(kbeta) <- list(NULL, NULL)
-    kbeta <- kbeta[, lamlist$left, drop = FALSE] %*% 
-      Matrix::Diagonal(x = lamlist$frac) +
-      kbeta[, lamlist$right, drop = FALSE] %*% 
-      Matrix::Diagonal(x = 1 - lamlist$frac)
-    dimnames(kbeta) <- list(vnames, paste(seq(along = s)))
-    nbeta[[i]] <- kbeta
-  }
-
+  # glmnet code
   if (inherits(betas, "sparseMatrix")) {
     betas <- methods::as(betas, "dgCMatrix")
   }
