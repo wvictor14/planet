@@ -12,8 +12,8 @@
 #'
 #' @details Predicts gestational age using one of 3 placental gestational age
 #' clocks: RPC, CPC, or refined RPC. Requires placental DNA methylation measured
-#' on the Infinium 27K/450k/EPIC methylation array. If CpGs are missing, a
-#' warning is returned.
+#' on the Infinium 27K/450k/EPIC methylation array. Ensure as many predictive 
+#' CpGs are present in your data, otherwise accuracy may be impacted.
 #'
 #' @return A vector of length `m`, containing inferred gestational age.
 #'
@@ -29,31 +29,37 @@
 #' @export
 #'
 pl_infer_age <- function(betas, type = "RPC") {
-    RPC <- CPC <- RRPC <- CpGs <- NULL
+  RPC <- CPC <- RRPC <- CpGs <- NULL
   
-    # Filter to coefficients
-    if (type == "RPC") {
-      coef <- planet::pl_clock %>%
-        dplyr::filter(RPC != 0)
-    } else if (type == "CPC") {
-      coef <- planet::pl_clock %>%
-        dplyr::filter(CPC != 0)
-    } else if (type == "RRPC") {
-      coef <- planet::pl_clock %>%
-        dplyr::filter(RRPC != 0)
-    } else {
-      stop('Type must be one of "CPC", "RPC", or "RRPC"')
-    }
+  # Filter to coefficients
+  if (type == "RPC") {
+    coef <- planet::pl_clock %>%
+      dplyr::filter(RPC != 0)
+  } else if (type == "CPC") {
+    coef <- planet::pl_clock %>%
+      dplyr::filter(CPC != 0)
+  } else if (type == "RRPC") {
+    coef <- planet::pl_clock %>%
+      dplyr::filter(RRPC != 0)
+  } else {
+    stop('Type must be one of "CPC", "RPC", or "RRPC"')
+  }
   
-    cpgs <- intersect(
-      coef %>%
-        dplyr::filter(CpGs != "(Intercept)") %>%
-        dplyr::pull(CpGs),
-      rownames(betas)
-    )
+  # intersection of cpgs
+  cpgs <- intersect(
+    coef %>%
+      dplyr::filter(CpGs != "(Intercept)") %>%
+      dplyr::pull(CpGs),
+    rownames(betas)
+  )
   
-    # Check if CpGs missing
-    if (length(cpgs) < (nrow(coef) - 1)) {
+  # Check if CpGs missing
+  if (length(cpgs) / (nrow(coef) - 1) < 0.5) {
+    stop("Less than 50% of predictors were found.")
+  }
+  
+  
+  if (length(cpgs) < (nrow(coef) - 1)) {
       warning(paste(
         "Only", length(cpgs), "out of", (nrow(coef) - 1),
         "predictors present."
@@ -61,9 +67,16 @@ pl_infer_age <- function(betas, type = "RPC") {
     } else {
       print(paste(length(cpgs), "of", (nrow(coef) - 1), "predictors present."))
     }
-  
-    betas <- cbind(1, t(betas[cpgs, ]))
-    age <- betas %*% (coef %>% dplyr::pull(!!type)) %>%
+    
+    # filter coefficients and beta
+    coef_filtered <- coef %>%
+      dplyr::filter(CpGs %in% c("(Intercept)", cpgs)) %>%
+      dplyr::pull(!!type)
+    
+    betas_filtered <- cbind(1, t(betas[cpgs, ]))
+    
+    # calculate
+    age <- betas_filtered %*% coef_filtered %>%
       as.vector()
   
     return(age)
