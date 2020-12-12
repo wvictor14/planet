@@ -71,6 +71,9 @@ nbeta$Asian <-
 nbeta$Caucasian <- 
   nbeta$Caucasian[c('(Intercept)', pl_ethnicity_features),,drop = FALSE]
 
+# change class from dgcMatrix to matrix, removes dependency on Matrix
+nbeta <- nbeta %>% purrr::map(as.matrix) 
+
 ############### save
 usethis::use_data(a0, nclass, 
                   #nbeta, 
