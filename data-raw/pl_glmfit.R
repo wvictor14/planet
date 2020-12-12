@@ -12,18 +12,6 @@ rownames(a0) <- rep("(Intercept)", nrow(a0))
 # nbeta
 nbeta <- pl_glmnet$beta # save this too
 
-for (i in seq(nclass)) {
-  kbeta <- methods::rbind2(a0[i, , drop = FALSE], nbeta[[i]]) # was rbind2
-  vnames <- dimnames(kbeta)[[1]]
-  dimnames(kbeta) <- list(NULL, NULL)
-  kbeta <- kbeta[, lamlist$left, drop = FALSE] %*% 
-    Matrix::Diagonal(x = lamlist$frac) +
-    kbeta[, lamlist$right, drop = FALSE] %*% 
-    Matrix::Diagonal(x = 1 - lamlist$frac)
-  dimnames(kbeta) <- list(vnames, paste(seq(along = s)))
-  nbeta[[i]] <- kbeta
-}
-
 # nclass
 nclass <- 3
 
@@ -45,6 +33,46 @@ coef <- coef[non_zero,] # 1860 + 1 intercept
 
 # take out feature names
 pl_ethnicity_features <- rownames(coef)[2:nrow(coef)] # remove intercept
+
+# some glmnet processing
+for (i in seq(nclass)) {
+  kbeta <- methods::rbind2(a0[i, , drop = FALSE], nbeta[[i]]) # was rbind2
+  vnames <- dimnames(kbeta)[[1]]
+  dimnames(kbeta) <- list(NULL, NULL)
+  kbeta <- kbeta[, lamlist$left, drop = FALSE] %*% 
+    Matrix::Diagonal(x = lamlist$frac) +
+    kbeta[, lamlist$right, drop = FALSE] %*% 
+    Matrix::Diagonal(x = 1 - lamlist$frac)
+  dimnames(kbeta) <- list(vnames, paste(seq(along = s)))
+  nbeta[[i]] <- kbeta
+}
+
+# reduce nbeta
+nbeta2 <- nbeta
+
+## explore nbeta structure
+library(dplyr)
+test1 <- nbeta2$African %>% as.matrix()
+test1 <- rownames(test1)[rowSums(test1) >0 ] 
+
+test2 <- nbeta2$Asian %>% as.matrix()
+test2 <- rownames(test2)[rowSums(test2) >0 ] 
+
+test3 <- nbeta2$Caucasian %>% as.matrix()
+test3 <- rownames(test3)[rowSums(test3) >0 ] 
+
+all(c(test1, test2, test3) %in% c("(Intercept)", pl_ethnicity_features))
+
+# subset each dgcmatrix to non-zero coefficients
+nbeta$African <- 
+  nbeta$African[c('(Intercept)', pl_ethnicity_features),,drop=FALSE]
+nbeta$Asian <- 
+  nbeta$Asian[c('(Intercept)', pl_ethnicity_features),,drop=FALSE]
+nbeta$Caucasian <- 
+  nbeta$Caucasian[c('(Intercept)', pl_ethnicity_features),,drop = FALSE]
+
+# change class from dgcMatrix to matrix, removes dependency on Matrix
+nbeta <- nbeta %>% purrr::map(as.matrix) 
 
 ############### save
 usethis::use_data(a0, nclass, 

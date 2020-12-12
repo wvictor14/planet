@@ -16,7 +16,6 @@ Description: This package contains R functions to infer additional biological
 Depends: 
     R (>= 4.0)
 Imports: 
-    Matrix,
     methods,
     tibble,
     magrittr,
