@@ -8,9 +8,9 @@
 [![](https://img.shields.io/github/last-commit/GuangchuangYu/badger.svg)](https://github.com/GuangchuangYu/badger/commits/master)
 <!-- badges: end -->
 
-`planet` is an R package for inferring **ethnicity** \[1\],
-**gestational age** \[2\], and **cell composition** \[3\] from placental
-DNA methylation data.
+`planet` is an R package for inferring **ethnicity** (1), **gestational
+age** (2), and **cell composition** (3) from placental DNA methylation
+data.
 
 See full documentation at <https://victor.rbind.io/planet>
 
@@ -68,7 +68,7 @@ pl_infer_ethnicity(pl_betas) %>%
 #### Infer Gestational Age
 
 There are 3 gestational age clocks for placental DNA methylation data
-from Lee Y. et al. 2019 \[2\]. To use a specific one, we can use the
+from Lee Y. et al. 2019 (2). To use a specific one, we can use the
 `type` argument in `pl_infer_age`:
 
 ``` r
@@ -81,8 +81,8 @@ pl_infer_age(pl_betas, type = 'RPC') %>%
 #### Infer Cell Composition
 
 Reference data to infer cell composition on placental villi DNAm samples
-\[3\] can be used with cell deconvolution from minfi or EpiDISH. These
-are provided in this package as `pl_cell_cpgs_third` and
+(3) can be used with cell deconvolution from minfi or EpiDISH. These are
+provided in this package as `pl_cell_cpgs_third` and
 `pl_cell_cpgs_first` for third trimester (term) and first trimester
 samples, respectively.
 
