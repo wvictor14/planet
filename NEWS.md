@@ -1,3 +1,12 @@
+# planet 0.2.35 (12-14-2020)
+
+* added hexsticker
+* updated zenodo doi
+* added github actions
+* added cells color palette
+* favicons
+* Fixed in-text citations in README
+
 # planet 0.2.34 (12-11-2020)
 
 * Reduced `nbeta` from 4 mb to 30 kb
