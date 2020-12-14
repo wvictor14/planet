@@ -12,3 +12,4 @@
 ^..bgf-report$
 ^doc$
 ^Meta$
+^.*\.pptx$
