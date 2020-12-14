@@ -46,13 +46,13 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
   #}
   
   npred <- nrow(betas) # number of samples
-  dn <- list(names(planet::nbeta), "1", dimnames(betas)[[1]])
+  dn <- list(names(nbeta), "1", dimnames(betas)[[1]])
   dp <- array(0, c(nclass, nlambda, npred), dimnames = dn) # set up for results
 
   # cross product with coeeficients
   for (i in seq(nclass)) {
     fitk <- methods::cbind2(1, betas) %*% 
-      matrix(planet::nbeta[[i]][c("(Intercept)", colnames(betas)), ])
+      matrix(nbeta[[i]][c("(Intercept)", colnames(betas)), ])
     dp[i, , ] <- dp[i, , ] + t(as.matrix(fitk))
   }
 
