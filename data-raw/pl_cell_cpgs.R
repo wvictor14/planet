@@ -17,3 +17,13 @@ pl_cell_cpgs_first <- pl_cell_cpgs_first[,2:7] %>%
   magrittr::set_rownames(pl_cell_cpgs_first$cpg)
 
 usethis::use_data(pl_cell_cpgs_third, pl_cell_cpgs_first, overwrite = TRUE, internal = FALSE)
+
+## Code for cell palette
+pl_colors <- c(Syncytiotrophoblast = "#f4702e", 
+               Trophoblasts = "#FBC02D", 
+               Stromal = "#388E3C", 
+               Hofbauer = "#1565C0", 
+               Endothelial = "#6A1B9A", 
+               nRBC = "grey")
+
+usethis::use_data(pl_colors, internal = FALSE, overwrite =TRUE)
