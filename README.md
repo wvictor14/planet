@@ -6,6 +6,8 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633)
 [![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://img.shields.io/github/last-commit/GuangchuangYu/badger.svg)](https://github.com/GuangchuangYu/badger/commits/master)
+[![R build
+status](https://github.com/wvictor14/planet/workflows/R-CMD-check/badge.svg)](https://github.com/wvictor14/planet/actions)
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** (1), **gestational
