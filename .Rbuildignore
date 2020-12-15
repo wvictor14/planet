@@ -13,3 +13,5 @@
 ^doc$
 ^Meta$
 ^.*\.pptx$
+^.*.Rmd.orig$
+^precompile.R$
