@@ -10,7 +10,8 @@ The features on the 450k/850k DNAm microarry used to predict ethnicity.}
 A character vector of length 1860
 }
 \source{
-\url{https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3}
+\url{https://epigeneticsandchromatin.biomedcentral.com/
+articles/10.1186/s13072-019-0296-3}
 }
 \usage{
 pl_ethnicity_features

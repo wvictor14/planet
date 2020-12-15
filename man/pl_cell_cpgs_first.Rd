@@ -12,7 +12,7 @@ Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 pl_cell_cpgs_first
 }
 \description{
-First trimester coefficients for placental cellular 
+First trimester coefficients for placental cellular
 deconvolution from Yuan V et al. 2020.
 
 Reference: to be edited

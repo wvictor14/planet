@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-This package contains R functions to infer additional biological 
+This package contains R functions to infer additional biological
     variables to supplemental DNA methylation analysis of placental data. This 
     includes inferring ethnicity/ancestry, gestational age, and cell composition
     from placental DNA methylation array (450k/850k) data. The package comes 

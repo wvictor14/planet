@@ -25,7 +25,7 @@ gestational age clocks by the corresponding CpGs in a supplied betas
 \details{
 Predicts gestational age using one of 3 placental gestational age
 clocks: RPC, CPC, or refined RPC. Requires placental DNA methylation measured
-on the Infinium 27K/450k/EPIC methylation array. Ensure as many predictive 
+on the Infinium 27K/450k/EPIC methylation array. Ensure as many predictive
 CpGs are present in your data, otherwise accuracy may be impacted.
 }
 \examples{
@@ -36,5 +36,5 @@ data(pl_betas)
 data(pl_pDat)
 
 pl_pDat \%>\%
-  mutate(inferred_ga = pl_infer_age(pl_betas, type = "RPC"))
+    mutate(inferred_ga = pl_infer_age(pl_betas, type = "RPC"))
 }
