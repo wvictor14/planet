@@ -36,14 +36,11 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
             length(planet::pl_ethnicity_features), "present."
         ))
     } else {
-        print(paste(length(pf), "of 1860 predictors present."))
+        message(paste(length(pf), "of 1860 predictors present."))
     }
 
     # subset down to 1860 final features
     betas <- t(betas[pf, ])
-
-    # glmnet code if (inherits(betas, 'sparseMatrix')) { betas <-
-    # methods::as(betas, 'dgCMatrix') }
 
     npred <- nrow(betas) # number of samples
     dn <- list(names(planet::nbeta), "1", dimnames(betas)[[1]])
@@ -84,7 +81,7 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
     return(tibble::as_tibble(p))
 }
 
-# taken from glmnet v3.0.2 source
+# attribution to glmnet v3.0.2 
 glmnet_softmax <- function(x, ignore_labels = FALSE) {
     d <- dim(x)
     dd <- dimnames(x)[[2]]

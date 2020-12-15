@@ -64,7 +64,7 @@ pl_infer_age <- function(betas, type = "RPC") {
             "predictors present."
         ))
     } else {
-        print(paste(
+        message(paste(
             length(cpgs), "of",
             (nrow(coef) - 1), "predictors present."
         ))
