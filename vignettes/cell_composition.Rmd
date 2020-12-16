@@ -160,7 +160,7 @@ bind_rows(
     labs(x = "", fill = "")
 ```
 
-![plot of chunk cell-compare-alg](figure/cell-compare-alg-1.png)
+![plot of chunk cell-compare-alg](fig/cell-compare-alg-1.png)
 
 ### References
 

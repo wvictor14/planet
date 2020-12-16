@@ -49,9 +49,15 @@ pl_pDat <- pl_pDat %>%
 ```
 
 ```
-## [1] "558 of 558 predictors present."
-## [1] "546 of 546 predictors present."
-## [1] "395 of 395 predictors present."
+## 558 of 558 predictors present.
+```
+
+```
+## 546 of 546 predictors present.
+```
+
+```
+## 395 of 395 predictors present.
 ```
 
 Note that the number of predictors (CpGs) that were used in our data are 
@@ -85,7 +91,7 @@ pl_pDat %>%
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-![plot of chunk ga-3-clocks](figure/ga-3-clocks-1.png)
+![plot of chunk ga-3-clocks](fig/ga-3-clocks-1.png)
 
 *GA: gestational age*
 

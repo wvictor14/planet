@@ -82,13 +82,7 @@ these, run `minfi::preprocessNoob()` on an `rgset` object and then
 
 ```r
 results <- pl_infer_ethnicity(pl_betas)
-```
 
-```
-## [1] "1860 of 1860 predictors present."
-```
-
-```r
 # show last 8 rows
 results %>%
     tail(8)
@@ -136,7 +130,7 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(African)")
 ```
 
-![plot of chunk eth-results](figure/eth-results-1.png)
+![plot of chunk eth-results](fig/eth-results-1.png)
 
 ```r
 results %>%
@@ -151,7 +145,7 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(Asian)")
 ```
 
-![plot of chunk eth-results](figure/eth-results-2.png)
+![plot of chunk eth-results](fig/eth-results-2.png)
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we
 know these samples were collected in Sydney, Australia, and are therefore 
