@@ -5,7 +5,7 @@
 \alias{nbeta}
 \title{Coefficients to predict ethnicity.}
 \format{
-A [list] with three matrices corresponding to the three ethnicity 
+A [list] with three matrices corresponding to the three ethnicity
 classes
 }
 \usage{

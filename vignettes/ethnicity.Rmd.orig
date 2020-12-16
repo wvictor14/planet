@@ -16,8 +16,7 @@ data (in betas) can be accessed with `data(pl_betas)` and corresponding sample
 information from `data(pl_pDat)`. Note that cpgs have been filtered to a random
 \~10,000 CpGs, plus the CpGs used inall of the models from this package.
 
-
-```r
+```{r, message = F, warning = F}
 library(dplyr) # for data wrangling
 library(ggplot2) #  plotting
 library(planet)
@@ -27,26 +26,7 @@ data(pl_betas)
 data(pl_pDat)
 
 dim(pl_betas)
-```
-
-```
-## [1] 13918    24
-```
-
-```r
 head(pl_pDat)
-```
-
-```
-## # A tibble: 6 x 4
-##   sample_id  sex    disease      gestation_wk
-##   <fct>      <chr>  <chr>               <dbl>
-## 1 GSM1944936 Male   preeclampsia           36
-## 2 GSM1944939 Male   preeclampsia           32
-## 3 GSM1944942 Female preeclampsia           32
-## 4 GSM1944944 Male   preeclampsia           35
-## 5 GSM1944946 Female preeclampsia           38
-## 6 GSM1944948 Female preeclampsia           36
 ```
 
 ### Infer Ethnicity
@@ -57,13 +37,8 @@ head(pl_pDat)
 `data.frame`. You can ensure that you have all features with the
 `pl_ethnicity_features` vector:
 
-
-```r
+```{r}
 all(pl_ethnicity_features %in% rownames(pl_betas))
-```
-
-```
-## [1] TRUE
 ```
 
 *Note that if some features are missing, `pl_infer_ethnicity` will throw a
@@ -79,29 +54,12 @@ rows. The rownames must be CpG/rs identifiers.
 these, run `minfi::preprocessNoob()` on an `rgset` object and then
 `wateRmelon::BMIQ()`. This has already applied to the example data.
 
-
-```r
+```{r, message = F}
 results <- pl_infer_ethnicity(pl_betas)
 
 # show last 8 rows
 results %>%
     tail(8)
-```
-
-```
-## # A tibble: 8 x 7
-##   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African
-##   <chr>     <chr>            <chr>                   <dbl>
-## 1 GSM19449~ Asian            Asian                0.0123  
-## 2 GSM19449~ Caucasian        Caucasian            0.0157  
-## 3 GSM19449~ Asian            Asian                0.0208  
-## 4 GSM19449~ Caucasian        Caucasian            0.000928
-## 5 GSM19449~ Caucasian        Caucasian            0.00226 
-## 6 GSM19449~ Caucasian        Caucasian            0.00660 
-## 7 GSM19449~ Caucasian        Caucasian            0.00216 
-## 8 GSM19449~ Caucasian        Caucasian            0.00114 
-## # ... with 3 more variables: Prob_Asian <dbl>,
-## #   Prob_Caucasian <dbl>, Highest_Prob <dbl>
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
@@ -116,8 +74,7 @@ the highest class-specific probability.
 can be adjusted with the `threshold` argument. Samples with this label might
 require special attention in downstream analyses.
 
-
-```r
+```{r eth-results, fig.width = 5}
 results %>%
     ggplot(aes(
         x = Prob_Caucasian, y = Prob_African,
@@ -128,11 +85,7 @@ results %>%
     scale_x_continuous(labels = scales::percent) +
     scale_y_continuous(labels = scales::percent) +
     labs(x = "P(Caucasian)", y = "P(African)")
-```
 
-![plot of chunk eth-results](fig/eth-results-1.png)
-
-```r
 results %>%
     ggplot(aes(
         x = Prob_Caucasian, y = Prob_Asian,
@@ -145,21 +98,12 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(Asian)")
 ```
 
-![plot of chunk eth-results](fig/eth-results-2.png)
-
 We can't compare this to self-reported ethnicity as it is unavailable. But we
 know these samples were collected in Sydney, Australia, and are therefore 
 likely mostly European with some East Asian ancestries.
 
-
-```r
+```{r}
 table(results$Predicted_ethnicity)
-```
-
-```
-## 
-##     Asian Caucasian 
-##         2        22
 ```
 
 **A note on adjustment in differential methylation analysis**

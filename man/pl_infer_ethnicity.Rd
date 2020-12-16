@@ -7,30 +7,30 @@
 pl_infer_ethnicity(betas, threshold = 0.75)
 }
 \arguments{
-\item{betas}{n x m dataframe of methylation values on the beta scale (0, 1), 
-where the variables are arranged in rows, and samples in columns. Should 
+\item{betas}{n x m dataframe of methylation values on the beta scale (0, 1),
+where the variables are arranged in rows, and samples in columns. Should
 contain all 1860 predictors and be normalized with NOOB and BMIQ.}
 
-\item{threshold}{A probability threshold ranging from (0, 1) to call samples 
+\item{threshold}{A probability threshold ranging from (0, 1) to call samples
 'ambiguous'. Defaults to 0.75.}
 }
 \value{
 a [tibble][tibble::tibble-package]
 }
 \description{
-\code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA 
+\code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA
 methylation data.
 }
 \details{
-Predicts self-reported ethnicity from 3 classes: Africans, Asians, 
+Predicts self-reported ethnicity from 3 classes: Africans, Asians,
 and Caucasians, using placental DNA methylation data measured on the Infinium
-450k/EPIC methylation array. Will return membership probabilities that often 
+450k/EPIC methylation array. Will return membership probabilities that often
 reflect genetic ancestry composition.
 
-The input data should contain all 1860 predictors (cpgs) of the final GLMNET 
+The input data should contain all 1860 predictors (cpgs) of the final GLMNET
 model.
 
-It's recommended to use the same normalization methods used on the training 
+It's recommended to use the same normalization methods used on the training
 data: NOOB and BMIQ.
 }
 \examples{

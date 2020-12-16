@@ -21,8 +21,7 @@ To predict gestational, we load the example data:
 - `pl_betas` - DNAm data for 24 placental samples
 - `pl_pDat` - Matching sample information
 
-
-```r
+```{r pl_infer_age, message = FALSE, warning = FALSE}
 library(dplyr) # for data wrangling
 library(ggplot2) #  plotting
 library(tidyr) # for pivot_longer
@@ -38,26 +37,13 @@ To use each, we can specify the `type` argument in `pl_infer_age`.
 We will apply all three clocks on this data, and add the predicted age to the
 sample information data.frame, `pl_pDat`.
 
-
-```r
+```{r}
 pl_pDat <- pl_pDat %>%
     mutate(
         ga_RPC = pl_infer_age(pl_betas, type = "RPC"),
         ga_CPC = pl_infer_age(pl_betas, type = "CPC"),
         ga_RRPC = pl_infer_age(pl_betas, type = "RRPC")
     )
-```
-
-```
-## 558 of 558 predictors present.
-```
-
-```
-## 546 of 546 predictors present.
-```
-
-```
-## 395 of 395 predictors present.
 ```
 
 Note that the number of predictors (CpGs) that were used in our data are 
@@ -68,8 +54,7 @@ accuracy.
 Next, I plot the difference between predicted and reported gestational age, for
 each of the 3 gestational age predictors.
 
-
-```r
+```{r ga-3-clocks, fig.width = 5}
 pl_pDat %>%
     # reshape, to plot
     pivot_longer(
@@ -86,12 +71,6 @@ pl_pDat %>%
     theme(legend.position = "top") +
     labs(x = "Reported GA (weeks)", y = "Inferred GA (weeks)", col = "")
 ```
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-![plot of chunk ga-3-clocks](fig/ga-3-clocks-1.png)
 
 *GA: gestational age*
 

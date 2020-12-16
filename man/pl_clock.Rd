@@ -3,25 +3,27 @@
 \docType{data}
 \name{pl_clock}
 \alias{pl_clock}
-\title{Coefficients from the three placental gestational age clocks from Lee 
+\title{Coefficients from the three placental gestational age clocks from Lee
 Y et al. 2019.
 
 Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
-estimating gestational age using placental DNA methylation levels. Aging 
-(Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID: 31235674}
+estimating gestational age using placental DNA methylation levels. Aging
+(Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID:
+31235674}
 \format{
-A [tibble][tibble::tibble-package] with coefficients for the RPC, 
+A [tibble][tibble::tibble-package] with coefficients for the RPC,
 CPC, and refined RPC.
 }
 \usage{
 pl_clock
 }
 \description{
-Coefficients from the three placental gestational age clocks from Lee 
+Coefficients from the three placental gestational age clocks from Lee
 Y et al. 2019.
 
 Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
-estimating gestational age using placental DNA methylation levels. Aging 
-(Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID: 31235674
+estimating gestational age using placental DNA methylation levels. Aging
+(Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID:
+31235674
 }
 \keyword{datasets}
