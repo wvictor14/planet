@@ -28,7 +28,6 @@ Suggests:
     tidyr,
     scales,
     viridis,
-    minfi,
     EpiDISH,
     knitr,
     rmarkdown
