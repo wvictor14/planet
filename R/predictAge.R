@@ -18,7 +18,6 @@
 #' contain all CpGs used in each clock
 #' @param type One of the following: "RPC" (Robust), "CPC", (Control) or "RRPC"
 #' (Refined Robust).
-
 #' @return A vector of length `m`, containing inferred gestational age.
 #'
 #' @examples
@@ -34,7 +33,7 @@
 #' @export predictAge
 #' @export pl_infer_age
 #' @aliases pl_infer_age
-#'
+#' 
 predictAge <- function(betas, type = "RPC") {
     RPC <- CPC <- RRPC <- CpGs <- NULL
     # Filter to coefficients

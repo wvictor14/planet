@@ -1,29 +1,29 @@
 ## code to get cell reference cpgs
 library(tidyverse)
 
-pl_cell_cpgs_third <-
+plCellCpGsThird <-
   read_csv('Z:/Victor/Projects/NIH - cells/outs/2_14_deconvolution_reference_cpgs_third.csv')
 
-pl_cell_cpgs_first <-
+plCellCpGsFirst <-
   read_csv('Z:/Victor/Projects/NIH - cells/outs/2_14_deconvolution_reference_cpgs_first.csv')
 
 # convert to matrix
-pl_cell_cpgs_third <- pl_cell_cpgs_third[,2:7] %>%
+plCellCpGsThird <- plCellCpGsThird[,2:7] %>%
   as.matrix() %>%
-  magrittr::set_rownames(pl_cell_cpgs_third$cpg)
+  magrittr::set_rownames(plCellCpGsThird$cpg)
 
-pl_cell_cpgs_first <- pl_cell_cpgs_first[,2:7] %>%
+plCellCpGsFirst <- plCellCpGsFirst[,2:7] %>%
   as.matrix() %>%
-  magrittr::set_rownames(pl_cell_cpgs_first$cpg)
+  magrittr::set_rownames(plCellCpGsFirst$cpg)
 
-usethis::use_data(pl_cell_cpgs_third, pl_cell_cpgs_first, overwrite = TRUE, internal = FALSE)
+usethis::use_data(plCellCpGsThird, plCellCpGsFirst, overwrite = TRUE, internal = FALSE)
 
 ## Code for cell palette
-pl_colors <- c(Syncytiotrophoblast = "#f4702e", 
+plColors <- c(Syncytiotrophoblast = "#f4702e", 
                Trophoblasts = "#FBC02D", 
                Stromal = "#388E3C", 
                Hofbauer = "#1565C0", 
                Endothelial = "#6A1B9A", 
                nRBC = "grey")
 
-usethis::use_data(pl_colors, internal = FALSE, overwrite =TRUE)
+usethis::use_data(plColors, internal = FALSE, overwrite =TRUE)

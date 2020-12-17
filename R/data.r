@@ -65,7 +65,7 @@
 #'
 #' @format A [matrix] with coefficients for Trophoblasts, Stromal,
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
-"pl_cell_cpgs_first"
+"plCellCpGsFirst"
 
 #' @title Third trimester cell type reference coefficients
 #' @description Third trimester coefficients for placental cellular
@@ -76,9 +76,9 @@
 #'
 #' @format A [matrix] with coefficients for Trophoblasts, Stromal,
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
-"pl_cell_cpgs_third"
+"plCellCpGsThird"
 
-#' @title pl_colors
+#' @title A nice color palette for graphs with placental cell types
 #' @description A color palette for cell types. Used in Yuan V et al. 2020.
 #' Contains colors for:
 #'
@@ -88,7 +88,7 @@
 #' - Hofbauer
 #' - Endothelial
 #' - nRBCs
-"pl_colors"
+"plColors"
 
 #' @title Coefficients to predict ethnicity.
 #'
