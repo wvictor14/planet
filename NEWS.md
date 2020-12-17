@@ -1,3 +1,9 @@
+# planet 0.2.36 (12-17-2020)
+
+* Removed minfi dependency
+* Addressed all fixable >line80 and 4 space indent notes from BiocCheck
+* Precompiling vignettes.
+
 # planet 0.2.35 (12-14-2020)
 
 * added hexsticker
