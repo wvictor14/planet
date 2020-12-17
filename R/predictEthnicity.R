@@ -1,4 +1,4 @@
-#' @title \code{predictEthnicity}
+#' @title Predicts ethnicity using DNA methylation microarray data
 #' 
 #' @description Predicts ethnicity using DNA methylation microarray data
 #'

@@ -19,9 +19,9 @@ contain all CpGs used in each clock}
 A vector of length `m`, containing inferred gestational age.
 }
 \description{
-\code{predictAge} Multiplies the coefficients from one of three epigenetic
-gestational age clocks by the corresponding CpGs in a supplied betas
-`data.frame`.
+\code{predictAge} Multiplies the coefficients from one of three 
+epigenetic gestational age clocks by the corresponding CpGs in a supplied 
+betas `data.frame`.
 }
 \details{
 Predicts gestational age using one of 3 placental gestational age

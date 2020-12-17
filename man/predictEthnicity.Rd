@@ -3,7 +3,7 @@
 \name{predictEthnicity}
 \alias{predictEthnicity}
 \alias{pl_infer_ethnicity}
-\title{\code{predictEthnicity}}
+\title{Predicts ethnicity using DNA methylation microarray data}
 \usage{
 predictEthnicity(betas, threshold = 0.75)
 }

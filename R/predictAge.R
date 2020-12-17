@@ -1,20 +1,20 @@
-#' Predicts gestational age using DNA methylation microarray data
+#' @title Predicts gestational age using DNA methylation microarray data
 #'
-#' \code{predictAge} Multiplies the coefficients from one of three epigenetic
-#' gestational age clocks by the corresponding CpGs in a supplied betas
-#' `data.frame`.
+#' @description \code{predictAge} Multiplies the coefficients from one of three 
+#' epigenetic gestational age clocks by the corresponding CpGs in a supplied 
+#' betas `data.frame`.
+#' 
+#' @details Predicts gestational age using one of 3 placental gestational age
+#' clocks: RPC, CPC, or refined RPC. Requires placental DNA methylation measured
+#' on the Infinium 27K/450k/EPIC methylation array. Ensure as many predictive
+#' CpGs are present in your data, otherwise accuracy may be impacted.
 #'
 #' @param betas An n by m dataframe of methylation values on the beta scale (0,
 #' 1), where the CpGs are arranged in rows, and samples in columns. Should
 #' contain all CpGs used in each clock
 #' @param type One of the following: "RPC" (Robust), "CPC", (Control) or "RRPC"
 #' (Refined Robust).
-#'
-#' @details Predicts gestational age using one of 3 placental gestational age
-#' clocks: RPC, CPC, or refined RPC. Requires placental DNA methylation measured
-#' on the Infinium 27K/450k/EPIC methylation array. Ensure as many predictive
-#' CpGs are present in your data, otherwise accuracy may be impacted.
-#'
+
 #' @return A vector of length `m`, containing inferred gestational age.
 #'
 #' @examples
