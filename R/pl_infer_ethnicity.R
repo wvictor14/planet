@@ -42,16 +42,16 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
     # subset down to 1860 final features
     betas <- t(betas[pf, ])
 
-  dn <- list(names(nbeta), "1", dimnames(betas)[[1]])
-  dp <- array(0, c(nclass, nlambda, npred), dimnames = dn) # set up for results
-  npred <- nrow(betas) # number of samples
+    npred <- nrow(betas) # number of samples
+    dn <- list(names(nbeta), "1", dimnames(betas)[[1]])
+    dp <- array(0, c(nclass, nlambda, npred), dimnames = dn) # set up results
 
-  # cross product with coeeficients
-  for (i in seq(nclass)) {
-    fitk <- methods::cbind2(1, betas) %*% 
-      matrix(nbeta[[i]][c("(Intercept)", colnames(betas)), ])
-    dp[i, , ] <- dp[i, , ] + t(as.matrix(fitk))
-  }
+    # cross product with coeeficients
+    for (i in seq(nclass)) {
+        fitk <- methods::cbind2(1, betas) %*%
+            matrix(nbeta[[i]][c("(Intercept)", colnames(betas)), ])
+        dp[i, , ] <- dp[i, , ] + t(as.matrix(fitk))
+    }
 
     # probabilities
     pp <- exp(dp)
@@ -81,13 +81,13 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
     return(tibble::as_tibble(p))
 }
 
-# attribution to glmnet v3.0.2 
+# attribution to glmnet v3.0.2
 glmnet_softmax <- function(x, ignore_labels = FALSE) {
     d <- dim(x)
     dd <- dimnames(x)[[2]]
     if (is.null(dd) || !length(dd)) {
         ignore_labels <- TRUE
-        }
+    }
 
     nas <- apply(is.na(x), 1, any)
     if (any(nas)) {

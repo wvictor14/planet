@@ -89,7 +89,7 @@ data("pl_colors")
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
-    houseman_estimates %>%as.data.frame()%>% mutate(algorithm="CP (Houseman)"),
+    houseman_estimates %>% as.data.frame() %>% mutate(algorithm = "CP (Houseman)"),
     epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
     epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
     epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
@@ -101,22 +101,26 @@ bind_rows(
         names_to = "component",
         values_to = "estimate"
     ) %>%
-    
+
     # relevel for plot
-    mutate(component = factor(component, 
-                              levels = c( "nRBC", "Endothelial", "Hofbauer",
-                                       "Stromal", "Trophoblasts",
-                                       "Syncytiotrophoblast")
+    mutate(component = factor(component,
+        levels = c(
+            "nRBC", "Endothelial", "Hofbauer",
+            "Stromal", "Trophoblasts",
+            "Syncytiotrophoblast"
+        )
     )) %>%
-    
+
     # plot
     ggplot(aes(x = sample, y = estimate, fill = component)) +
     geom_bar(stat = "identity") +
     facet_wrap(~algorithm, ncol = 1) +
     scale_fill_manual(values = pl_colors) +
     theme_minimal() +
-    scale_y_continuous(limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1), 
-                       labels = scales::percent) +
+    scale_y_continuous(
+        limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1),
+        labels = scales::percent
+    ) +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
     coord_cartesian(ylim = c(0, 1)) +
     labs(x = "", fill = "")

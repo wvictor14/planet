@@ -90,18 +90,19 @@ results %>%
 
 ```
 ## # A tibble: 8 x 7
-##   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African
-##   <chr>     <chr>            <chr>                   <dbl>
-## 1 GSM19449~ Asian            Asian                0.0123  
-## 2 GSM19449~ Caucasian        Caucasian            0.0157  
-## 3 GSM19449~ Asian            Asian                0.0208  
-## 4 GSM19449~ Caucasian        Caucasian            0.000928
-## 5 GSM19449~ Caucasian        Caucasian            0.00226 
-## 6 GSM19449~ Caucasian        Caucasian            0.00660 
-## 7 GSM19449~ Caucasian        Caucasian            0.00216 
-## 8 GSM19449~ Caucasian        Caucasian            0.00114 
-## # ... with 3 more variables: Prob_Asian <dbl>,
-## #   Prob_Caucasian <dbl>, Highest_Prob <dbl>
+##   Sample_ID Predicted_ethni~ Predicted_ethni~
+##   <chr>     <chr>            <chr>           
+## 1 GSM19449~ Asian            Asian           
+## 2 GSM19449~ Caucasian        Caucasian       
+## 3 GSM19449~ Asian            Asian           
+## 4 GSM19449~ Caucasian        Caucasian       
+## 5 GSM19449~ Caucasian        Caucasian       
+## 6 GSM19449~ Caucasian        Caucasian       
+## 7 GSM19449~ Caucasian        Caucasian       
+## 8 GSM19449~ Caucasian        Caucasian       
+## # ... with 4 more variables: Prob_African <dbl>,
+## #   Prob_Asian <dbl>, Prob_Caucasian <dbl>,
+## #   Highest_Prob <dbl>
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
