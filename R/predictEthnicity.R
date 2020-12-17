@@ -1,6 +1,8 @@
-#' Infers ethnicity using DNA methylation microarray data
+#' @title \code{predictEthnicity}
+#' 
+#' @description Predicts ethnicity using DNA methylation microarray data
 #'
-#' \code{pl_infer_ethnicity} Uses a glmnet model to predict ethnicity using DNA
+#' \code{predictEthnicity} Uses a glmnet model to predict ethnicity using DNA
 #' methylation data.
 #'
 #' @param betas n x m dataframe of methylation values on the beta scale (0, 1),
@@ -8,6 +10,7 @@
 #' contain all 1860 predictors and be normalized with NOOB and BMIQ.
 #' @param threshold A probability threshold ranging from (0, 1) to call samples
 #' 'ambiguous'. Defaults to 0.75.
+#' 
 #' @details Predicts self-reported ethnicity from 3 classes: Africans, Asians,
 #' and Caucasians, using placental DNA methylation data measured on the Infinium
 #' 450k/EPIC methylation array. Will return membership probabilities that often
@@ -25,10 +28,11 @@
 #'
 #' # Load placenta DNAm data
 #' data(pl_betas)
-#' pl_infer_ethnicity(pl_betas)
+#' predictEthnicity(pl_betas)
+#' 
 #' @export
-#'
-pl_infer_ethnicity <- function(betas, threshold = 0.75) {
+
+predictEthnicity <- function(betas, threshold = 0.75) {
     pf <- intersect(rownames(betas), planet::pl_ethnicity_features)
     if (length(pf) < length(planet::pl_ethnicity_features)) {
         warning(paste(
@@ -38,21 +42,21 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
     } else {
         message(paste(length(pf), "of 1860 predictors present."))
     }
-
+    
     # subset down to 1860 final features
     betas <- t(betas[pf, ])
-
+    
     npred <- nrow(betas) # number of samples
     dn <- list(names(nbeta), "1", dimnames(betas)[[1]])
     dp <- array(0, c(nclass, nlambda, npred), dimnames = dn) # set up results
-
+    
     # cross product with coeeficients
     for (i in seq(nclass)) {
         fitk <- methods::cbind2(1, betas) %*%
             matrix(nbeta[[i]][c("(Intercept)", colnames(betas)), ])
         dp[i, , ] <- dp[i, , ] + t(as.matrix(fitk))
     }
-
+    
     # probabilities
     pp <- exp(dp)
     psum <- apply(pp, c(2, 3), sum)
@@ -61,13 +65,13 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
         c(3, 1, 2)
     ))
     colnames(probs) <- paste0("Prob_", dn[[1]])
-
+    
     # classification
     link <- aperm(dp, c(3, 1, 2))
     dpp <- aperm(dp, c(3, 1, 2))
     preds <- data.frame(apply(dpp, 3, glmnet_softmax))
     colnames(preds) <- "Predicted_ethnicity_nothresh"
-
+    
     # combine and apply thresholding
     p <- cbind(preds, probs)
     p$Highest_Prob <- apply(p[, 2:4], 1, max)
@@ -77,7 +81,7 @@ pl_infer_ethnicity <- function(betas, threshold = 0.75) {
     )
     p$Sample_ID <- rownames(p)
     p <- p[, c(7, 1, 6, 2:5)]
-
+    
     return(tibble::as_tibble(p))
 }
 
@@ -88,7 +92,7 @@ glmnet_softmax <- function(x, ignore_labels = FALSE) {
     if (is.null(dd) || !length(dd)) {
         ignore_labels <- TRUE
     }
-
+    
     nas <- apply(is.na(x), 1, any)
     if (any(nas)) {
         pclass <- rep(NA, d[1])
@@ -117,4 +121,9 @@ glmnet_softmax <- function(x, ignore_labels = FALSE) {
         }
     }
     pclass
+}
+
+pl_infer_ethnicity <- function(betas, threshold = 0.75) {
+    .Deprecated("predictEthnicity")
+    predictEthnicity(betas = betas, threshold = threshold)
 }
