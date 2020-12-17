@@ -141,7 +141,8 @@ data("pl_colors")
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
-    houseman_estimates %>% as.data.frame() %>% mutate(algorithm = "CP (Houseman)"),
+    houseman_estimates %>% as.data.frame() %>% 
+        mutate(algorithm = "CP (Houseman)"),
     epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
     epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
     epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
