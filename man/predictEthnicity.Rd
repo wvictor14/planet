@@ -20,9 +20,6 @@ a [tibble][tibble::tibble-package]
 }
 \description{
 Predicts ethnicity using DNA methylation microarray data
-
-\code{predictEthnicity} Uses a glmnet model to predict ethnicity using DNA
-methylation data.
 }
 \details{
 Predicts self-reported ethnicity from 3 classes: Africans, Asians,

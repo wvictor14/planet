@@ -2,15 +2,6 @@
 #' 
 #' @description Predicts ethnicity using DNA methylation microarray data
 #'
-#' \code{predictEthnicity} Uses a glmnet model to predict ethnicity using DNA
-#' methylation data.
-#'
-#' @param betas n x m dataframe of methylation values on the beta scale (0, 1),
-#' where the variables are arranged in rows, and samples in columns. Should
-#' contain all 1860 predictors and be normalized with NOOB and BMIQ.
-#' @param threshold A probability threshold ranging from (0, 1) to call samples
-#' 'ambiguous'. Defaults to 0.75.
-#' 
 #' @details Predicts self-reported ethnicity from 3 classes: Africans, Asians,
 #' and Caucasians, using placental DNA methylation data measured on the Infinium
 #' 450k/EPIC methylation array. Will return membership probabilities that often
@@ -21,6 +12,12 @@
 #'
 #' It's recommended to use the same normalization methods used on the training
 #' data: NOOB and BMIQ.
+#'
+#' @param betas n x m dataframe of methylation values on the beta scale (0, 1),
+#' where the variables are arranged in rows, and samples in columns. Should
+#' contain all 1860 predictors and be normalized with NOOB and BMIQ.
+#' @param threshold A probability threshold ranging from (0, 1) to call samples
+#' 'ambiguous'. Defaults to 0.75.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #' @examples
