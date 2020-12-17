@@ -8,9 +8,10 @@ These functions still work but will be removed (defunct) in the next version.
 }
 \details{
 \itemize{
- \item \code{\link{pl_infer_ethnicity}}: This function is deprecated, and 
- will be removed in the next version of this package.
- \item \code{\link{pl_infer_age}}: This function is deprecated, and 
- will be removed in the next version of this package.
+ \item \code{\link{pl_infer_ethnicity}}: This function has been renamed
+ \code{\link{predictEthnicity}}
+ 
+ \item \code{\link{pl_infer_age}}: This function has been renamed
+ \code{\link{predictAge}}
 }
 }
