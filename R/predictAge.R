@@ -1,6 +1,6 @@
 #' Predicts gestational age using DNA methylation microarray data
 #'
-#' \code{pl_infer_age} Multiplies the coefficients from one of three epigenetic
+#' \code{predictAge} Multiplies the coefficients from one of three epigenetic
 #' gestational age clocks by the corresponding CpGs in a supplied betas
 #' `data.frame`.
 #'
@@ -25,10 +25,13 @@
 #' data(pl_pDat)
 #'
 #' pl_pDat %>%
-#'     mutate(inferred_ga = pl_infer_age(pl_betas, type = "RPC"))
-#' @export
+#'     mutate(inferred_ga = predictAge(pl_betas, type = "RPC"))
+#'     
+#' @export predictAge
+#' @export pl_infer_age
+#' @aliases pl_infer_age
 #'
-pl_infer_age <- function(betas, type = "RPC") {
+predictAge <- function(betas, type = "RPC") {
     RPC <- CPC <- RRPC <- CpGs <- NULL
     # Filter to coefficients
     if (type == "RPC") {
@@ -82,4 +85,9 @@ pl_infer_age <- function(betas, type = "RPC") {
         as.vector()
 
     return(age)
+}
+
+pl_infer_age <- function(betas, type = 'RPC'){
+    .Deprecated('predictAge')
+    predictAge(betas = betas, type = type)
 }
