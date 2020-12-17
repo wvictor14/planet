@@ -30,7 +30,9 @@
 #' data(pl_betas)
 #' predictEthnicity(pl_betas)
 #' 
-#' @export
+#' @export predictEthnicity 
+#' @export pl_infer_ethnicity
+#' @aliases pl_infer_ethnicity
 
 predictEthnicity <- function(betas, threshold = 0.75) {
     pf <- intersect(rownames(betas), planet::pl_ethnicity_features)

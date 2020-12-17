@@ -2,6 +2,7 @@
 % Please edit documentation in R/predictEthnicity.R
 \name{predictEthnicity}
 \alias{predictEthnicity}
+\alias{pl_infer_ethnicity}
 \title{\code{predictEthnicity}}
 \usage{
 predictEthnicity(betas, threshold = 0.75)

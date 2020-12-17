@@ -2,6 +2,7 @@
 
 export("%>%")
 export(pl_infer_age)
+export(pl_infer_ethnicity)
 export(predictEthnicity)
 importFrom(magrittr,"%>%")
 importFrom(tibble,tibble)
