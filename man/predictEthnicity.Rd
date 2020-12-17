@@ -3,7 +3,7 @@
 \name{predictEthnicity}
 \alias{predictEthnicity}
 \alias{pl_infer_ethnicity}
-\title{Predicts ethnicity using DNA methylation microarray data}
+\title{Predicts ethnicity using placental DNA methylation microarray data}
 \usage{
 predictEthnicity(betas, threshold = 0.75)
 }
@@ -19,7 +19,8 @@ contain all 1860 predictors and be normalized with NOOB and BMIQ.}
 a [tibble][tibble::tibble-package]
 }
 \description{
-Predicts ethnicity using DNA methylation microarray data
+Uses 1860 CpGs to predict self-reported ethnicity on placental
+microarray data.
 }
 \details{
 Predicts self-reported ethnicity from 3 classes: Africans, Asians,

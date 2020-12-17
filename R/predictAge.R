@@ -1,7 +1,8 @@
-#' @title Predicts gestational age using DNA methylation microarray data
+#' @title Predicts gestational age using placental DNA methylation microarray 
+#' data
 #'
 #' @description \code{predictAge} Multiplies the coefficients from one of three 
-#' epigenetic gestational age clocks by the corresponding CpGs in a supplied 
+#' epigenetic gestational age clocks, by the corresponding CpGs in a supplied 
 #' betas `data.frame`.
 #' 
 #' @details Predicts gestational age using one of 3 placental gestational age
@@ -9,6 +10,9 @@
 #' on the Infinium 27K/450k/EPIC methylation array. Ensure as many predictive
 #' CpGs are present in your data, otherwise accuracy may be impacted.
 #'
+#' It's recommended that you have all predictive CpGs, otherwise accuracy may
+#' vary.
+#' 
 #' @param betas An n by m dataframe of methylation values on the beta scale (0,
 #' 1), where the CpGs are arranged in rows, and samples in columns. Should
 #' contain all CpGs used in each clock

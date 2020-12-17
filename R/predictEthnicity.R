@@ -1,6 +1,7 @@
-#' @title Predicts ethnicity using DNA methylation microarray data
+#' @title Predicts ethnicity using placental DNA methylation microarray data
 #' 
-#' @description Predicts ethnicity using DNA methylation microarray data
+#' @description Uses 1860 CpGs to predict self-reported ethnicity on placental
+#' microarray data.
 #'
 #' @details Predicts self-reported ethnicity from 3 classes: Africans, Asians,
 #' and Caucasians, using placental DNA methylation data measured on the Infinium
