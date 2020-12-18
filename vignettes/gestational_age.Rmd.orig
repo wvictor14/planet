@@ -18,31 +18,31 @@ Y. et al. 2019:
 
 To predict gestational, we load the example data:
 
-- `pl_betas` - DNAm data for 24 placental samples
-- `pl_pDat` - Matching sample information
+- `plBetas` - DNAm data for 24 placental samples
+- `plPhenoData` - Matching sample information
 
-```{r pl_infer_age, message = FALSE, warning = FALSE}
+```{r predictAge, message = FALSE, warning = FALSE}
 library(dplyr) # for data wrangling
 library(ggplot2) #  plotting
 library(tidyr) # for pivot_longer
 library(planet)
 
 # load example data
-data("pl_pDat")
-data("pl_betas")
+data("plPhenoData")
+data("plBetas")
 ```
 
-To use each, we can specify the `type` argument in `pl_infer_age`.
+To use each, we can specify the `type` argument in `predictAge`.
 
 We will apply all three clocks on this data, and add the predicted age to the
-sample information data.frame, `pl_pDat`.
+sample information data.frame, `plPhenoData`.
 
 ```{r}
-pl_pDat <- pl_pDat %>%
+plPhenoData <- plPhenoData %>%
     mutate(
-        ga_RPC = pl_infer_age(pl_betas, type = "RPC"),
-        ga_CPC = pl_infer_age(pl_betas, type = "CPC"),
-        ga_RRPC = pl_infer_age(pl_betas, type = "RRPC")
+        ga_RPC = predictAge(plBetas, type = "RPC"),
+        ga_CPC = predictAge(plBetas, type = "CPC"),
+        ga_RRPC = predictAge(plBetas, type = "RRPC")
     )
 ```
 
@@ -55,7 +55,7 @@ Next, I plot the difference between predicted and reported gestational age, for
 each of the 3 gestational age predictors.
 
 ```{r ga-3-clocks, fig.width = 5}
-pl_pDat %>%
+plPhenoData %>%
     # reshape, to plot
     pivot_longer(
         cols = contains("ga"),
