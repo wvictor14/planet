@@ -7,7 +7,7 @@ Authors@R:
     person(c("Wendy", "P."), "Robinson",
             role = "ctb"))
 URL: 
-    https://victor.rbind.io/planet
+    https://victor.rbind.io/planet, http://github.com/wvictor14/planet
 BugReports: 
     http://github.com/wvictor14/planet/issues
 Description: This package contains R functions to infer additional biological
