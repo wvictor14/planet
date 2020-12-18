@@ -89,11 +89,3 @@
 #' - Endothelial
 #' - nRBCs
 "plColors"
-
-#' @title Coefficients to predict ethnicity.
-#'
-#' @keywords internal
-#' @format A [list] with three matrices corresponding to the three ethnicity
-#' classes
-#'
-"nbeta"
