@@ -1,5 +1,5 @@
 ---
-title: "Infer Gestational Age"
+title: "Predict Gestational Age"
 output: 
     rmarkdown::html_vignette:
         df_print: kable

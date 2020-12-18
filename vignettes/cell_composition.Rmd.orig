@@ -1,5 +1,5 @@
 ---
-title: "Infer Placental Cell Composition"
+title: "Predict Placental Cell Composition"
 output: 
     rmarkdown::html_vignette:
         df_print: kable
