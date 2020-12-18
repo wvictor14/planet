@@ -39,17 +39,15 @@ head(plPhenoData)
 
 ```
 ## # A tibble: 6 x 7
-##   sample_id sex   disease gestation_wk
-##   <fct>     <chr> <chr>          <dbl>
-## 1 GSM19449~ Male  preecl~           36
-## 2 GSM19449~ Male  preecl~           32
-## 3 GSM19449~ Fema~ preecl~           32
-## 4 GSM19449~ Male  preecl~           35
-## 5 GSM19449~ Fema~ preecl~           38
-## 6 GSM19449~ Fema~ preecl~           36
-## # ... with 3 more variables:
-## #   ga_RPC <dbl>, ga_CPC <dbl>,
-## #   ga_RRPC <dbl>
+##   sample_id sex   disease gestation_wk ga_RPC ga_CPC
+##   <fct>     <chr> <chr>          <dbl>  <dbl>  <dbl>
+## 1 GSM19449~ Male  preecl~           36   38.5   38.7
+## 2 GSM19449~ Male  preecl~           32   33.1   34.2
+## 3 GSM19449~ Fema~ preecl~           32   34.3   35.1
+## 4 GSM19449~ Male  preecl~           35   35.5   36.7
+## 5 GSM19449~ Fema~ preecl~           38   37.6   37.6
+## 6 GSM19449~ Fema~ preecl~           36   36.8   38.4
+## # ... with 1 more variable: ga_RRPC <dbl>
 ```
 
 ### Infer Ethnicity
@@ -101,22 +99,18 @@ results %>%
 
 ```
 ## # A tibble: 8 x 7
-##   Sample_ID Predicted_ethni~
-##   <chr>     <chr>           
-## 1 GSM19449~ Asian           
-## 2 GSM19449~ Caucasian       
-## 3 GSM19449~ Asian           
-## 4 GSM19449~ Caucasian       
-## 5 GSM19449~ Caucasian       
-## 6 GSM19449~ Caucasian       
-## 7 GSM19449~ Caucasian       
-## 8 GSM19449~ Caucasian       
-## # ... with 5 more variables:
-## #   Predicted_ethnicity <chr>,
-## #   Prob_African <dbl>,
-## #   Prob_Asian <dbl>,
-## #   Prob_Caucasian <dbl>,
-## #   Highest_Prob <dbl>
+##   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African
+##   <chr>     <chr>            <chr>                   <dbl>
+## 1 GSM19449~ Asian            Asian                0.0123  
+## 2 GSM19449~ Caucasian        Caucasian            0.0157  
+## 3 GSM19449~ Asian            Asian                0.0208  
+## 4 GSM19449~ Caucasian        Caucasian            0.000928
+## 5 GSM19449~ Caucasian        Caucasian            0.00226 
+## 6 GSM19449~ Caucasian        Caucasian            0.00660 
+## 7 GSM19449~ Caucasian        Caucasian            0.00216 
+## 8 GSM19449~ Caucasian        Caucasian            0.00114 
+## # ... with 3 more variables: Prob_Asian <dbl>,
+## #   Prob_Caucasian <dbl>, Highest_Prob <dbl>
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
