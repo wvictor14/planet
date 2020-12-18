@@ -164,6 +164,13 @@ bind_rows(
 
 <img src="fig/cell-compare-alg-1.png" title="plot of chunk cell-compare-alg" alt="plot of chunk cell-compare-alg" style="display: block; margin: auto;" />
 
+Some notes:
+
+* Normalize your data with `minfi::preprocessNoob`
+* Use all cell CpGs, if some are missing, estimates may vary
+* If your samples have been processed in a particular manner, (e.g. sampling 
+from maternal side) expect cell composition to reflect that
+
 ### References
 
 1. [Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific Characterization 

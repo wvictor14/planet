@@ -31,6 +31,7 @@ knitr::opts_chunk$set(
     fig.height = 7, 
     fig.align = "center",
     dpi=300)
+library(ggplot2)
 ggplot2::theme_set(theme_minimal(base_size = 14))
 ```
 
@@ -138,6 +139,13 @@ bind_rows(
     coord_cartesian(ylim = c(0, 1)) +
     labs(x = "", fill = "")
 ```
+
+Some notes:
+
+* Normalize your data with `minfi::preprocessNoob`
+* Use all cell CpGs, if some are missing, estimates may vary
+* If your samples have been processed in a particular manner, (e.g. sampling 
+from maternal side) expect cell composition to reflect that
 
 ### References
 
