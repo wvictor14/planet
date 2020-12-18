@@ -4,7 +4,7 @@ output:
     rmarkdown::html_vignette:
         df_print: kable
 vignette: >
-    %\VignetteIndexEntry{Infer Gestational Age}
+    %\VignetteIndexEntry{Predict Gestational Age}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---

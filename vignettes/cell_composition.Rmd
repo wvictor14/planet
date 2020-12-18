@@ -4,7 +4,7 @@ output:
     rmarkdown::html_vignette:
         df_print: kable
 vignette: >
-    %\VignetteIndexEntry{Infer Placental Cell Composition}
+    %\VignetteIndexEntry{Predict Placental Cell Composition}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

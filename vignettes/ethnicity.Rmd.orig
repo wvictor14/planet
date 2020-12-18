@@ -2,7 +2,7 @@
 title: "Predict Ethnicity"
 output: rmarkdown::html_vignette
 vignette: >
-    %\VignetteIndexEntry{Infer Ethnicity}
+    %\VignetteIndexEntry{Predict Ethnicity}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
