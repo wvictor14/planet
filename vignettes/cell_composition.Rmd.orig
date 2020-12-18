@@ -2,7 +2,7 @@
 title: "Predict Placental Cell Composition"
 output: 
     rmarkdown::html_vignette:
-        df_print: kable
+        df_print: "kable"
         fig_caption: FALSE
 pkgdown:
     as_is: true
@@ -98,7 +98,7 @@ epidish_CP <- epidish(
 
 We can compare the different cell composition estimates.
 
-```{r cell-compare-alg, fig.width = 9, fig.height = 8}
+```{r cell-comp}
 data("plColors")
 
 # bind estimate data frames and reshape for plotting

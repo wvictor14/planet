@@ -2,7 +2,7 @@
 title: "Predict Gestational Age"
 output: 
     rmarkdown::html_vignette:
-        df_print: kable
+        df_print: "kable"
         fig_caption: FALSE
 pkgdown:
     as_is: true
@@ -69,7 +69,7 @@ accuracy.
 Next, I plot the difference between predicted and reported gestational age, for
 each of the 3 gestational age predictors.
 
-```{r ga-3-clocks}
+```{r gest-age}
 plPhenoData %>%
     # reshape, to plot
     pivot_longer(

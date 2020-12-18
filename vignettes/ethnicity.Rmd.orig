@@ -90,7 +90,7 @@ the highest class-specific probability.
 can be adjusted with the `threshold` argument. Samples with this label might
 require special attention in downstream analyses.
 
-```{r eth-results}
+```{r ethnicity}
 results %>%
     ggplot(aes(
         x = Prob_Caucasian, y = Prob_African,

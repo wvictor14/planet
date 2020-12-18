@@ -2,7 +2,7 @@
 title: "Predict Placental Cell Composition"
 output: 
     rmarkdown::html_vignette:
-        df_print: kable
+        df_print: "kable"
         fig_caption: FALSE
 pkgdown:
     as_is: true
@@ -162,7 +162,7 @@ bind_rows(
     labs(x = "", fill = "")
 ```
 
-<img src="fig/cell-compare-alg-1.png" title="plot of chunk cell-compare-alg" alt="plot of chunk cell-compare-alg" style="display: block; margin: auto;" />
+<img src="fig/cell-comp-1.png" title="plot of chunk cell-comp" alt="plot of chunk cell-comp" style="display: block; margin: auto;" />
 
 Some notes:
 

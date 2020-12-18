@@ -125,7 +125,7 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(African)")
 ```
 
-<img src="fig/eth-results-1.png" title="plot of chunk eth-results" alt="plot of chunk eth-results" style="display: block; margin: auto;" />
+<img src="fig/ethnicity-1.png" title="plot of chunk ethnicity" alt="plot of chunk ethnicity" style="display: block; margin: auto;" />
 
 ```r
 
@@ -141,7 +141,7 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(Asian)")
 ```
 
-<img src="fig/eth-results-2.png" title="plot of chunk eth-results" alt="plot of chunk eth-results" style="display: block; margin: auto;" />
+<img src="fig/ethnicity-2.png" title="plot of chunk ethnicity" alt="plot of chunk ethnicity" style="display: block; margin: auto;" />
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we
 know these samples were collected in Sydney, Australia, and are therefore 
