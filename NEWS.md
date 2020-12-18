@@ -1,4 +1,4 @@
-# planet 0.99.0
+# planet 0.99.0 (12-18-2020)
 
 * Improved vignette figure quality
 * Using github-actions check from `biocthis`
