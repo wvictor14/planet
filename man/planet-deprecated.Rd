@@ -2,16 +2,16 @@
 % Please edit documentation in R/planet-deprecated.R
 \name{planet-deprecated}
 \alias{planet-deprecated}
-\title{Deprecated functions in helloworld}
+\title{Deprecated functions in \pkg{planet}}
 \description{
 These functions still work but will be removed (defunct) in the next version.
 }
 \details{
 \itemize{
- \item \code{\link{pl_infer_ethnicity}}: This function has been renamed
- \code{\link{predictEthnicity}}
- 
- \item \code{\link{pl_infer_age}}: This function has been renamed
- \code{\link{predictAge}}
+\item \code{\link{pl_infer_ethnicity}}: This function has been renamed
+\code{\link{predictEthnicity}}
+
+\item \code{\link{pl_infer_age}}: This function has been renamed
+\code{\link{predictAge}}
 }
 }

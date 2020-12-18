@@ -16,7 +16,7 @@ contain all 1860 predictors and be normalized with NOOB and BMIQ.}
 'ambiguous'. Defaults to 0.75.}
 }
 \value{
-a [tibble][tibble::tibble-package]
+a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Uses 1860 CpGs to predict self-reported ethnicity on placental

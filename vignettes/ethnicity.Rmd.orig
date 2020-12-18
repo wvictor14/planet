@@ -13,8 +13,8 @@ For demonstration, I use 24 samples from a placental DNAm dataset from GEO,
 ([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)), which
 contains samples collected in an Australian population. The DNA methylation 
 data (in betas) can be accessed with `data(plBetas)` and corresponding sample
-information from `data(plPhenoData)`. Note that cpgs have been filtered to a random
-\~10,000 CpGs, plus the CpGs used inall of the models from this package.
+information from `data(plPhenoData)`. Note that cpgs have been filtered to a 
+random \~10,000 CpGs, plus the CpGs used inall of the models from this package.
 
 ```{r, message = F, warning = F}
 library(dplyr) # for data wrangling

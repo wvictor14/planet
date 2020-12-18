@@ -1,4 +1,4 @@
-#' Deprecated functions in helloworld
+#' Deprecated functions in \pkg{planet}
 #' 
 #' These functions still work but will be removed (defunct) in the next version.
 #' 

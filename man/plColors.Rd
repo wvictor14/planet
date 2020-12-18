@@ -3,7 +3,7 @@
 \docType{data}
 \name{plColors}
 \alias{plColors}
-\title{A nice color palette for graphs with placental cell types}
+\title{A color palette for placental cell types}
 \format{
 An object of class \code{character} of length 6.
 }
@@ -11,14 +11,18 @@ An object of class \code{character} of length 6.
 plColors
 }
 \description{
-A color palette for cell types. Used in Yuan V et al. 2020.
-Contains colors for:
+A nice color palette for placental cell types.
 
-- Syncytiotrophoblast
-- Trophoblast
-- Stromal
-- Hofbauer
-- Endothelial
-- nRBCs
+Used in \url{Yuan V et al. 2020}.
+
+Contains colors for:
+\itemize{
+\item Syncytiotrophoblast
+\item Trophoblast
+\item Stromal
+\item Hofbauer
+\item Endothelial
+\item nRBCs
+}
 }
 \keyword{datasets}

@@ -3,27 +3,21 @@
 \docType{data}
 \name{ageCpGs}
 \alias{ageCpGs}
-\title{Coefficients from the three placental gestational age clocks from Lee
-Y et al. 2019.
-
-Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
-estimating gestational age using placental DNA methylation levels. Aging
-(Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID:
-31235674}
+\title{Placental gestational age CpGs}
 \format{
-A [tibble][tibble::tibble-package] with coefficients for the RPC,
+A \link[tibble:tibble-package]{tibble} with coefficients for the RPC,
 CPC, and refined RPC.
 }
 \usage{
 ageCpGs
 }
 \description{
-Coefficients from the three placental gestational age clocks from Lee
-Y et al. 2019.
+Coefficients from the three placental gestational age clocks
+from \href{https://pubmed.ncbi.nlm.nih.gov/31235674/}{Lee Y et al. 2019}.
 
-Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic clocks:
-estimating gestational age using placental DNA methylation levels. Aging
-(Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID:
+Reference: Lee Y, Choufani S, Weksberg R, et al. Placental epigenetic
+clocks: estimating gestational age using placental DNA methylation levels.
+Aging (Albany NY). 2019;11(12):4238–4253. doi:10.18632/aging.102049. PMID:
 31235674
 }
 \keyword{datasets}

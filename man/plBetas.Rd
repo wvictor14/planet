@@ -3,25 +3,7 @@
 \docType{data}
 \name{plBetas}
 \alias{plBetas}
-\title{6 DNA methylation profiles from preeclampsia and healthy control
-placentas
-
-"Genome wide DNA methylation profiling of normal and preeclampsia placental
-samples. Illumina Infinium HumanMethylation450 BeadChip (450K array) was
-used to obtain DNA methylation profiles in placental samples. Samples
-included 16 samples from healthy uncomplicated pregnancies and 8 samples
-from pregnancies affected by preeclampsia."
-
-The DNA methylation data for 24 placental samples were downloaded from
-[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
-After normalizing using `minfi::preprocessNoob` and `wateRmelon::BMIQ`, the
-betas were filtered to 10,000 random CpGs + those CpGs used in the
-gestational age clock and ethnicity classifier.
-
-Reference: Yeung KR, Chiu CL, Pidsley R, Makris A et al. DNA methylation
-profiles in preeclampsia and healthy control placentas. Am J Physiol Heart
-Circ Physiol 2016 May 15;310(10):H1295-303.
-PMID: 26968548}
+\title{Example placental DNA methylation data}
 \format{
 A matrix
 }
@@ -32,24 +14,28 @@ A matrix
 plBetas
 }
 \description{
-6 DNA methylation profiles from preeclampsia and healthy control
-placentas
+6 DNA methylation profiles from preeclampsia and healthy
+control placentas. This data was downloaded from:
+\itemize{
+\item \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}{GSE75196}
+}
 
-"Genome wide DNA methylation profiling of normal and preeclampsia placental
-samples. Illumina Infinium HumanMethylation450 BeadChip (450K array) was
-used to obtain DNA methylation profiles in placental samples. Samples
-included 16 samples from healthy uncomplicated pregnancies and 8 samples
-from pregnancies affected by preeclampsia."
+"Genome wide DNA methylation profiling of normal and
+preeclampsia placental samples. Illumina Infinium HumanMethylation450
+BeadChip (450K array) was used to obtain DNA methylation profiles in
+placental samples. Samples included 16 samples from healthy uncomplicated
+pregnancies and 8 samples from pregnancies affected by preeclampsia." -
+from \href{https://pubmed.ncbi.nlm.nih.gov/26968548/}{Yeung et al.}
 
 The DNA methylation data for 24 placental samples were downloaded from
-[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
-After normalizing using `minfi::preprocessNoob` and `wateRmelon::BMIQ`, the
-betas were filtered to 10,000 random CpGs + those CpGs used in the
-gestational age clock and ethnicity classifier.
+\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}{GSE75196}.
+After normalizing using \code{minfi::preprocessNoob} and \code{wateRmelon::BMIQ},
+the data were filtered to 6/24 samples and 10,000 random CpGs + those CpGs
+used in the gestational age clock and ethnicity classifier.
 
 Reference: Yeung KR, Chiu CL, Pidsley R, Makris A et al. DNA methylation
 profiles in preeclampsia and healthy control placentas. Am J Physiol Heart
 Circ Physiol 2016 May 15;310(10):H1295-303.
-PMID: 26968548
+\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}{PMID:26968548}
 }
 \keyword{datasets}

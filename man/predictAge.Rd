@@ -3,7 +3,7 @@
 \name{predictAge}
 \alias{predictAge}
 \alias{pl_infer_age}
-\title{Predicts gestational age using placental DNA methylation microarray 
+\title{Predicts gestational age using placental DNA methylation microarray
 data}
 \usage{
 predictAge(betas, type = "RPC")
@@ -17,12 +17,12 @@ contain all CpGs used in each clock}
 (Refined Robust).}
 }
 \value{
-A vector of length `m`, containing inferred gestational age.
+A vector of length \code{m}, containing inferred gestational age.
 }
 \description{
-\code{predictAge} Multiplies the coefficients from one of three 
-epigenetic gestational age clocks, by the corresponding CpGs in a supplied 
-betas `data.frame`.
+\code{predictAge} Multiplies the coefficients from one of three
+epigenetic gestational age clocks, by the corresponding CpGs in a supplied
+betas \code{data.frame}.
 }
 \details{
 Predicts gestational age using one of 3 placental gestational age

@@ -3,9 +3,9 @@
 \docType{data}
 \name{plCellCpGsThird}
 \alias{plCellCpGsThird}
-\title{Third trimester cell type reference coefficients}
+\title{Third trimester placental cell type coefficients}
 \format{
-A [matrix] with coefficients for Trophoblasts, Stromal,
+A \link{matrix} with coefficients for Trophoblasts, Stromal,
 Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 }
 \usage{
@@ -13,7 +13,7 @@ plCellCpGsThird
 }
 \description{
 Third trimester coefficients for placental cellular
-deconvolution from Yuan V et al. 2020.
+deconvolution from \url{Yuan V et al. 2020}.
 
 Reference: to be edited
 PMID: to be edited

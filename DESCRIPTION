@@ -38,3 +38,4 @@ RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 biocViews: Software, DifferentialMethylation, Epigenetics, Microarray, 
     MethylationArray, DNAMethylation, CpGIsland
+Roxygen: list(markdown = TRUE)

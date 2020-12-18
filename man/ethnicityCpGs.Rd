@@ -3,22 +3,20 @@
 \docType{data}
 \name{ethnicityCpGs}
 \alias{ethnicityCpGs}
-\title{Features from 450k/850k data used to predict ethnicity
-
-The features on the 450k/850k DNAm microarry used to predict ethnicity.}
+\title{CpGs to predict ethnicity}
 \format{
 A character vector of length 1860
 }
 \source{
-\url{https://epigeneticsandchromatin.biomedcentral.com/
-articles/10.1186/s13072-019-0296-3}
+\url{https://pubmed.ncbi.nlm.nih.gov/31399127/}
 }
 \usage{
 ethnicityCpGs
 }
 \description{
-Features from 450k/850k data used to predict ethnicity
+1860 CpGs used to predict ethnicity.
 
-The features on the 450k/850k DNAm microarry used to predict ethnicity.
+See \href{https://pubmed.ncbi.nlm.nih.gov/31399127/}{Yuan et al. 2019} for
+details.
 }
 \keyword{datasets}

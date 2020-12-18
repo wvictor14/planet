@@ -3,13 +3,9 @@
 \docType{data}
 \name{plPhenoData}
 \alias{plPhenoData}
-\title{Sex, disease, and gestational age information associated with
-`pl_betas`.
-
-Taken from
-[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).}
+\title{Sample information accompanying \code{pl_betas}}
 \format{
-A [tibble][tibble::tibble-package]
+A \link[tibble:tibble-package]{tibble}
 }
 \source{
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
@@ -19,9 +15,16 @@ plPhenoData
 }
 \description{
 Sex, disease, and gestational age information associated with
-`pl_betas`.
+\code{pl_betas}.
 
-Taken from
-[GSE75196](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196).
+Downloaded from the GEO accession:
+\itemize{
+\item \href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}{GSE75196}
+}
+
+Reference: Yeung KR, Chiu CL, Pidsley R, Makris A et al. DNA methylation
+profiles in preeclampsia and healthy control placentas. Am J Physiol Heart
+Circ Physiol 2016 May 15;310(10):H1295-303.
+\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}{PMID: 26968548}
 }
 \keyword{datasets}
