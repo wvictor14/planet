@@ -1,5 +1,10 @@
 # planet 0.99.0
 
+* Improved vignette figure quality
+* Using github-actions check from `biocthis`
+* Removed `viridis` from suggests
+* Rewrote many data man pages
+
 # planet 0.3.0 (12-17-2020)
 
 * Final preparations for Bioconductor submission
