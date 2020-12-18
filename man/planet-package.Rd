@@ -18,6 +18,7 @@ This package contains R functions to infer additional biological
 Useful links:
 \itemize{
   \item \url{https://victor.rbind.io/planet}
+  \item \url{http://github.com/wvictor14/planet}
   \item Report bugs at \url{http://github.com/wvictor14/planet/issues}
 }
 

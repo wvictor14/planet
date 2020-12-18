@@ -1,13 +1,13 @@
 Package: planet
 Title: Placental DNA methylation analysis tools
-Version: 0.2.36
+Version: 0.99.0
 Authors@R: 
     c(person("Victor", "Yuan", email = "victor.2wy@gmail.com",
             role = c("aut", "cre")),
     person(c("Wendy", "P."), "Robinson",
             role = "ctb"))
 URL: 
-    https://victor.rbind.io/planet
+    https://victor.rbind.io/planet, http://github.com/wvictor14/planet
 BugReports: 
     http://github.com/wvictor14/planet/issues
 Description: This package contains R functions to infer additional biological
@@ -27,14 +27,14 @@ Suggests:
     testthat,
     tidyr,
     scales,
-    viridis,
     EpiDISH,
     knitr,
     rmarkdown
-License: MIT + file LICENSE
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 biocViews: Software, DifferentialMethylation, Epigenetics, Microarray, 
     MethylationArray, DNAMethylation, CpGIsland
+Roxygen: list(markdown = TRUE)

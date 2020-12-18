@@ -1,3 +1,21 @@
+# planet 0.99.0 (12-18-2020)
+
+* Improved vignette figure quality
+* Using github-actions check from `biocthis`
+* Removed `viridis` from suggests
+* Rewrote many data man pages
+
+# planet 0.3.0 (12-17-2020)
+
+* Final preparations for Bioconductor submission
+* Changed license to => GPL-2
+* More detailed attribution to glmnet
+* Renamed all functions to camel case convention, including functions, data, 
+tests, documentation, vignettes
+* Added `planet-deprecated.R`
+* `pl_infer_ethnicity()` and `pl_infer_age()` now deprecated, replaced with
+`predictEthnicity` and `predictAge`, respectively.
+
 # planet 0.2.36 (12-17-2020)
 
 * Removed minfi dependency

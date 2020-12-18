@@ -4,10 +4,11 @@
 <!-- badges: start -->
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633)
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://img.shields.io/github/last-commit/GuangchuangYu/badger.svg)](https://github.com/GuangchuangYu/badger/commits/master)
 [![R build
 status](https://github.com/wvictor14/planet/workflows/R-CMD-check/badge.svg)](https://github.com/wvictor14/planet/actions)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** (1), **gestational
@@ -34,7 +35,7 @@ detailed usage.
 All functions in this package take as input DNAm data the 450k and EPIC
 DNAm microarray. For best performance I suggest providing unfiltered
 data normalized with noob and BMIQ. A processed example dataset,
-`pl_betas`, is provided to show the format that this data should be in.
+`plBetas`, is provided to show the format that this data should be in.
 The output of all `planet` functions is a `data.frame`.
 
 A quick example of each major function is illustrated with this example
@@ -45,16 +46,16 @@ library(minfi)
 library(planet)
 
 #load example data
-data(pl_betas)
-data(pl_pDat) # sample information
+data(plBetas)
+data(plPhenoData) # sample information
 ```
 
-#### Infer Ethnicity
+#### Predict Ethnicity
 
 ``` r
-pl_infer_ethnicity(pl_betas) %>%
+predictEthnicity(plBetas) %>%
   head()
-#> [1] "1860 of 1860 predictors present."
+#> 1860 of 1860 predictors present.
 #> # A tibble: 6 x 7
 #>   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African Prob_Asian
 #>   <chr>     <chr>            <chr>                   <dbl>      <dbl>
@@ -67,37 +68,36 @@ pl_infer_ethnicity(pl_betas) %>%
 #> # ... with 2 more variables: Prob_Caucasian <dbl>, Highest_Prob <dbl>
 ```
 
-#### Infer Gestational Age
+#### Predict Gestational Age
 
 There are 3 gestational age clocks for placental DNA methylation data
 from Lee Y. et al. 2019 (2). To use a specific one, we can use the
-`type` argument in `pl_infer_age`:
+`type` argument in `predictAge`:
 
 ``` r
-pl_infer_age(pl_betas, type = 'RPC') %>%
+predictAge(plBetas, type = 'RPC') %>%
   head()
-#> [1] "558 of 558 predictors present."
+#> 558 of 558 predictors present.
 #> [1] 38.46528 33.09680 34.32520 35.50937 37.63910 36.77051
 ```
 
-#### Infer Cell Composition
+#### Predict Cell Composition
 
 Reference data to infer cell composition on placental villi DNAm samples
 (3) can be used with cell deconvolution from minfi or EpiDISH. These are
-provided in this package as `pl_cell_cpgs_third` and
-`pl_cell_cpgs_first` for third trimester (term) and first trimester
-samples, respectively.
+provided in this package as `plCellCpGsThird` and `plCellCpGsFirst` for
+third trimester (term) and first trimester samples, respectively.
 
 ``` r
-data('pl_cell_cpgs_third')
+data('plCellCpGsThird')
 
 minfi:::projectCellType(
   
   # subset your data to cell cpgs
-  pl_betas[rownames(pl_cell_cpgs_third),], 
+  plBetas[rownames(plCellCpGsThird),], 
   
   # input the reference cpg matrix
-  pl_cell_cpgs_third,
+  plCellCpGsThird,
   
   lessThanOne = FALSE) %>%
   

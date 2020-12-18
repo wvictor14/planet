@@ -1,10 +1,13 @@
 ---
-title: "Infer Placental Cell Composition"
+title: "Predict Placental Cell Composition"
 output: 
     rmarkdown::html_vignette:
-        df_print: kable
+        df_print: "kable"
+        fig_caption: FALSE
+pkgdown:
+    as_is: true
 vignette: >
-    %\VignetteIndexEntry{Infer Placental Cell Composition}
+    %\VignetteIndexEntry{Predict Placental Cell Composition}
     %\VignetteEncoding{UTF-8}
     %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -13,12 +16,14 @@ editor_options:
 
 To infer cell composition on placental villi DNAm samples, we can use the
 reference cpgs identified in [3]. These are provided in this package as
-`pl_cell_cpgs_third` and `pl_cell_cpgs_first` for third trimester (term) and
+`plCellCpGsThird` and `plCellCpGsFirst` for third trimester (term) and
 first trimester samples, respectively.
 
 In this example we are using term villi DNAm data, so we first load the 
-reference cpgs `pl_cell_cpgs_third`. This is a data frame of 600 cpgs, with 
+reference cpgs `plCellCpGsThird`. This is a data frame of 600 cpgs, with 
 mean methylation levels for each cell type.
+
+
 
 
 ```r
@@ -30,38 +35,27 @@ library(EpiDISH)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-library(viridis)
 
 library(planet)
 
 # load example data
-data("pl_betas")
-data("pl_cell_cpgs_third")
-head(pl_cell_cpgs_third)
-```
-
-```
-##            Trophoblasts   Stromal  Hofbauer
-## cg10590657    0.1014098 0.9345796 0.8655285
-## cg14923398    0.1282030 0.8902107 0.9036769
-## cg05348366    0.1305697 0.9519820 0.8803082
-## cg17907628    0.1215249 0.9278777 0.8727841
-## cg26799656    0.1259953 0.9482014 0.8803863
-## cg11862144    0.1561991 0.9430855 0.9114967
-##            Endothelial      nRBC
-## cg10590657   0.8963641 0.8448382
-## cg14923398   0.9383641 0.9508709
-## cg05348366   0.9065136 0.9278057
-## cg17907628   0.8914412 0.9143601
-## cg26799656   0.8791004 0.9010419
-## cg11862144   0.9341671 0.9647331
-##            Syncytiotrophoblast
-## cg10590657          0.05460441
-## cg14923398          0.05383193
-## cg05348366          0.06546727
-## cg17907628          0.05325227
-## cg26799656          0.06823985
-## cg11862144          0.06044207
+data("plBetas")
+data("plCellCpGsThird")
+head(plCellCpGsThird)
+#>            Trophoblasts   Stromal  Hofbauer Endothelial
+#> cg10590657    0.1014098 0.9345796 0.8655285   0.8963641
+#> cg14923398    0.1282030 0.8902107 0.9036769   0.9383641
+#> cg05348366    0.1305697 0.9519820 0.8803082   0.9065136
+#> cg17907628    0.1215249 0.9278777 0.8727841   0.8914412
+#> cg26799656    0.1259953 0.9482014 0.8803863   0.8791004
+#> cg11862144    0.1561991 0.9430855 0.9114967   0.9341671
+#>                 nRBC Syncytiotrophoblast
+#> cg10590657 0.8448382          0.05460441
+#> cg14923398 0.9508709          0.05383193
+#> cg05348366 0.9278057          0.06546727
+#> cg17907628 0.9143601          0.05325227
+#> cg26799656 0.9010419          0.06823985
+#> cg11862144 0.9647331          0.06044207
 ```
 
 After our reference cpg data is loaded, we can estimate cell composition by
@@ -73,36 +67,26 @@ packages minfi or EpiDISH, or a non-constrained approach by EpiDish.
 
 ```r
 houseman_estimates <- minfi:::projectCellType(
-    pl_betas[rownames(pl_cell_cpgs_third), ],
-    pl_cell_cpgs_third,
+    plBetas[rownames(plCellCpGsThird), ],
+    plCellCpGsThird,
     lessThanOne = FALSE
 )
 
 head(houseman_estimates)
-```
-
-```
-##            Trophoblasts    Stromal      Hofbauer
-## GSM1944936    0.1091279 0.04891919  0.000000e+00
-## GSM1944939    0.2299918 0.00000000 -1.806592e-19
-## GSM1944942    0.1934287 0.03483540  0.000000e+00
-## GSM1944944    0.2239896 0.06249135  1.608645e-03
-## GSM1944946    0.1894152 0.07935955  0.000000e+00
-## GSM1944948    0.2045124 0.07657717  0.000000e+00
-##            Endothelial       nRBC
-## GSM1944936  0.08983998 0.05294062
-## GSM1944939  0.07888007 0.03374149
-## GSM1944942  0.09260353 0.02929310
-## GSM1944944  0.11040693 0.04447951
-## GSM1944946  0.10587439 0.05407587
-## GSM1944948  0.09871149 0.02269798
-##            Syncytiotrophoblast
-## GSM1944936           0.6979477
-## GSM1944939           0.6377822
-## GSM1944942           0.6350506
-## GSM1944944           0.5467642
-## GSM1944946           0.6022329
-## GSM1944948           0.6085825
+#>            Trophoblasts    Stromal      Hofbauer
+#> GSM1944936    0.1091279 0.04891919  0.000000e+00
+#> GSM1944939    0.2299918 0.00000000 -1.806592e-19
+#> GSM1944942    0.1934287 0.03483540  0.000000e+00
+#> GSM1944944    0.2239896 0.06249135  1.608645e-03
+#> GSM1944946    0.1894152 0.07935955  0.000000e+00
+#> GSM1944948    0.2045124 0.07657717  0.000000e+00
+#>            Endothelial       nRBC Syncytiotrophoblast
+#> GSM1944936  0.08983998 0.05294062           0.6979477
+#> GSM1944939  0.07888007 0.03374149           0.6377822
+#> GSM1944942  0.09260353 0.02929310           0.6350506
+#> GSM1944944  0.11040693 0.04447951           0.5467642
+#> GSM1944946  0.10587439 0.05407587           0.6022329
+#> GSM1944948  0.09871149 0.02269798           0.6085825
 ```
 
 #### EpiDish
@@ -111,22 +95,22 @@ head(houseman_estimates)
 ```r
 # robust partial correlations
 epidish_RPC <- epidish(
-    beta.m = pl_betas[rownames(pl_cell_cpgs_third), ],
-    ref.m = pl_cell_cpgs_third,
+    beta.m = plBetas[rownames(plCellCpGsThird), ],
+    ref.m = plCellCpGsThird,
     method = "RPC"
 )
 
 # CIBERSORT
 epidish_CBS <- epidish(
-    beta.m = pl_betas[rownames(pl_cell_cpgs_third), ],
-    ref.m = pl_cell_cpgs_third,
+    beta.m = plBetas[rownames(plCellCpGsThird), ],
+    ref.m = plCellCpGsThird,
     method = "CBS"
 )
 
 # constrained projection (houseman 2012)
 epidish_CP <- epidish(
-    beta.m = pl_betas[rownames(pl_cell_cpgs_third), ],
-    ref.m = pl_cell_cpgs_third,
+    beta.m = plBetas[rownames(plCellCpGsThird), ],
+    ref.m = plCellCpGsThird,
     method = "CP"
 )
 ```
@@ -137,7 +121,7 @@ We can compare the different cell composition estimates.
 
 
 ```r
-data("pl_colors")
+data("plColors")
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
@@ -168,8 +152,7 @@ bind_rows(
     ggplot(aes(x = sample, y = estimate, fill = component)) +
     geom_bar(stat = "identity") +
     facet_wrap(~algorithm, ncol = 1) +
-    scale_fill_manual(values = pl_colors) +
-    theme_minimal() +
+    scale_fill_manual(values = plColors) +
     scale_y_continuous(
         limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1),
         labels = scales::percent
@@ -179,7 +162,14 @@ bind_rows(
     labs(x = "", fill = "")
 ```
 
-![plot of chunk cell-compare-alg](fig/cell-compare-alg-1.png)
+<img src="fig/cell-comp-1.png" title="plot of chunk cell-comp" alt="plot of chunk cell-comp" style="display: block; margin: auto;" />
+
+Some notes:
+
+* Normalize your data with `minfi::preprocessNoob`
+* Use all cell CpGs, if some are missing, estimates may vary
+* If your samples have been processed in a particular manner, (e.g. sampling 
+from maternal side) expect cell composition to reflect that
 
 ### References
 
