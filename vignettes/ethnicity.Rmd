@@ -1,11 +1,17 @@
 ---
 title: "Predict Ethnicity"
-output: rmarkdown::html_vignette
+output: 
+    rmarkdown::html_vignette:
+        fig_caption: FALSE
+pkgdown:
+    as_is: true
 vignette: >
     %\VignetteIndexEntry{Predict Ethnicity}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
+
+
 
 ### Example Data
 
@@ -27,27 +33,18 @@ data(plBetas)
 data(plPhenoData)
 
 dim(plBetas)
-```
-
-```
-## [1] 13918    24
-```
-
-```r
+#> [1] 13918    24
 head(plPhenoData)
-```
-
-```
-## # A tibble: 6 x 7
-##   sample_id sex   disease gestation_wk ga_RPC ga_CPC
-##   <fct>     <chr> <chr>          <dbl>  <dbl>  <dbl>
-## 1 GSM19449~ Male  preecl~           36   38.5   38.7
-## 2 GSM19449~ Male  preecl~           32   33.1   34.2
-## 3 GSM19449~ Fema~ preecl~           32   34.3   35.1
-## 4 GSM19449~ Male  preecl~           35   35.5   36.7
-## 5 GSM19449~ Fema~ preecl~           38   37.6   37.6
-## 6 GSM19449~ Fema~ preecl~           36   36.8   38.4
-## # ... with 1 more variable: ga_RRPC <dbl>
+#> # A tibble: 6 x 7
+#>   sample_id sex   disease gestation_wk ga_RPC ga_CPC
+#>   <fct>     <chr> <chr>          <dbl>  <dbl>  <dbl>
+#> 1 GSM19449~ Male  preecl~           36   38.5   38.7
+#> 2 GSM19449~ Male  preecl~           32   33.1   34.2
+#> 3 GSM19449~ Fema~ preecl~           32   34.3   35.1
+#> 4 GSM19449~ Male  preecl~           35   35.5   36.7
+#> 5 GSM19449~ Fema~ preecl~           38   37.6   37.6
+#> 6 GSM19449~ Fema~ preecl~           36   36.8   38.4
+#> # ... with 1 more variable: ga_RRPC <dbl>
 ```
 
 ### Infer Ethnicity
@@ -61,10 +58,7 @@ head(plPhenoData)
 
 ```r
 all(ethnicityCpGs %in% rownames(plBetas))
-```
-
-```
-## [1] TRUE
+#> [1] TRUE
 ```
 
 *Note that if some features are missing, `pl_infer_ethnicity` will throw a
@@ -83,34 +77,26 @@ these, run `minfi::preprocessNoob()` on an `rgset` object and then
 
 ```r
 results <- pl_infer_ethnicity(plBetas)
-```
+#> Warning: 'pl_infer_ethnicity' is deprecated.
+#> Use 'predictEthnicity' instead.
+#> See help("Deprecated")
 
-```
-## Warning: 'pl_infer_ethnicity' is deprecated.
-## Use 'predictEthnicity' instead.
-## See help("Deprecated")
-```
-
-```r
 # show last 8 rows
 results %>%
     tail(8)
-```
-
-```
-## # A tibble: 8 x 7
-##   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African
-##   <chr>     <chr>            <chr>                   <dbl>
-## 1 GSM19449~ Asian            Asian                0.0123  
-## 2 GSM19449~ Caucasian        Caucasian            0.0157  
-## 3 GSM19449~ Asian            Asian                0.0208  
-## 4 GSM19449~ Caucasian        Caucasian            0.000928
-## 5 GSM19449~ Caucasian        Caucasian            0.00226 
-## 6 GSM19449~ Caucasian        Caucasian            0.00660 
-## 7 GSM19449~ Caucasian        Caucasian            0.00216 
-## 8 GSM19449~ Caucasian        Caucasian            0.00114 
-## # ... with 3 more variables: Prob_Asian <dbl>,
-## #   Prob_Caucasian <dbl>, Highest_Prob <dbl>
+#> # A tibble: 8 x 7
+#>   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African
+#>   <chr>     <chr>            <chr>                   <dbl>
+#> 1 GSM19449~ Asian            Asian                0.0123  
+#> 2 GSM19449~ Caucasian        Caucasian            0.0157  
+#> 3 GSM19449~ Asian            Asian                0.0208  
+#> 4 GSM19449~ Caucasian        Caucasian            0.000928
+#> 5 GSM19449~ Caucasian        Caucasian            0.00226 
+#> 6 GSM19449~ Caucasian        Caucasian            0.00660 
+#> 7 GSM19449~ Caucasian        Caucasian            0.00216 
+#> 8 GSM19449~ Caucasian        Caucasian            0.00114 
+#> # ... with 3 more variables: Prob_Asian <dbl>,
+#> #   Prob_Caucasian <dbl>, Highest_Prob <dbl>
 ```
 
 `pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
@@ -139,9 +125,10 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(African)")
 ```
 
-![plot of chunk eth-results](fig/eth-results-1.png)
+<img src="fig/eth-results-1.png" title="plot of chunk eth-results" alt="plot of chunk eth-results" style="display: block; margin: auto;" />
 
 ```r
+
 results %>%
     ggplot(aes(
         x = Prob_Caucasian, y = Prob_Asian,
@@ -154,7 +141,7 @@ results %>%
     labs(x = "P(Caucasian)", y = "P(Asian)")
 ```
 
-![plot of chunk eth-results](fig/eth-results-2.png)
+<img src="fig/eth-results-2.png" title="plot of chunk eth-results" alt="plot of chunk eth-results" style="display: block; margin: auto;" />
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we
 know these samples were collected in Sydney, Australia, and are therefore 
@@ -163,12 +150,9 @@ likely mostly European with some East Asian ancestries.
 
 ```r
 table(results$Predicted_ethnicity)
-```
-
-```
-## 
-##     Asian Caucasian 
-##         2        22
+#> 
+#>     Asian Caucasian 
+#>         2        22
 ```
 
 **A note on adjustment in differential methylation analysis**

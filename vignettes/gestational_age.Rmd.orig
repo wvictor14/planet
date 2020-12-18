@@ -3,11 +3,25 @@ title: "Predict Gestational Age"
 output: 
     rmarkdown::html_vignette:
         df_print: kable
+        fig_caption: FALSE
+pkgdown:
+    as_is: true
 vignette: >
     %\VignetteIndexEntry{Predict Gestational Age}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE, 
+    comment = "#>", 
+    fig.width = 7, 
+    fig.height = 4, 
+    fig.align = "center",
+    dpi=300)
+ggplot2::theme_set(theme_bw(base_size = 12))
+```
 
 There are 3 gestational age clocks for placental DNA methylation data from Lee 
 Y. et al. 2019:
@@ -54,7 +68,7 @@ accuracy.
 Next, I plot the difference between predicted and reported gestational age, for
 each of the 3 gestational age predictors.
 
-```{r ga-3-clocks, fig.width = 5}
+```{r ga-3-clocks}
 plPhenoData %>%
     # reshape, to plot
     pivot_longer(

@@ -3,6 +3,9 @@ title: "Predict Placental Cell Composition"
 output: 
     rmarkdown::html_vignette:
         df_print: kable
+        fig_caption: FALSE
+pkgdown:
+    as_is: true
 vignette: >
     %\VignetteIndexEntry{Predict Placental Cell Composition}
     %\VignetteEncoding{UTF-8}
@@ -20,6 +23,17 @@ In this example we are using term villi DNAm data, so we first load the
 reference cpgs `plCellCpGsThird`. This is a data frame of 600 cpgs, with 
 mean methylation levels for each cell type.
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE, 
+    comment = "#>", 
+    fig.width = 7, 
+    fig.height = 7, 
+    fig.align = "center",
+    dpi=300)
+ggplot2::theme_set(theme_minimal(base_size = 14))
+```
+
 ```{r, message = FALSE, warning = FALSE}
 # cell deconvolution packages
 library(minfi)
@@ -29,7 +43,6 @@ library(EpiDISH)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
-library(viridis)
 
 library(planet)
 
@@ -84,7 +97,7 @@ epidish_CP <- epidish(
 
 We can compare the different cell composition estimates.
 
-```{r cell-compare-alg, fig.width = 6, fig.height = 8}
+```{r cell-compare-alg, fig.width = 9, fig.height = 8}
 data("plColors")
 
 # bind estimate data frames and reshape for plotting
@@ -117,7 +130,6 @@ bind_rows(
     geom_bar(stat = "identity") +
     facet_wrap(~algorithm, ncol = 1) +
     scale_fill_manual(values = plColors) +
-    theme_minimal() +
     scale_y_continuous(
         limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1),
         labels = scales::percent

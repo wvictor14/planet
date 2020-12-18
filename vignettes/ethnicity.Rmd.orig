@@ -1,11 +1,26 @@
 ---
 title: "Predict Ethnicity"
-output: rmarkdown::html_vignette
+output: 
+    rmarkdown::html_vignette:
+        fig_caption: FALSE
+pkgdown:
+    as_is: true
 vignette: >
     %\VignetteIndexEntry{Predict Ethnicity}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE, 
+    comment = "#>", 
+    fig.width = 7, 
+    fig.height = 4, 
+    fig.align = "center",
+    dpi=300)
+ggplot2::theme_set(theme_bw(base_size = 12))
+```
 
 ### Example Data
 
@@ -74,7 +89,7 @@ the highest class-specific probability.
 can be adjusted with the `threshold` argument. Samples with this label might
 require special attention in downstream analyses.
 
-```{r eth-results, fig.width = 5}
+```{r eth-results}
 results %>%
     ggplot(aes(
         x = Prob_Caucasian, y = Prob_African,

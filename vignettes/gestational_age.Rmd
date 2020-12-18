@@ -3,11 +3,16 @@ title: "Predict Gestational Age"
 output: 
     rmarkdown::html_vignette:
         df_print: kable
+        fig_caption: FALSE
+pkgdown:
+    as_is: true
 vignette: >
     %\VignetteIndexEntry{Predict Gestational Age}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
+
+
 
 There are 3 gestational age clocks for placental DNA methylation data from Lee 
 Y. et al. 2019:
@@ -46,18 +51,9 @@ plPhenoData <- plPhenoData %>%
         ga_CPC = predictAge(plBetas, type = "CPC"),
         ga_RRPC = predictAge(plBetas, type = "RRPC")
     )
-```
-
-```
-## 558 of 558 predictors present.
-```
-
-```
-## 546 of 546 predictors present.
-```
-
-```
-## 395 of 395 predictors present.
+#> 558 of 558 predictors present.
+#> 546 of 546 predictors present.
+#> 395 of 395 predictors present.
 ```
 
 Note that the number of predictors (CpGs) that were used in our data are 
@@ -85,13 +81,10 @@ plPhenoData %>%
     facet_wrap(~clock_type) +
     theme(legend.position = "top") +
     labs(x = "Reported GA (weeks)", y = "Inferred GA (weeks)", col = "")
+#> `geom_smooth()` using formula 'y ~ x'
 ```
 
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-![plot of chunk ga-3-clocks](fig/ga-3-clocks-1.png)
+<img src="fig/ga-3-clocks-1.png" title="plot of chunk ga-3-clocks" alt="plot of chunk ga-3-clocks" style="display: block; margin: auto;" />
 
 *GA: gestational age*
 
