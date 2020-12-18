@@ -6,7 +6,7 @@
 #' @source \url{https://epigeneticsandchromatin.biomedcentral.com/
 #' articles/10.1186/s13072-019-0296-3}
 #'
-"pl_ethnicity_features"
+"ethnicityCpGs"
 
 #' @title 6 DNA methylation profiles from preeclampsia and healthy control
 #' placentas
@@ -54,7 +54,7 @@
 #'
 #' @format A [tibble][tibble::tibble-package] with coefficients for the RPC,
 #' CPC, and refined RPC.
-"pl_clock"
+"ageCpGs"
 
 #' @title First trimester cell type coefficients
 #' @description First trimester coefficients for placental cellular

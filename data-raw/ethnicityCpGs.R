@@ -32,7 +32,7 @@ non_zero <- abs(rowSums(coef)) > 0
 coef <- coef[non_zero,] # 1860 + 1 intercept
 
 # take out feature names
-pl_ethnicity_features <- rownames(coef)[2:nrow(coef)] # remove intercept
+ethnicityCpGs <- rownames(coef)[2:nrow(coef)] # remove intercept
 
 # some glmnet processing
 for (i in seq(nclass)) {
@@ -61,15 +61,15 @@ test2 <- rownames(test2)[rowSums(test2) >0 ]
 test3 <- nbeta2$Caucasian %>% as.matrix()
 test3 <- rownames(test3)[rowSums(test3) >0 ] 
 
-all(c(test1, test2, test3) %in% c("(Intercept)", pl_ethnicity_features))
+all(c(test1, test2, test3) %in% c("(Intercept)", ethnicityCpGs))
 
 # subset each dgcmatrix to non-zero coefficients
 nbeta$African <- 
-  nbeta$African[c('(Intercept)', pl_ethnicity_features),,drop=FALSE]
+  nbeta$African[c('(Intercept)', ethnicityCpGs),,drop=FALSE]
 nbeta$Asian <- 
-  nbeta$Asian[c('(Intercept)', pl_ethnicity_features),,drop=FALSE]
+  nbeta$Asian[c('(Intercept)', ethnicityCpGs),,drop=FALSE]
 nbeta$Caucasian <- 
-  nbeta$Caucasian[c('(Intercept)', pl_ethnicity_features),,drop = FALSE]
+  nbeta$Caucasian[c('(Intercept)', ethnicityCpGs),,drop = FALSE]
 
 # change class from dgcMatrix to matrix, removes dependency on Matrix
 nbeta <- nbeta %>% purrr::map(as.matrix) 
@@ -80,4 +80,5 @@ usethis::use_data(a0, nclass,
                   lamlist, s, nlambda,
                    internal = TRUE, overwrite = TRUE)
 #usethis::use_data(nbeta, internal = FALSE) # ideally this should be internal but this causes installation errors on linux (and maybe mac?)
-usethis::use_data(pl_ethnicity_features, internal = FALSE, overwrite = TRUE)
+usethis::use_data(ethnicityCpGs, internal = FALSE, overwrite = TRUE)
+

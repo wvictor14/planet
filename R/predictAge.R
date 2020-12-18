@@ -38,13 +38,13 @@ predictAge <- function(betas, type = "RPC") {
     RPC <- CPC <- RRPC <- CpGs <- NULL
     # Filter to coefficients
     if (type == "RPC") {
-        coef <- planet::pl_clock %>%
+        coef <- planet::ageCpGs %>%
             dplyr::filter(RPC != 0)
     } else if (type == "CPC") {
-        coef <- planet::pl_clock %>%
+        coef <- planet::ageCpGs %>%
             dplyr::filter(CPC != 0)
     } else if (type == "RRPC") {
-        coef <- planet::pl_clock %>%
+        coef <- planet::ageCpGs %>%
             dplyr::filter(RRPC != 0)
     } else {
         stop('Type must be one of "CPC", "RPC", or "RRPC"')

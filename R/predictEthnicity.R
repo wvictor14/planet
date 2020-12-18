@@ -33,11 +33,11 @@
 #' @aliases pl_infer_ethnicity
 
 predictEthnicity <- function(betas, threshold = 0.75) {
-    pf <- intersect(rownames(betas), planet::pl_ethnicity_features)
-    if (length(pf) < length(planet::pl_ethnicity_features)) {
+    pf <- intersect(rownames(betas), planet::ethnicityCpGs)
+    if (length(pf) < length(planet::ethnicityCpGs)) {
         warning(paste(
             "Only", length(pf), "out of",
-            length(planet::pl_ethnicity_features), "present."
+            length(planet::ethnicityCpGs), "present."
         ))
     } else {
         message(paste(length(pf), "of 1860 predictors present."))

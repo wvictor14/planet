@@ -3,13 +3,13 @@ test_that("predictAge() complains when no CpGs found", {
   expect_error(predictAge(pl_betas[1:500,], type = 'RPC'))
   
   # 2:700 = 344/558
-  expect_warning(predictAge(pl_betas[planet::pl_clock$CpGs[2:700],], 
+  expect_warning(predictAge(pl_betas[planet::ageCpGs$CpGs[2:700],], 
                               type = 'RPC'))
   # 2:700 = 337/546
-  expect_warning(predictAge(pl_betas[planet::pl_clock$CpGs[2:700],], 
+  expect_warning(predictAge(pl_betas[planet::ageCpGs$CpGs[2:700],], 
                               type = 'CPC'))
   # 2:700 = 243/395
-  expect_warning(predictAge(pl_betas[planet::pl_clock$CpGs[2:700],], 
+  expect_warning(predictAge(pl_betas[planet::ageCpGs$CpGs[2:700],], 
                               type = 'RRPC'))
 })
 
