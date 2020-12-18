@@ -23,24 +23,24 @@ b <- wateRmelon::BMIQ(n)
 
 # SNP data
 s <- getSnpBeta(pl_rgset)
-pl_betas <- rbind(b, s)
+plBetas <- rbind(b, s)
 
 # filter
 set.seed(1)
 cpgs <- unique(c(pl_ethnicity_features,
                  pl_clock$CpGs[2:nrow(pl_clock)], # drop intercept
-                 sample(rownames(pl_betas), 10000),
+                 sample(rownames(plBetas), 10000),
                  rownames(pl_cell_cpgs_first),
                  rownames(pl_cell_cpgs_third)))
 
-pl_betas <- pl_betas[cpgs,]
+plBetas <- plBetas[cpgs,]
 
 # get pData
-pl_pDat <- read_tsv('ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE75nnn/GSE75196/matrix/GSE75196_series_matrix.txt.gz',
+plPhenoData <- read_tsv('ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE75nnn/GSE75196/matrix/GSE75196_series_matrix.txt.gz',
                 skip = 31, n_max = 20)
 
 # fix pDat
-pl_pDat <- pl_pDat %>%
+plPhenoData <- plPhenoData %>%
 
   # clean variable names
   mutate(Variable = gsub('!Sample_', '', `!Sample_geo_accession`),
@@ -63,13 +63,13 @@ pl_pDat <- pl_pDat %>%
   mutate_all(list(~ gsub('.*\\:\\s', '', .))) %>%
   mutate(`gestation (wk)` = as.numeric(`gestation (wk)`))
 
-# order pDat by pl_betas columns
-colnames(pl_betas) <- colnames(pl_rgset) <-str_extract(colnames(pl_rgset), 'GSM[^_]*')
-pl_pDat <- pl_pDat %>%
+# order pDat by plBetas columns
+colnames(plBetas) <- colnames(pl_rgset) <-str_extract(colnames(pl_rgset), 'GSM[^_]*')
+plPhenoData <- plPhenoData %>%
   filter(sample_id %in% colnames(pl_rgset)) %>%
   mutate(sample_id = factor(sample_id, levels = colnames(pl_rgset))) %>%
   arrange(sample_id) %>%
   janitor::clean_names()
 
-usethis::use_data(pl_betas, overwrite = TRUE, internal = FALSE)
-usethis::use_data(pl_pDat, overwrite = TRUE, internal = FALSE)
+usethis::use_data(plBetas, overwrite = TRUE, internal = FALSE)
+usethis::use_data(plPhenoData, overwrite = TRUE, internal = FALSE)

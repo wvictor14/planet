@@ -24,11 +24,11 @@
 #'
 #' # Load placenta DNAm data
 #' library(dplyr)
-#' data(pl_betas)
-#' data(pl_pDat)
+#' data(plBetas)
+#' data(plPhenoData)
 #'
-#' pl_pDat %>%
-#'     mutate(inferred_ga = predictAge(pl_betas, type = "RPC"))
+#' plPhenoData %>%
+#'     mutate(inferred_ga = predictAge(plBetas, type = "RPC"))
 #'     
 #' @export predictAge
 #' @export pl_infer_age

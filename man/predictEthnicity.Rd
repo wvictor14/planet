@@ -38,7 +38,7 @@ data: NOOB and BMIQ.
 ## To predict ethnicity on 450k/850k samples
 
 # Load placenta DNAm data
-data(pl_betas)
-predictEthnicity(pl_betas)
+data(plBetas)
+predictEthnicity(plBetas)
 
 }

@@ -31,7 +31,7 @@
 #' @format A matrix
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
 #'
-"pl_betas"
+"plBetas"
 
 #' @title Sex, disease, and gestational age information associated with
 #' `pl_betas`.
@@ -42,7 +42,7 @@
 #' @format A [tibble][tibble::tibble-package]
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
 #'
-"pl_pDat"
+"plPhenoData"
 
 #' @title Coefficients from the three placental gestational age clocks from Lee
 #' Y et al. 2019.

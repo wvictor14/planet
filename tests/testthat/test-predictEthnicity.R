@@ -2,7 +2,7 @@ test_that("multiplication works", {
   expect_equal(2 * 2, 4)
 })
 test_that("predictEthnicity() returns data.frame", {
-    expect_true(is.data.frame(predictEthnicity(pl_betas)))
+    expect_true(is.data.frame(predictEthnicity(plBetas)))
 })
 
 test_that("predictEthnicity() calculates same output", {
@@ -20,7 +20,7 @@ test_that("predictEthnicity() calculates same output", {
               0.00226345903184434, 0.00659734968883996, 
               0.00215776758283817, 0.00113972509373285
     )
-    expect_equal(predictEthnicity(pl_betas)$Prob_African, p_af)
+    expect_equal(predictEthnicity(plBetas)$Prob_African, p_af)
     
     p_as <- c(0.016379989165612, 0.000514334630824522, 0.0006992472221568, 
               0.000791574845990966, 0.00130198889660584, 0.000973412726488719, 
@@ -30,7 +30,7 @@ test_that("predictEthnicity() calculates same output", {
               0.00247488942951423, 0.952354422257874, 0.15952127142996, 
               0.895451754694616, 0.000880124891818622, 0.00280074668729557, 
               0.0112012645744202, 0.00241963027188368, 0.00176508849863307)
-    expect_equal(predictEthnicity(pl_betas)$Prob_Asian, p_as)
+    expect_equal(predictEthnicity(plBetas)$Prob_Asian, p_as)
     
     p_ca <- c(0.980312322107821, 0.998713954725231, 0.998494658597473, 
               0.998325283510774, 0.9978132113059, 0.998174460282059, 
@@ -40,21 +40,21 @@ test_that("predictEthnicity() calculates same output", {
               0.996101841411314, 0.035338252924298, 0.82478265754479, 
               0.0837061488475445, 0.998192320144306, 0.99493579428086, 
               0.98220138573674, 0.995422602145278, 0.997095186407634)
-    expect_equal(predictEthnicity(pl_betas)$Prob_Caucasian, p_ca)
+    expect_equal(predictEthnicity(plBetas)$Prob_Caucasian, p_ca)
     
 })
 
 test_that("predictEthnicity() works when some CpGs missing", {
-    pl_betas_missing_cpgs <- pl_betas[1:1500,]
+    plBetas_missing_cpgs <- plBetas[1:1500,]
     expect_true(
         suppressWarnings(
             is.data.frame(
-                predictEthnicity(pl_betas_missing_cpgs))))
-    expect_warning(predictEthnicity(pl_betas_missing_cpgs))
+                predictEthnicity(plBetas_missing_cpgs))))
+    expect_warning(predictEthnicity(plBetas_missing_cpgs))
 })
 
 test_that("predictEthnicity() output contains all columns", {
-    output_colnames <- names(predictEthnicity(pl_betas))
+    output_colnames <- names(predictEthnicity(plBetas))
     expect_true(
         all(
             c("Predicted_ethnicity_nothresh", "Predicted_ethnicity",
@@ -63,14 +63,14 @@ test_that("predictEthnicity() output contains all columns", {
 })
 
 test_that("predictEthnicity() returns probabilities that sum to 1", {
-    sums <- predictEthnicity(pl_betas) %>%
+    sums <- predictEthnicity(plBetas) %>%
         dplyr::mutate(sum_of_prob = Prob_African + Prob_Asian + Prob_Caucasian) %>%
         dplyr::pull(sum_of_prob)
     expect_equal(sums, rep(1, 24))
 })
 
-test_that("predictEthnicity(pl_betas) returns expected probabilities", {
-    probs <- predictEthnicity(pl_betas[,1:3]) %>%
+test_that("predictEthnicity(plBetas) returns expected probabilities", {
+    probs <- predictEthnicity(plBetas[,1:3]) %>%
         dplyr::select(contains('Prob_')) %>%
         as.matrix()
     
