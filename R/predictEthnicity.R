@@ -33,6 +33,7 @@
 #' @aliases pl_infer_ethnicity
 
 predictEthnicity <- function(betas, threshold = 0.75) {
+    
     pf <- intersect(rownames(betas), planet::ethnicityCpGs)
     if (length(pf) < length(planet::ethnicityCpGs)) {
         warning(paste(
@@ -45,6 +46,13 @@ predictEthnicity <- function(betas, threshold = 0.75) {
     
     # subset down to 1860 final features
     betas <- t(betas[pf, ])
+    
+    # This code is modified from glmnet v3.0.2, GPL-2 license
+    # modifications include reducing the number of features from the original 
+    # training set, to only where coefficients != 0 (1860 features)
+    # These modifications were made to significantly reduce memory size of the
+    # internal object `nbeta` 
+    # see https://glmnet.stanford.edu/ for original glmnet package
     
     npred <- nrow(betas) # number of samples
     dn <- list(names(nbeta), "1", dimnames(betas)[[1]])
@@ -85,7 +93,12 @@ predictEthnicity <- function(betas, threshold = 0.75) {
     return(tibble::as_tibble(p))
 }
 
-# attribution to glmnet v3.0.2
+# This code is copied directly from glmnet v3.0.2, GPL-2 license
+# see https://glmnet.stanford.edu/ for original glmnet package
+# The authors and copy right holders include:
+# Jerome Friedman [aut], Trevor Hastie [aut, cre], Rob Tibshirani [aut], 
+# Balasubramanian Narasimhan [aut], Kenneth Tay [aut], Noah Simon [aut], 
+# Junyang Qian [ctb]
 glmnet_softmax <- function(x, ignore_labels = FALSE) {
     d <- dim(x)
     dd <- dimnames(x)[[2]]
