@@ -16,7 +16,7 @@ Description: This package contains R functions to infer additional biological
     from placental DNA methylation array (450k/850k) data. The package comes 
     with an example processed placental dataset.
 Depends: 
-    R (>= 4.0)
+    R (>= 4.1)
 Imports: 
     methods,
     tibble,
