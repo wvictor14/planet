@@ -84,7 +84,7 @@ plPhenoData %>%
 #> `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="fig/gest-age-1.png" title="plot of chunk gest-age" alt="plot of chunk gest-age" style="display: block; margin: auto;" />
+<img src="figure/gest-age-1.png" title="plot of chunk gest-age" alt="plot of chunk gest-age" style="display: block; margin: auto;" />
 
 *GA: gestational age*
 
