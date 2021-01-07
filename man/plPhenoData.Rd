@@ -11,7 +11,7 @@ A \link[tibble:tibble-package]{tibble}
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
 }
 \usage{
-plPhenoData
+data(plPhenoData)
 }
 \description{
 Sex, disease, and gestational age information associated with

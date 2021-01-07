@@ -7,7 +7,7 @@
 #'
 #' @format A character vector of length 1860
 #' @source \url{https://pubmed.ncbi.nlm.nih.gov/31399127/}
-#'
+#' @usage data(ethnicityCpGs)
 "ethnicityCpGs"
 
 #' @title Example placental DNA methylation data
@@ -37,7 +37,7 @@
 #'
 #' @format A matrix
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
-#'
+#' @usage data(plBetas)
 "plBetas"
 
 #' @title Sample information accompanying `pl_betas`
@@ -56,7 +56,7 @@
 #' 
 #' @format A [tibble][tibble::tibble-package]
 #' @source \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
-#'
+#' @usage data(plPhenoData)
 "plPhenoData"
 
 #' @title Placental gestational age CpGs 
@@ -71,6 +71,7 @@
 #'
 #' @format A [tibble][tibble::tibble-package] with coefficients for the RPC,
 #' CPC, and refined RPC.
+#' @usage data(ageCpGs)
 "ageCpGs"
 
 #' @title First trimester placental cell type coefficients
@@ -82,6 +83,7 @@
 #'
 #' @format A [matrix] with coefficients for Trophoblasts, Stromal,
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
+#' @usage data(plCellCpGsFirst)
 "plCellCpGsFirst"
 
 #' @title Third trimester placental cell type coefficients
@@ -93,6 +95,7 @@
 #'
 #' @format A [matrix] with coefficients for Trophoblasts, Stromal,
 #' Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
+#' @usage data(plCellCpGsThird)
 "plCellCpGsThird"
 
 #' @title A color palette for placental cell types
@@ -108,5 +111,5 @@
 #' - Hofbauer
 #' - Endothelial
 #' - nRBCs
-#' 
+#' @usage data(plColors)
 "plColors"

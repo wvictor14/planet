@@ -9,7 +9,7 @@ A \link[tibble:tibble-package]{tibble} with coefficients for the RPC,
 CPC, and refined RPC.
 }
 \usage{
-ageCpGs
+data(ageCpGs)
 }
 \description{
 Coefficients from the three placental gestational age clocks

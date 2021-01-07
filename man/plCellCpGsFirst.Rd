@@ -9,7 +9,7 @@ A \link{matrix} with coefficients for Trophoblasts, Stromal,
 Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 }
 \usage{
-plCellCpGsFirst
+data(plCellCpGsFirst)
 }
 \description{
 First trimester coefficients for placental cellular

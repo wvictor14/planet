@@ -11,7 +11,7 @@ A matrix
 \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196}
 }
 \usage{
-plBetas
+data(plBetas)
 }
 \description{
 6 DNA methylation profiles from preeclampsia and healthy

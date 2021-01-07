@@ -11,7 +11,7 @@ A character vector of length 1860
 \url{https://pubmed.ncbi.nlm.nih.gov/31399127/}
 }
 \usage{
-ethnicityCpGs
+data(ethnicityCpGs)
 }
 \description{
 1860 CpGs used to predict ethnicity.

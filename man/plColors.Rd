@@ -8,7 +8,7 @@
 An object of class \code{character} of length 6.
 }
 \usage{
-plColors
+data(plColors)
 }
 \description{
 A nice color palette for placental cell types.
