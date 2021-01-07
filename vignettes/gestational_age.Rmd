@@ -2,6 +2,7 @@
 title: "Predict Gestational Age"
 output: 
     rmarkdown::html_vignette:
+        toc: true
         df_print: "kable"
         fig_caption: FALSE
 pkgdown:
@@ -84,7 +85,7 @@ plPhenoData %>%
 #> `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="figure/gest-age-1.png" title="plot of chunk gest-age" alt="plot of chunk gest-age" style="display: block; margin: auto;" />
+<img src="fig/gest-age-1.png" title="plot of chunk gest-age" alt="plot of chunk gest-age" style="display: block; margin: auto;" />
 
 *GA: gestational age*
 
@@ -95,3 +96,96 @@ plPhenoData %>%
     methylation levels. Aging (Albany NY). 2019;11(12):4238–4253.
     doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/
     PMC6628997/)
+    
+### Session Info
+
+
+```r
+sessionInfo()
+#> R Under development (unstable) (2020-12-18 r79646)
+#> Platform: x86_64-w64-mingw32/x64 (64-bit)
+#> Running under: Windows 10 x64 (build 19042)
+#> 
+#> Matrix products: default
+#> 
+#> locale:
+#> [1] LC_COLLATE=English_Canada.1252  LC_CTYPE=English_Canada.1252   
+#> [3] LC_MONETARY=English_Canada.1252 LC_NUMERIC=C                   
+#> [5] LC_TIME=English_Canada.1252    
+#> 
+#> attached base packages:
+#> [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+#> [8] methods   base     
+#> 
+#> other attached packages:
+#>  [1] planet_0.99.1               bumphunter_1.33.0          
+#>  [3] tidyr_1.1.2                 dplyr_1.0.2                
+#>  [5] EpiDISH_2.7.0               locfit_1.5-9.4             
+#>  [7] iterators_1.0.13            foreach_1.5.1              
+#>  [9] Biostrings_2.59.2           XVector_0.31.1             
+#> [11] SummarizedExperiment_1.21.1 Biobase_2.51.0             
+#> [13] MatrixGenerics_1.3.0        matrixStats_0.57.0         
+#> [15] GenomicRanges_1.43.1        GenomeInfoDb_1.27.3        
+#> [17] IRanges_2.25.6              S4Vectors_0.29.6           
+#> [19] BiocGenerics_0.37.0         ggplot2_3.3.2              
+#> [21] testthat_3.0.1              devtools_2.3.2             
+#> [23] usethis_2.0.0              
+#> 
+#> loaded via a namespace (and not attached):
+#>   [1] BiocFileCache_1.15.1      splines_4.1.0            
+#>   [3] BiocParallel_1.25.1       digest_0.6.27            
+#>   [5] htmltools_0.5.0           fansi_0.4.1              
+#>   [7] magrittr_2.0.1            memoise_1.1.0            
+#>   [9] remotes_2.2.0             askpass_1.1              
+#>  [11] prettyunits_1.1.1         colorspace_2.0-0         
+#>  [13] rappdirs_0.3.1            blob_1.2.1               
+#>  [15] xfun_0.19                 callr_3.5.1              
+#>  [17] crayon_1.3.4              RCurl_1.98-1.2           
+#>  [19] jsonlite_1.7.2            graph_1.69.0             
+#>  [21] roxygen2_7.1.1            glue_1.4.2               
+#>  [23] gtable_0.3.0              zlibbioc_1.37.0          
+#>  [25] DelayedArray_0.17.6       pkgbuild_1.2.0           
+#>  [27] scales_1.1.1              DBI_1.1.0                
+#>  [29] rngtools_1.5              Rcpp_1.0.5               
+#>  [31] progress_1.2.2            bit_4.0.4                
+#>  [33] xopen_1.0.0               httr_1.4.2               
+#>  [35] getopt_1.20.3             ellipsis_0.3.1           
+#>  [37] pkgconfig_2.0.3           XML_3.99-0.5             
+#>  [39] farver_2.0.3              dbplyr_2.0.0             
+#>  [41] utf8_1.1.4                here_1.0.1               
+#>  [43] tidyselect_1.1.0          labeling_0.4.2           
+#>  [45] rlang_0.4.9               AnnotationDbi_1.53.0     
+#>  [47] munsell_0.5.0             biocViews_1.59.1         
+#>  [49] tools_4.1.0               cli_2.2.0                
+#>  [51] generics_0.1.0            RSQLite_2.2.1            
+#>  [53] evaluate_0.14             stringr_1.4.0            
+#>  [55] yaml_2.2.1                processx_3.4.5           
+#>  [57] knitr_1.30                bit64_4.0.5              
+#>  [59] fs_1.5.0                  purrr_0.3.4              
+#>  [61] RBGL_1.67.0               nlme_3.1-151             
+#>  [63] doRNG_1.8.2               sparseMatrixStats_1.3.2  
+#>  [65] xml2_1.3.2                biomaRt_2.47.1           
+#>  [67] compiler_4.1.0            rstudioapi_0.13          
+#>  [69] filelock_1.0.2            curl_4.3                 
+#>  [71] e1071_1.7-4               tibble_3.0.4             
+#>  [73] stringi_1.5.3             highr_0.8                
+#>  [75] ps_1.5.0                  GenomicFeatures_1.43.3   
+#>  [77] desc_1.2.0                lattice_0.20-41          
+#>  [79] Matrix_1.2-18             commonmark_1.7           
+#>  [81] vctrs_0.3.6               stringdist_0.9.6.3       
+#>  [83] pillar_1.4.7              BiocCheck_1.27.2         
+#>  [85] lifecycle_0.2.0           RUnit_0.4.32             
+#>  [87] optparse_1.6.6            BiocManager_1.30.10      
+#>  [89] bitops_1.0-6              rcmdcheck_1.3.3          
+#>  [91] rtracklayer_1.51.1        BiocIO_1.1.2             
+#>  [93] R6_2.5.0                  sessioninfo_1.1.1        
+#>  [95] codetools_0.2-18          MASS_7.3-53              
+#>  [97] assertthat_0.2.1          pkgload_1.1.0            
+#>  [99] openssl_1.4.3             rprojroot_2.0.2          
+#> [101] withr_2.3.0               GenomicAlignments_1.27.2 
+#> [103] Rsamtools_2.7.0           GenomeInfoDbData_1.2.4   
+#> [105] locfdr_1.1-8              mgcv_1.8-33              
+#> [107] hms_0.5.3                 quadprog_1.5-8           
+#> [109] grid_4.1.0                class_7.3-17             
+#> [111] rmarkdown_2.6             DelayedMatrixStats_1.13.1
+```

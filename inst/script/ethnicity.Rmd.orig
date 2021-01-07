@@ -3,6 +3,7 @@ title: "Predict Ethnicity"
 output: 
     rmarkdown::html_vignette:
         fig_caption: FALSE
+        toc: TRUE
 pkgdown:
     as_is: true
 vignette: >
@@ -18,7 +19,11 @@ knitr::opts_chunk$set(
     fig.width = 7, 
     fig.height = 4, 
     fig.align = "center",
+    fig.path = "fig/",
     dpi=300)
+knitr::opts_knit$set(
+    base.dir = "vignettes"
+)
 library(ggplot2)
 ggplot2::theme_set(theme_bw(base_size = 12))
 ```
@@ -139,3 +144,9 @@ stratifying downstream analyses by ethnicity might also be a valid option.
 Accurate ethnicity prediction from placental DNA methylation data. Epigenetics 
 & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.
 biomedcentral.com/articles/10.1186/s13072-019-0296-3)
+
+### Session Info
+
+```{r}
+sessionInfo()
+```

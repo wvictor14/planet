@@ -4,6 +4,7 @@ output:
     rmarkdown::html_vignette:
         df_print: "kable"
         fig_caption: FALSE
+        toc: TRUE
 pkgdown:
     as_is: true
 vignette: >
@@ -29,8 +30,9 @@ mean methylation levels for each cell type.
 ```r
 # cell deconvolution packages
 library(minfi)
-#> Error: package 'bumphunter' could not be loaded
+#> Error in library(minfi): there is no package called 'minfi'
 library(EpiDISH)
+#> Error in library(EpiDISH): there is no package called 'EpiDISH'
 
 # data wrangling and plotting
 library(dplyr)
@@ -38,25 +40,13 @@ library(ggplot2)
 library(tidyr)
 
 library(planet)
+#> Error in library(planet): there is no package called 'planet'
 
 # load example data
 data("plBetas")
 data("plCellCpGsThird")
 head(plCellCpGsThird)
-#>            Trophoblasts   Stromal  Hofbauer Endothelial      nRBC
-#> cg10590657    0.1014098 0.9345796 0.8655285   0.8963641 0.8448382
-#> cg14923398    0.1282030 0.8902107 0.9036769   0.9383641 0.9508709
-#> cg05348366    0.1305697 0.9519820 0.8803082   0.9065136 0.9278057
-#> cg17907628    0.1215249 0.9278777 0.8727841   0.8914412 0.9143601
-#> cg26799656    0.1259953 0.9482014 0.8803863   0.8791004 0.9010419
-#> cg11862144    0.1561991 0.9430855 0.9114967   0.9341671 0.9647331
-#>            Syncytiotrophoblast
-#> cg10590657          0.05460441
-#> cg14923398          0.05383193
-#> cg05348366          0.06546727
-#> cg17907628          0.05325227
-#> cg26799656          0.06823985
-#> cg11862144          0.06044207
+#> Error in head(plCellCpGsThird): object 'plCellCpGsThird' not found
 ```
 
 After our reference cpg data is loaded, we can estimate cell composition by
@@ -72,10 +62,10 @@ houseman_estimates <- minfi:::projectCellType(
     plCellCpGsThird,
     lessThanOne = FALSE
 )
-#> Error in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]): there is no package called 'HDF5Array'
+#> Error in loadNamespace(name): there is no package called 'minfi'
 
 head(houseman_estimates)
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'head': object 'houseman_estimates' not found
+#> Error in head(houseman_estimates): object 'houseman_estimates' not found
 ```
 
 #### EpiDish
@@ -88,6 +78,7 @@ epidish_RPC <- epidish(
     ref.m = plCellCpGsThird,
     method = "RPC"
 )
+#> Error in epidish(beta.m = plBetas[rownames(plCellCpGsThird), ], ref.m = plCellCpGsThird, : could not find function "epidish"
 
 # CIBERSORT
 epidish_CBS <- epidish(
@@ -95,6 +86,7 @@ epidish_CBS <- epidish(
     ref.m = plCellCpGsThird,
     method = "CBS"
 )
+#> Error in epidish(beta.m = plBetas[rownames(plCellCpGsThird), ], ref.m = plCellCpGsThird, : could not find function "epidish"
 
 # constrained projection (houseman 2012)
 epidish_CP <- epidish(
@@ -102,6 +94,7 @@ epidish_CP <- epidish(
     ref.m = plCellCpGsThird,
     method = "CP"
 )
+#> Error in epidish(beta.m = plBetas[rownames(plCellCpGsThird), ], ref.m = plCellCpGsThird, : could not find function "epidish"
 ```
 
 ### Compare
@@ -111,6 +104,7 @@ We can compare the different cell composition estimates.
 
 ```r
 data("plColors")
+#> Warning in data("plColors"): data set 'plColors' not found
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
@@ -149,7 +143,7 @@ bind_rows(
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
     coord_cartesian(ylim = c(0, 1)) +
     labs(x = "", fill = "")
-#> Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'as.data.frame': object 'houseman_estimates' not found
+#> Error in as.data.frame(.): object 'houseman_estimates' not found
 ```
 
 Some notes:
@@ -164,3 +158,37 @@ from maternal side) expect cell composition to reflect that
 1. [Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific Characterization 
 of the Placental Methylome, 29 October 2020, PREPRINT (Version 3) available at
 Research Square](https://www.researchsquare.com/article/rs-38223/v3)
+
+### Session Info
+
+
+```r
+sessionInfo()
+#> R version 4.0.3 (2020-10-10)
+#> Platform: x86_64-w64-mingw32/x64 (64-bit)
+#> Running under: Windows 10 x64 (build 19042)
+#> 
+#> Matrix products: default
+#> 
+#> locale:
+#> [1] LC_COLLATE=English_Canada.1252  LC_CTYPE=English_Canada.1252   
+#> [3] LC_MONETARY=English_Canada.1252 LC_NUMERIC=C                   
+#> [5] LC_TIME=English_Canada.1252    
+#> 
+#> attached base packages:
+#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> 
+#> other attached packages:
+#> [1] tidyr_1.1.2   dplyr_1.0.2   ggplot2_3.3.2
+#> 
+#> loaded via a namespace (and not attached):
+#>  [1] knitr_1.30       magrittr_2.0.1   tidyselect_1.1.0 munsell_0.5.0   
+#>  [5] colorspace_2.0-0 here_1.0.1       R6_2.5.0         rlang_0.4.9     
+#>  [9] stringr_1.4.0    tools_4.0.3      grid_4.0.3       gtable_0.3.0    
+#> [13] xfun_0.19        withr_2.3.0      htmltools_0.5.0  ellipsis_0.3.1  
+#> [17] yaml_2.2.1       rprojroot_2.0.2  digest_0.6.27    tibble_3.0.4    
+#> [21] lifecycle_0.2.0  crayon_1.3.4     purrr_0.3.4      vctrs_0.3.6     
+#> [25] glue_1.4.2       evaluate_0.14    rmarkdown_2.6    stringi_1.5.3   
+#> [29] compiler_4.0.3   pillar_1.4.7     generics_0.1.0   scales_1.1.1    
+#> [33] pkgconfig_2.0.3
+```

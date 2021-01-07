@@ -4,6 +4,7 @@ output:
     rmarkdown::html_vignette:
         df_print: "kable"
         fig_caption: FALSE
+        toc: TRUE
 pkgdown:
     as_is: true
 vignette: >
@@ -30,7 +31,12 @@ knitr::opts_chunk$set(
     fig.width = 7, 
     fig.height = 7, 
     fig.align = "center",
+    fig.path = "fig/",
     dpi=300)
+knitr::opts_knit$set(
+    base.dir = "vignettes"
+)
+
 library(ggplot2)
 ggplot2::theme_set(theme_minimal(base_size = 14))
 ```
@@ -152,3 +158,9 @@ from maternal side) expect cell composition to reflect that
 1. [Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific Characterization 
 of the Placental Methylome, 29 October 2020, PREPRINT (Version 3) available at
 Research Square](https://www.researchsquare.com/article/rs-38223/v3)
+
+### Session Info
+
+```{r}
+sessionInfo()
+```

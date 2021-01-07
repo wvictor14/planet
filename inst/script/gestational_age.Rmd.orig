@@ -2,6 +2,7 @@
 title: "Predict Gestational Age"
 output: 
     rmarkdown::html_vignette:
+        toc: true
         df_print: "kable"
         fig_caption: FALSE
 pkgdown:
@@ -19,7 +20,11 @@ knitr::opts_chunk$set(
     fig.width = 7, 
     fig.height = 4, 
     fig.align = "center",
+    fig.path = "fig/",
     dpi=300)
+knitr::opts_knit$set(
+    base.dir = "vignettes"
+)
 library(ggplot2)
 ggplot2::theme_set(theme_bw(base_size = 12))
 ```
@@ -96,3 +101,9 @@ plPhenoData %>%
     methylation levels. Aging (Albany NY). 2019;11(12):4238–4253.
     doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/
     PMC6628997/)
+    
+### Session Info
+
+```{r}
+sessionInfo()
+```
