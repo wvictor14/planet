@@ -28,6 +28,15 @@ knitr::opts_knit$set(
 library(ggplot2)
 ggplot2::theme_set(theme_bw(base_size = 12))
 ```
+### Installation
+
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
+### Set up
 
 There are 3 gestational age clocks for placental DNA methylation data from Lee 
 Y. et al. 2019:
@@ -51,6 +60,8 @@ library(planet)
 data("plPhenoData")
 data("plBetas")
 ```
+
+### Predict Gestational Age
 
 To use each, we can specify the `type` argument in `predictAge`.
 

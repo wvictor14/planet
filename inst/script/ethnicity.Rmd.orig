@@ -28,6 +28,14 @@ library(ggplot2)
 ggplot2::theme_set(theme_bw(base_size = 12))
 ```
 
+### Installation
+
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
 ### Example Data
 
 For demonstration, I use 24 samples from a placental DNAm dataset from GEO,
@@ -59,6 +67,7 @@ head(plPhenoData)
 `ethnicityCpGs` vector:
 
 ```{r}
+data(ethnicityCpGs)
 all(ethnicityCpGs %in% rownames(plBetas))
 ```
 
@@ -76,14 +85,14 @@ these, run `minfi::preprocessNoob()` on an `rgset` object and then
 `wateRmelon::BMIQ()`. This has already applied to the example data.
 
 ```{r, message = F}
-results <- pl_infer_ethnicity(plBetas)
+results <- predictEthnicity(plBetas)
 
 # show last 8 rows
 results %>%
     tail(8)
 ```
 
-`pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
+`predictEthnicity` returns probabilities corresponding to each ethnicity for
 each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final
 classification is determined in two ways:
 

@@ -15,6 +15,16 @@ editor_options:
     chunk_output_type: console
 ---
 
+### Installation
+
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
+### Set up
+
 To infer cell composition on placental villi DNAm samples, we can use the
 reference cpgs identified in [3]. These are provided in this package as
 `plCellCpGsThird` and `plCellCpGsFirst` for third trimester (term) and
@@ -41,9 +51,10 @@ library(ggplot2)
 ggplot2::theme_set(theme_minimal(base_size = 14))
 ```
 
+
 ```{r, message = FALSE, warning = FALSE}
 # cell deconvolution packages
-library(minfi)
+# library(minfi) # currently not installable on R devel
 library(EpiDISH)
 
 # data wrangling and plotting
@@ -65,7 +76,7 @@ packages minfi or EpiDISH, or a non-constrained approach by EpiDish.
 
 #### Minfi
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
 houseman_estimates <- minfi:::projectCellType(
     plBetas[rownames(plCellCpGsThird), ],
     plCellCpGsThird,
@@ -109,8 +120,8 @@ data("plColors")
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
-    houseman_estimates %>% as.data.frame() %>% 
-        mutate(algorithm = "CP (Houseman)"),
+    #houseman_estimates %>% as.data.frame() %>% 
+    #    mutate(algorithm = "CP (Houseman)"),
     epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
     epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
     epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
