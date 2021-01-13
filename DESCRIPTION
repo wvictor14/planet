@@ -1,6 +1,6 @@
 Package: planet
 Title: Placental DNA methylation analysis tools
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: 
     c(person("Victor", "Yuan", email = "victor.2wy@gmail.com",
             role = c("aut", "cre")),
@@ -16,7 +16,7 @@ Description: This package contains R functions to infer additional biological
     from placental DNA methylation array (450k/850k) data. The package comes 
     with an example processed placental dataset.
 Depends: 
-    R (>= 4.1)
+    R (>= 4.0)
 Imports: 
     methods,
     tibble,
@@ -30,9 +30,9 @@ Suggests:
     EpiDISH,
     knitr,
     rmarkdown
-License: GPL (>= 2)
+License: GPL-2
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 biocViews: Software, DifferentialMethylation, Epigenetics, Microarray, 

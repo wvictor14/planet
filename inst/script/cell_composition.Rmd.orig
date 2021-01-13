@@ -4,6 +4,7 @@ output:
     rmarkdown::html_vignette:
         df_print: "kable"
         fig_caption: FALSE
+        toc: TRUE
 pkgdown:
     as_is: true
 vignette: >
@@ -13,6 +14,16 @@ vignette: >
 editor_options: 
     chunk_output_type: console
 ---
+
+### Installation
+
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
+### Set up
 
 To infer cell composition on placental villi DNAm samples, we can use the
 reference cpgs identified in [3]. These are provided in this package as
@@ -30,14 +41,20 @@ knitr::opts_chunk$set(
     fig.width = 7, 
     fig.height = 7, 
     fig.align = "center",
+    fig.path = "fig/",
     dpi=300)
+knitr::opts_knit$set(
+    base.dir = "vignettes"
+)
+
 library(ggplot2)
 ggplot2::theme_set(theme_minimal(base_size = 14))
 ```
 
+
 ```{r, message = FALSE, warning = FALSE}
 # cell deconvolution packages
-library(minfi)
+# library(minfi) # currently not installable on R devel
 library(EpiDISH)
 
 # data wrangling and plotting
@@ -59,7 +76,7 @@ packages minfi or EpiDISH, or a non-constrained approach by EpiDish.
 
 #### Minfi
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
 houseman_estimates <- minfi:::projectCellType(
     plBetas[rownames(plCellCpGsThird), ],
     plCellCpGsThird,
@@ -103,8 +120,8 @@ data("plColors")
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
-    houseman_estimates %>% as.data.frame() %>% 
-        mutate(algorithm = "CP (Houseman)"),
+    #houseman_estimates %>% as.data.frame() %>% 
+    #    mutate(algorithm = "CP (Houseman)"),
     epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
     epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
     epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
@@ -152,3 +169,9 @@ from maternal side) expect cell composition to reflect that
 1. [Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific Characterization 
 of the Placental Methylome, 29 October 2020, PREPRINT (Version 3) available at
 Research Square](https://www.researchsquare.com/article/rs-38223/v3)
+
+### Session Info
+
+```{r}
+sessionInfo()
+```

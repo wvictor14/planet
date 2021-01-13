@@ -9,7 +9,7 @@ A \link{matrix} with coefficients for Trophoblasts, Stromal,
 Endothelial, Hofbauer cells, nRBCs, and Syncytiotrophoblasts.
 }
 \usage{
-plCellCpGsThird
+data(plCellCpGsThird)
 }
 \description{
 Third trimester coefficients for placental cellular

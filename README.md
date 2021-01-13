@@ -1,5 +1,5 @@
 
-# planet <img src="man/figures/logo.png" align="right" height = "139" />
+# planet <img src="inst/figures/logo.png" align="right" height = "139" />
 
 <!-- badges: start -->
 
@@ -71,7 +71,7 @@ predictEthnicity(plBetas) %>%
 #### Predict Gestational Age
 
 There are 3 gestational age clocks for placental DNA methylation data
-from Lee Y. et al. 2019 (2). To use a specific one, we can use the
+from Lee Y. et al. 2019 (2). To use a specific one, we can use the
 `type` argument in `predictAge`:
 
 ``` r

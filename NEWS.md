@@ -1,3 +1,12 @@
+# planet 0.99.2 (01-07-2021)
+
+* Vignettes updated with new function names
+* Removed `minfi` from examples since installation fails on some R versions
+* Moved `.orig` files to `inst/script`
+* Moved `data-raw/` contents to `inst/script` 
+* Moved `man/figures/logo.png` to `inst/figures/logo.png`, updated README
+* Lazydata set to false
+
 # planet 0.99.0 (12-18-2020)
 
 * Improved vignette figure quality

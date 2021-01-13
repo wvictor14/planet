@@ -3,6 +3,7 @@ title: "Predict Ethnicity"
 output: 
     rmarkdown::html_vignette:
         fig_caption: FALSE
+        toc: TRUE
 pkgdown:
     as_is: true
 vignette: >
@@ -18,9 +19,21 @@ knitr::opts_chunk$set(
     fig.width = 7, 
     fig.height = 4, 
     fig.align = "center",
+    fig.path = "fig/",
     dpi=300)
+knitr::opts_knit$set(
+    base.dir = "vignettes"
+)
 library(ggplot2)
 ggplot2::theme_set(theme_bw(base_size = 12))
+```
+
+### Installation
+
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
 ```
 
 ### Example Data
@@ -54,6 +67,7 @@ head(plPhenoData)
 `ethnicityCpGs` vector:
 
 ```{r}
+data(ethnicityCpGs)
 all(ethnicityCpGs %in% rownames(plBetas))
 ```
 
@@ -71,14 +85,14 @@ these, run `minfi::preprocessNoob()` on an `rgset` object and then
 `wateRmelon::BMIQ()`. This has already applied to the example data.
 
 ```{r, message = F}
-results <- pl_infer_ethnicity(plBetas)
+results <- predictEthnicity(plBetas)
 
 # show last 8 rows
 results %>%
     tail(8)
 ```
 
-`pl_infer_ethnicity` returns probabilities corresponding to each ethnicity for
+`predictEthnicity` returns probabilities corresponding to each ethnicity for
 each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). A final
 classification is determined in two ways:
 
@@ -139,3 +153,9 @@ stratifying downstream analyses by ethnicity might also be a valid option.
 Accurate ethnicity prediction from placental DNA methylation data. Epigenetics 
 & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.
 biomedcentral.com/articles/10.1186/s13072-019-0296-3)
+
+### Session Info
+
+```{r}
+sessionInfo()
+```
