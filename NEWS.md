@@ -1,3 +1,8 @@
+# planet 0.99.3 (01-22-2021)
+
+* Update reference for cell composition
+* Accepted into bioconductor, will be released in next cycle
+
 # planet 0.99.2 (01-07-2021)
 
 * Vignettes updated with new function names
