@@ -39,25 +39,6 @@ c(
     ),
     
     bibentry(bibtype="article",
-        title = "Accurate ethnicity prediction from placental DNA methylation data",
-        author = personList(
-            person("Victor", "Yuan"),
-            person("Magda E.", "Price"),
-            person("Giulia", "Del Gobbo"),
-            person("Sara", "Mostafavi"),
-            person("Brian", "Cox"),
-            person("Alexandra M.", "Binder"),
-            person("Karin B.", "Michels"),
-            person("Carmen", "Marsit"),
-            person("Wendy P.", "Robinson")
-        ),
-        year = 2019,
-        journal = "BMC Epigenetics & Chromatin",
-        doi = "10.1186/s13072-019-0296-3",
-        url = "https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3"
-    ),
-    
-    bibentry(bibtype="article",
         title = "Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels",
         author = personList(
             person("Yunsung", "Lee"),
@@ -82,6 +63,21 @@ c(
         journal = "Aging (Albany NY)",
         doi = "10.18632/aging.102049",
         url = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/"
+    ),
+    
+    bibentry(bibtype="article",
+        title = "Cell-specific characterization of the placental methylome",
+        author = personList(
+            person("Victor", "Yuan"),
+            person("Desmond", "Hui"),
+            person("Maria S.", "Penaherrera"),
+            person("Alexander G.", "Beristain"),
+            person("Wendy P.", "Robinson")
+        ),
+        year = 2021,
+        journal = "BMC Genomics",
+        doi = "10.1186/s12864-020-07186-6",
+        url = "https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6"
     )
     
 )

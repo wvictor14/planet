@@ -1,5 +1,5 @@
 
-# planet <img src="inst/figures/logo.png" align="right" height = "139" />
+# planet <img src="man/figures/logo.png" align="right" height = "139" />
 
 <!-- badges: start -->
 
@@ -71,7 +71,7 @@ predictEthnicity(plBetas) %>%
 #### Predict Gestational Age
 
 There are 3 gestational age clocks for placental DNA methylation data
-from Lee Y. et al. 2019 (2). To use a specific one, we can use the
+from Lee Y. et al. 2019 (2). To use a specific one, we can use the
 `type` argument in `predictAge`:
 
 ``` r
@@ -131,7 +131,7 @@ minfi:::projectCellType(
     2019;11(12):4238–4253.
     doi:10.18632/aging.102049](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
 
-3.  [Victor Yuan, Desmond Hui, Yifan Yin et al. Cell-specific
-    Characterization of the Placental Methylome, 29 October 2020,
-    PREPRINT (Version 3) available at Research
-    Square](https://www.researchsquare.com/article/rs-38223/v3)
+3.  [**Yuan V**, Hui D, Yin Y, Peñaherrera MS, Beristain AG, Robinson
+    WP. Cell-specific characterization of the placental methylome. BMC
+    Genomics. 2021 Jan
+    6;22(1):6.](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6)
