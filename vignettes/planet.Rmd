@@ -1,0 +1,318 @@
+---
+title: "planet"
+output: 
+    rmarkdown::html_vignette:
+        df_print: "kable"
+        fig_caption: FALSE
+        toc: TRUE
+pkgdown:
+    as_is: true
+vignette: >
+    %\VignetteIndexEntry{planet}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+    chunk_output_type: console
+---
+
+## Installation
+
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
+## Cell composition
+
+To infer cell composition on placental villi DNAm samples, we can need to use
+placental reference cpgs [(Yuan 2021)](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6). These are provided in this package as
+`plCellCpGsThird` and `plCellCpGsFirst` for third trimester (term) and
+first trimester samples, respectively.
+
+In this example we are using term villi DNAm data, so we first load the 
+reference cpgs `plCellCpGsThird`. This is a data frame of 600 cpgs, with 
+mean methylation levels for each cell type.
+
+```{r, message = FALSE, warning = FALSE}
+# cell deconvolution packages
+library(minfi)
+library(EpiDISH)
+
+# data wrangling and plotting
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(planet)
+
+# load example data
+data("plBetas")
+data("plCellCpGsThird")
+head(plCellCpGsThird)
+```
+
+After our reference cpg data is loaded, we can estimate cell composition by
+applying either the Constrained Projection approach implemented by the R 
+packages minfi or EpiDISH, or a non-constrained approach by EpiDish. I demonstrate
+how to do both.
+
+#### Minfi
+
+```{r}
+houseman_estimates <- minfi:::projectCellType(
+    plBetas[rownames(plCellCpGsThird), ],
+    plCellCpGsThird,
+    lessThanOne = FALSE
+)
+
+head(houseman_estimates)
+```
+
+#### EpiDISH
+
+```{r}
+# robust partial correlations
+epidish_RPC <- epidish(
+    beta.m = plBetas[rownames(plCellCpGsThird), ],
+    ref.m = plCellCpGsThird,
+    method = "RPC"
+)
+
+# CIBERSORT
+epidish_CBS <- epidish(
+    beta.m = plBetas[rownames(plCellCpGsThird), ],
+    ref.m = plCellCpGsThird,
+    method = "CBS"
+)
+
+# constrained projection (houseman 2012)
+epidish_CP <- epidish(
+    beta.m = plBetas[rownames(plCellCpGsThird), ],
+    ref.m = plCellCpGsThird,
+    method = "CP"
+)
+```
+
+#### Compare
+
+Below, I demonstrate how we can visually compare the different cell composition 
+estimates.
+
+```{r, fig.width = 7, fig.height = 7}
+data("plColors")
+
+# bind estimate data frames and reshape for plotting
+bind_rows(
+    houseman_estimates %>% as.data.frame() %>% mutate(algorithm = "CP (Houseman)"),
+    epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
+    epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
+    epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
+) %>%
+    mutate(sample = rep(rownames(houseman_estimates), 4)) %>%
+    as_tibble() %>%
+    pivot_longer(
+        cols = -c(algorithm, sample),
+        names_to = "component",
+        values_to = "estimate"
+    ) %>%
+
+    # relevel for plot
+    mutate(component = factor(component,
+        levels = c(
+            "nRBC", "Endothelial", "Hofbauer",
+            "Stromal", "Trophoblasts",
+            "Syncytiotrophoblast"
+        )
+    )) %>%
+
+    # plot
+    ggplot(aes(x = sample, y = estimate, fill = component)) +
+    geom_bar(stat = "identity") +
+    facet_wrap(~algorithm, ncol = 1) +
+    scale_fill_manual(values = plColors) +
+    scale_y_continuous(
+        limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1),
+        labels = scales::percent
+    ) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+    coord_cartesian(ylim = c(0, 1)) +
+    labs(x = "", fill = "")
+```
+
+Some notes:
+
+* Normalize your data with `minfi::preprocessNoob` and BMIQ
+* Use all cell CpGs - if some are missing, estimates may vary
+* If your samples have been processed in a particular manner, (e.g. sampling 
+from maternal side) expect cell composition to reflect that
+
+## Gestational age
+
+#### Example Data
+
+For demonstration, I use 24 samples from a placental DNAm dataset from GEO,
+([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)), which
+contains samples collected in an Australian population. The DNA methylation 
+data (in betas) can be accessed with `data(plBetas)` and corresponding sample
+information from `data(plPhenoData)`. Note that for demonstration purposes, the 
+cpgs have been filtered to a random \~10,000 CpGs, plus the CpGs used in all of 
+the functions from this package.
+
+```{r}
+# load example data
+data(plBetas)
+data(plPhenoData)
+
+dim(plBetas)
+#> [1] 13918    24
+head(plPhenoData)
+#> # A tibble: 6 x 7
+#>   sample_id  sex   disease   gestation_wk ga_RPC ga_CPC ga_RRPC
+#>   <fct>      <chr> <chr>            <dbl>  <dbl>  <dbl>   <dbl>
+#> 1 GSM1944936 Male  preeclam~           36   38.5   38.7    38.7
+#> 2 GSM1944939 Male  preeclam~           32   33.1   34.2    32.6
+#> 3 GSM1944942 Fema~ preeclam~           32   34.3   35.1    33.3
+#> 4 GSM1944944 Male  preeclam~           35   35.5   36.7    35.5
+#> 5 GSM1944946 Fema~ preeclam~           38   37.6   37.6    36.6
+#> 6 GSM1944948 Fema~ preeclam~           36   36.8   38.4    36.7
+```
+
+There are 3 gestational age clocks for placental DNA methylation data from [(Lee 2019)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/):
+
+1.  Robust Placental Clock (RPC)
+2.  Control Placental Clock (CPC)
+3.  Refined Robust Placental Clock (RRPC)
+
+To predict gestational, we load the example data:
+
+- `plBetas` - DNAm data for 24 placental samples
+- `plPhenoData` - Matching sample information
+
+#### Predict Gestational Age
+
+To select the type of clock, we can specify the `type` argument in `predictAge`.
+
+We will apply all three clocks on this data, and add the predicted age to the
+sample information data.frame, `plPhenoData`.
+
+```{r}
+plPhenoData <- plPhenoData %>%
+    mutate(
+        ga_RPC = predictAge(plBetas, type = "RPC"),
+        ga_CPC = predictAge(plBetas, type = "CPC"),
+        ga_RRPC = predictAge(plBetas, type = "RRPC")
+    )
+```
+
+Note that the number of predictors (CpGs) that were used in our data are 
+printed. It's important to take note if a significant number of predictive CpGs
+are missing in your data, as this can affect the predicted gestational age
+accuracy.
+
+Next, I plot the difference between predicted and reported gestational age, for
+each of the 3 gestational age predictors.
+
+```{r, fig.width = 7, fig.height = 5}
+plPhenoData %>%
+  
+    # reshape, to plot
+    pivot_longer(
+        cols = contains("ga"),
+        names_to = "clock_type",
+        names_prefix = "ga_",
+        values_to = "ga"
+    ) %>%
+
+    # plot code
+    ggplot(aes(x = gestation_wk, y = ga, col = disease)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE) +
+    facet_wrap(~clock_type) +
+    theme(legend.position = "top") +
+    labs(x = "Reported GA (weeks)", y = "Inferred GA (weeks)", col = "")
+```
+
+## Ethnicity
+
+Before predicting ethnicity You can ensure that you have all features using the
+`ethnicityCpGs` vector:
+
+```{r}
+data(ethnicityCpGs)
+all(ethnicityCpGs %in% rownames(plBetas))
+
+results <- predictEthnicity(plBetas)
+results %>%
+    tail(8)
+```
+
+`predictEthnicity` returns probabilities corresponding to each ethnicity for
+each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). This applies a
+glmnet model described in [(Yuan 2019)](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3). A final classification is determined in two ways:
+
+1.  `Predicted_ethnicity_nothresh` - returns a classification corresponding to
+the highest class-specific probability.
+
+2.  `Predicted_ethnicity` - if the highest class-specific probability is below
+`0.75`, then the the sample is assigned an `Amibiguous` label. This threshold 
+can be adjusted with the `threshold` argument. Samples with this label might
+require special attention in downstream analyses.
+
+
+```{r, fig.width = 7}
+results %>%
+    ggplot(aes(
+        x = Prob_Caucasian, y = Prob_African,
+        col = Predicted_ethnicity
+    )) +
+    geom_point(alpha = 0.7) +
+    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+    scale_x_continuous(labels = scales::percent) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(x = "P(Caucasian)", y = "P(African)")
+
+results %>%
+    ggplot(aes(
+        x = Prob_Caucasian, y = Prob_Asian,
+        col = Predicted_ethnicity
+    )) +
+    geom_point(alpha = 0.7) +
+    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+    scale_x_continuous(labels = scales::percent) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(x = "P(Caucasian)", y = "P(Asian)")
+```
+
+We can't compare this to self-reported ethnicity as it is unavailable. But we
+know these samples were collected in Sydney, Australia, and are therefore 
+likely mostly European with some East Asian participants.
+
+
+```{r}
+table(results$Predicted_ethnicity)
+```
+
+**A note on adjustment in differential methylation analysis**
+
+Because 'Ambiguous' samples might have different mixtures of ancestries, it 
+might be inadequate to adjust for them as one group in an analysis of admixed
+populations (e.g. 50/50 Asian/African should not be considered the same group 
+as 50/50 Caucasian/African). One solution would be to simply remove these
+samples. Another would be to adjust for the raw probabilities-in this case, use
+only two of the three probabilities, since the third will be redundant
+(probabilities sum to 1). If sample numbers are large enough in each group,
+stratifying downstream analyses by ethnicity might also be a valid option.
+
+## References
+
+[Yuan V, Hui D, Yin Y, Peñaherrera MS, Beristain AG, Robinson WP. Cell-specific characterization of the placental methylome. BMC Genomics. 2021 Jan 6;22(1):6. ](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6)
+
+[Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
+
+[Lee Y, Choufani S, Weksberg R, Wilson SL, Yuan V, Burt A, et al. Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels. Aging (Albany NY). 2019 Jun 24;11(12):4238–53.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
+
+## Session Info
+
+```{r}
+sessionInfo()
+```

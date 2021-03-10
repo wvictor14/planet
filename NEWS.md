@@ -1,3 +1,8 @@
+# planet 0.99.4 (03-10-2021)
+
+* Combined vignettes into a single one
+* Updated references
+
 # planet 0.99.3 (01-22-2021)
 
 * Update reference for cell composition
