@@ -27,6 +27,7 @@ Suggests:
     testthat,
     tidyr,
     scales,
+    minfi,
     EpiDISH,
     knitr,
     rmarkdown
