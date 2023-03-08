@@ -42,15 +42,18 @@ test_that("predictEthnicity() calculates same output", {
     
 })
 
-test_that("predictEthnicity() works when some CpGs missing", {
+test_that("predictEthnicity() does NOT work when some CpGs missing", {
     data(plBetas)
     plBetas_missing_cpgs <- plBetas[1:1500,]
-    expect_true(
-        suppressWarnings(
-            is.data.frame(
-                predictEthnicity(plBetas_missing_cpgs))))
-    expect_warning(predictEthnicity(plBetas_missing_cpgs))
+    expect_error(predictEthnicity(plBetas_missing_cpgs))
 })
+
+test_that("predictEthnicity() errors when some CpGs are NA.") {
+  data(plBetas)
+  plBetas_with_na <- plBetas
+  plBetas_with_na[1:3,] <- NA
+  expect_error(predictEthnicity(plBetas_with_na))
+}
 
 test_that("predictEthnicity() output contains all columns", {
     data(plBetas)
