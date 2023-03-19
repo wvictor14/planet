@@ -1,3 +1,10 @@
+---
+title: "samplecode"
+output: github_document
+---
+
+
+```{r}
 library(mixOmics)
 library(here)
 library(dplyr)
@@ -29,3 +36,11 @@ results <- tibble(sample_id = rownames(predict.filt$predict)) %>%
 results
 
 object.size(mod) %>% print(unit = 'Mb')
+
+library(usethis)
+use_data(mod)
+```
+
+
+# reduce size
+
