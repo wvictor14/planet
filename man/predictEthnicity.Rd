@@ -5,7 +5,7 @@
 \alias{pl_infer_ethnicity}
 \title{Predicts ethnicity using placental DNA methylation microarray data}
 \usage{
-predictEthnicity(betas, threshold = 0.75)
+predictEthnicity(betas, threshold = 0.75, force = FALSE)
 }
 \arguments{
 \item{betas}{n x m dataframe of methylation values on the beta scale (0, 1),
@@ -14,6 +14,8 @@ contain all 1860 predictors and be normalized with NOOB and BMIQ.}
 
 \item{threshold}{A probability threshold ranging from (0, 1) to call samples
 'ambiguous'. Defaults to 0.75.}
+
+\item{force}{run even if missing predictors. Default is \code{FALSE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
