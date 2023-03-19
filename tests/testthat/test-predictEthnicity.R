@@ -48,12 +48,12 @@ test_that("predictEthnicity() does NOT work when some CpGs missing", {
     expect_error(predictEthnicity(plBetas_missing_cpgs))
 })
 
-test_that("predictEthnicity() errors when some CpGs are NA.") {
+test_that("predictEthnicity() errors when some CpGs are NA.", {
   data(plBetas)
   plBetas_with_na <- plBetas
   plBetas_with_na[1:3,] <- NA
   expect_error(predictEthnicity(plBetas_with_na))
-}
+})
 
 test_that("predictEthnicity() output contains all columns", {
     data(plBetas)
