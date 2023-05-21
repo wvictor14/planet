@@ -19,7 +19,14 @@ See full documentation at <https://victor.rbind.io/planet>
 
 ### Installation
 
-You can install `planet` from this github repo:
+```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("planet")
+```
+
+Development version of `planet`:
 
 ``` r
 devtools::install_github('wvictor14/planet')
