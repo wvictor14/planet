@@ -12,3 +12,5 @@ doc
 Meta
 *hexsticker.pptx
 pkgdown/
+*.rds
+.vscode/settings.json
