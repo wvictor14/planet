@@ -329,9 +329,21 @@ for classification used to assign labels is 55%; if the users wishes to use
 other threshold, different labels can be assigned based on the output 
 probabilities. 
 
+```{r include=FALSE}
+
+library(ExperimentHub)
+eh = ExperimentHub()
+query(eh, c('eoPred'))
+val = eh[["EH8091"]]
+# add line to load valMeta
+
+```
+
 ```{r}
 
-preds <- predictPreeclampsia(t(val))
+dim(val) # 48 by 341,281
+
+preds <- predictPreeclampsia(val)
 
 # have a quick look
 head(preds)

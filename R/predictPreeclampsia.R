@@ -21,23 +21,21 @@
 #' Load data
 #' data(peBetas)
 #' predictPreeclampsia(peBetas, dist = "max.dist")
-#'
+#' 
+#' @import mixOmics
+#' @import ExperimentHub
 #' @export predictPreeclampsia
 #'
 
 predictPreeclampsia <- function(betas, ...){
   
   # read in data to generate model
-  data(trainBetas, envir=environment())
-  data(trainLabels, envir=environment())
-  
-  # model
-  set.seed(2022)
-  mod = mixOmics::splsda(trainBetas, trainLabels, ncomp = 1, keepX = 45)
-  trainCpGs = colnames(mod)$X
-  peCpGs = mixOmics::selectVar(mod)$name
+  eh = ExperimentHub()
+  mod = eh[['EH8090']]
+  trainCpGs = colnames(mod$X)
   
   # check that there are no NAs in the predictors (or if there are, how many)
+  peCpGs = mixOmics::selectVar(mod)$name
   pp <- intersect(colnames(betas), peCpGs)
   
   if(length(pp) < length(peCpGs)){

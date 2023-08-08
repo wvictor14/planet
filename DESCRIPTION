@@ -21,7 +21,8 @@ Imports:
     methods,
     tibble,
     magrittr,
-    dplyr
+    dplyr,
+    ExperimentHub
 Suggests:
     badger,
     ggplot2,
