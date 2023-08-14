@@ -22,7 +22,8 @@ Imports:
     tibble,
     magrittr,
     dplyr,
-    ExperimentHub
+    ExperimentHub,
+    mixOmics
 Suggests:
     badger,
     ggplot2,

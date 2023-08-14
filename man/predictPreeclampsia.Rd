@@ -20,16 +20,17 @@ on placental DNA methylation microarray data.
 \details{
 Assigns the class labels "early-PE" or "normotensive" to each sample
 and returns a class probability.
-
-It is recommended that users apply beta-mixture quantile normalization (BMIQ) to their data
+}
+\section{It is recommended that users apply beta-mixture quantile normalization (BMIQ) to their data}{
 prior to prediction. This was the normalization method used on the training data.
 }
+
 \examples{
 
-To predict early preeclampsia on 450k/850k samples
+# To predict early preeclampsia on 450k/850k samples
 
-Load data
-data(peBetas)
-predictPreeclampsia(peBetas, dist = "max.dist")
+# Load data
+# data(peBetas)
+# predictPreeclampsia(peBetas, dist = "max.dist")
 
 }

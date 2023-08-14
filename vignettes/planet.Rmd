@@ -329,7 +329,7 @@ for classification used to assign labels is 55%; if the users wishes to use
 other threshold, different labels can be assigned based on the output 
 probabilities. 
 
-```{r include=FALSE}
+```{r include=FALSE, eval = FALSE}
 
 library(ExperimentHub)
 eh = ExperimentHub()
@@ -339,7 +339,7 @@ val = eh[["EH8091"]]
 
 ```
 
-```{r}
+```{r include=FALSE, eval = FALSE}
 
 dim(val) # 48 by 341,281
 

@@ -6,7 +6,7 @@
 #' @details Assigns the class labels "early-PE" or "normotensive" to each sample
 #' and returns a class probability.
 #'
-#' It is recommended that users apply beta-mixture quantile normalization (BMIQ) to their data
+#' # It is recommended that users apply beta-mixture quantile normalization (BMIQ) to their data
 #' prior to prediction. This was the normalization method used on the training data.
 #'
 #' @param betas matrix or array of methylation values on the beta scale (0, 1),
@@ -16,11 +16,11 @@
 #'
 #' @examples
 #'
-#' To predict early preeclampsia on 450k/850k samples
+#' # To predict early preeclampsia on 450k/850k samples
 #'
-#' Load data
-#' data(peBetas)
-#' predictPreeclampsia(peBetas, dist = "max.dist")
+#' # Load data
+#' # data(peBetas)
+#' # predictPreeclampsia(peBetas, dist = "max.dist")
 #' 
 #' @import mixOmics
 #' @import ExperimentHub
@@ -66,25 +66,25 @@ predictPreeclampsia <- function(betas, ...){
     print(paste0("Input data must be a matrix or an array"))
   }
   
-  subset <- betas[,colnames(betas) %in% trainCpGs]
+  betasSubset <- betas[,colnames(betas) %in% trainCpGs]
   
   # order
-  subset <- subset[drop=FALSE,, trainCpGs]
+  betasSubset <- betasSubset[drop=FALSE,, trainCpGs]
   
-  if(all(colnames(subset) == trainCpGs) == FALSE){
+  if(all(colnames(betasSubset) == trainCpGs) == FALSE){
     stop()
   } else
     
     # predict
-    out <- mixOmics:::predict.mixo_spls(mod, subset)
+    out <- mixOmics:::predict.mixo_spls(mod, betasSubset)
   
   # get class probabilities
   CP <- out$predict[,,1]
   CP <- t(apply(as.matrix(CP), 1, function(data) exp(data)/sum(exp(data))))
   CP <- as.data.frame(CP) %>% tibble::rownames_to_column("Sample_ID")
-  CP$Pred_Class <- CP$comp1
+  CP$PE_Status <- CP$comp1
   CP <- CP %>%
-    dplyr::mutate(Pred_Class = dplyr::case_when(EOPE > 0.55 ~ "EOPE",
+    dplyr::mutate(PE_Status = dplyr::case_when(EOPE > 0.55 ~ "EOPE",
                                                 EOPE < 0.55 ~ "Normotensive"))
   
   return(CP)
