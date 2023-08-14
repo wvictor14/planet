@@ -23,8 +23,8 @@ Uses 1860 CpGs to predict self-reported ethnicity on placental
 microarray data.
 }
 \details{
-Predicts self-reported ethnicity from 3 classes: Africans, Asians,
-and Caucasians, using placental DNA methylation data measured on the Infinium
+Predicts self-reported ethnicity from 3 groups: African, Asian,
+and European, using placental DNA methylation data measured on the Infinium
 450k/EPIC methylation array. Will return membership probabilities that often
 reflect genetic ancestry composition.
 
