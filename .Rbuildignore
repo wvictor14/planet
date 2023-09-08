@@ -15,4 +15,3 @@
 ^.*\.pptx$
 ^.*.Rmd.orig$
 ^precompile.R$
-^*.rds$
