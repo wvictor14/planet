@@ -17,3 +17,5 @@ data-raw/mod.rds
 data-raw/x_test.rds
 data-raw/x_train.rds
 data-raw/y_train.rds
+*.rds
+.vscode/settings.json

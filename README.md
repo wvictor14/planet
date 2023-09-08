@@ -4,11 +4,10 @@
 <!-- badges: start -->
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633)
-[![](https://img.shields.io/github/last-commit/GuangchuangYu/badger.svg)](https://github.com/GuangchuangYu/badger/commits/master)
-[![R build
-status](https://github.com/wvictor14/planet/workflows/R-CMD-check/badge.svg)](https://github.com/wvictor14/planet/actions)
+[![](https://img.shields.io/github/last-commit/wvictor14/planet.svg)](https://github.com/wvictor14/planet/commits/master)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![R-CMD-check](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** (1), **gestational
@@ -56,16 +55,18 @@ data(plPhenoData) # sample information
 predictEthnicity(plBetas) %>%
   head()
 #> 1860 of 1860 predictors present.
-#> # A tibble: 6 x 7
-#>   Sample_ID Predicted_ethni~ Predicted_ethni~ Prob_African Prob_Asian
-#>   <chr>     <chr>            <chr>                   <dbl>      <dbl>
-#> 1 GSM19449~ Caucasian        Caucasian            0.00331    0.0164  
-#> 2 GSM19449~ Caucasian        Caucasian            0.000772   0.000514
-#> 3 GSM19449~ Caucasian        Caucasian            0.000806   0.000699
-#> 4 GSM19449~ Caucasian        Caucasian            0.000883   0.000792
-#> 5 GSM19449~ Caucasian        Caucasian            0.000885   0.00130 
-#> 6 GSM19449~ Caucasian        Caucasian            0.000852   0.000973
-#> # ... with 2 more variables: Prob_Caucasian <dbl>, Highest_Prob <dbl>
+#> # A tibble: 6 × 7
+#>   Sample_ID  Predicted_ethnicity_nothr…¹ Predi…² Prob_…³ Prob_…⁴ Prob_…⁵ Highe…⁶
+#>   <chr>      <chr>                       <chr>     <dbl>   <dbl>   <dbl>   <dbl>
+#> 1 GSM1944936 Caucasian                   Caucas… 3.31e-3 1.64e-2   0.980   0.980
+#> 2 GSM1944939 Caucasian                   Caucas… 7.72e-4 5.14e-4   0.999   0.999
+#> 3 GSM1944942 Caucasian                   Caucas… 8.06e-4 6.99e-4   0.998   0.998
+#> 4 GSM1944944 Caucasian                   Caucas… 8.83e-4 7.92e-4   0.998   0.998
+#> 5 GSM1944946 Caucasian                   Caucas… 8.85e-4 1.30e-3   0.998   0.998
+#> 6 GSM1944948 Caucasian                   Caucas… 8.52e-4 9.73e-4   0.998   0.998
+#> # … with abbreviated variable names ¹​Predicted_ethnicity_nothresh,
+#> #   ²​Predicted_ethnicity, ³​Prob_African, ⁴​Prob_Asian, ⁵​Prob_Caucasian,
+#> #   ⁶​Highest_Prob
 ```
 
 #### Predict Gestational Age

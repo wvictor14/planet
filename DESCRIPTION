@@ -23,6 +23,7 @@ Imports:
     magrittr,
     dplyr
 Suggests:
+    badger,
     ggplot2,
     testthat,
     tidyr,

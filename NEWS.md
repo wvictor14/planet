@@ -1,5 +1,9 @@
 # planet 1.9.1
 
+* add eoPred
+* default behaviour of predict functions is to throw error if missing features
+* added some tests
+
 # planet 0.99.4 (03-10-2021)
 
 * Combined vignettes into a single one

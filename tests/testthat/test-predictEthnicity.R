@@ -38,7 +38,7 @@ test_that("predictEthnicity() calculates same output", {
               0.996101841411314, 0.035338252924298, 0.82478265754479, 
               0.0837061488475445, 0.998192320144306, 0.99493579428086, 
               0.98220138573674, 0.995422602145278, 0.997095186407634)
-    expect_equal(predictEthnicity(plBetas)$Prob_Caucasian, p_ca)
+    expect_equal(predictEthnicity(plBetas)$Prob_European, p_ca)
     
 })
 
@@ -61,14 +61,14 @@ test_that("predictEthnicity() output contains all columns", {
     expect_true(
         all(
             c("Predicted_ethnicity_nothresh", "Predicted_ethnicity",
-              "Prob_African", "Prob_Asian", "Prob_Caucasian", "Highest_Prob") %in%
+              "Prob_African", "Prob_Asian", "Prob_European", "Highest_Prob") %in%
                 output_colnames))
 })
 
 test_that("predictEthnicity() returns probabilities that sum to 1", {
     data(plBetas)
     sums <- predictEthnicity(plBetas) %>%
-        dplyr::mutate(sum_of_prob = Prob_African + Prob_Asian + Prob_Caucasian) %>%
+        dplyr::mutate(sum_of_prob = Prob_African + Prob_Asian + Prob_European) %>%
         dplyr::pull(sum_of_prob)
     expect_equal(sums, rep(1, 24))
 })
@@ -81,7 +81,7 @@ test_that("predictEthnicity(plBetas) returns expected probabilities", {
     
     probs_expected <-
         tibble::tribble(
-            ~Prob_African , ~Prob_Asian, ~Prob_Caucasian,
+            ~Prob_African , ~Prob_Asian, ~Prob_European,
             0.0033076887, 0.0163799892, 0.9803123,
             0.0007717106, 0.0005143346, 0.9987140,
             0.0008060942, 0.0006992472, 0.9984947
