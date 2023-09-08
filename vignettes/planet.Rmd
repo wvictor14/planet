@@ -23,30 +23,14 @@ if(!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("planet")
 ```
 
-## READ: Important notes for `planet` usage
-
-Whenever possible:
-
-* Normalize your data with `minfi::preprocessNoob` and BMIQ. 
-Performance of planet functions is best with this normalization.
-
-* Use all cell CpGs, including the SNP probes in the array 
-- if some are missing, estimates may vary
-
-If your samples have been processed in a particular manner, (e.g. sampling 
-from maternal side) expect cell composition to reflect that.
-
 ## Cell composition
 
-To infer cell composition on placental villi DNA methylation (DNAme) samples, 
-we need to use placental reference cpgs [(Yuan 2021)](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6). 
-These are provided in this package as
+To infer cell composition on placental villi DNAm samples, we can need to use
+placental reference cpgs [(Yuan 2021)](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6). These are provided in this package as
 `plCellCpGsThird` and `plCellCpGsFirst` for third trimester (term) and
 first trimester samples, respectively.
 
-#### Example Data
-
-In this example, we are using term villi DNAm data. We first load the 
+In this example we are using term villi DNAm data, so we first load the 
 reference cpgs `plCellCpGsThird`. This is a data frame of 600 cpgs, with 
 mean methylation levels for each cell type.
 
@@ -69,8 +53,8 @@ head(plCellCpGsThird)
 
 After our reference cpg data is loaded, we can estimate cell composition by
 applying either the Constrained Projection approach implemented by the R 
-packages minfi or EpiDISH, or a non-constrained approach by EpiDish. 
-I demonstrate how to do both.
+packages minfi or EpiDISH, or a non-constrained approach by EpiDish. I demonstrate
+how to do both.
 
 #### Minfi
 
@@ -155,22 +139,24 @@ bind_rows(
     labs(x = "", fill = "")
 ```
 
+Some notes:
+
+* Normalize your data with `minfi::preprocessNoob` and BMIQ
+* Use all cell CpGs - if some are missing, estimates may vary
+* If your samples have been processed in a particular manner, (e.g. sampling 
+from maternal side) expect cell composition to reflect that
+
 ## Gestational age
 
 #### Example Data
 
 For demonstration, I use 24 samples from a placental DNAm dataset from GEO,
 ([GSE7519](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75196)), which
-contains samples collected in an Australian population. The DNAm 
+contains samples collected in an Australian population. The DNA methylation 
 data (in betas) can be accessed with `data(plBetas)` and corresponding sample
 information from `data(plPhenoData)`. Note that for demonstration purposes, the 
 cpgs have been filtered to a random \~10,000 CpGs, plus the CpGs used in all of 
 the functions from this package.
-
-To predict gestational age, we load the example data:
-
-- `plBetas` - DNAm data for 24 placental samples
-- `plPhenoData` - Matching sample information
 
 ```{r}
 # load example data
@@ -191,11 +177,16 @@ head(plPhenoData)
 #> 6 GSM1944948 Fema~ preeclam~           36   36.8   38.4    36.7
 ```
 
-There are 3 gestational age clocks for placental DNAm data from [(Lee 2019)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/):
+There are 3 gestational age clocks for placental DNA methylation data from [(Lee 2019)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/):
 
 1.  Robust Placental Clock (RPC)
 2.  Control Placental Clock (CPC)
 3.  Refined Robust Placental Clock (RRPC)
+
+To predict gestational, we load the example data:
+
+- `plBetas` - DNAm data for 24 placental samples
+- `plPhenoData` - Matching sample information
 
 #### Predict Gestational Age
 
@@ -256,14 +247,14 @@ results %>%
 ```
 
 `predictEthnicity` returns probabilities corresponding to each ethnicity for
-each sample (e.g `Prob_European`, `Prob_African`, `Prob_Asian`). This applies a
+each sample (e.g `Prob_Caucasian`, `Prob_African`, `Prob_Asian`). This applies a
 glmnet model described in [(Yuan 2019)](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3). A final classification is determined in two ways:
 
 1.  `Predicted_ethnicity_nothresh` - returns a classification corresponding to
 the highest class-specific probability.
 
 2.  `Predicted_ethnicity` - if the highest class-specific probability is below
-`0.75`, then the the sample is assigned an `Ambiguous` label. This threshold 
+`0.75`, then the the sample is assigned an `Amibiguous` label. This threshold 
 can be adjusted with the `threshold` argument. Samples with this label might
 require special attention in downstream analyses.
 
@@ -271,30 +262,31 @@ require special attention in downstream analyses.
 ```{r, fig.width = 7}
 results %>%
     ggplot(aes(
-        x = Prob_European, y = Prob_African,
+        x = Prob_Caucasian, y = Prob_African,
         col = Predicted_ethnicity
     )) +
     geom_point(alpha = 0.7) +
     coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
     scale_x_continuous(labels = scales::percent) +
     scale_y_continuous(labels = scales::percent) +
-    labs(x = "P(European)", y = "P(African)")
+    labs(x = "P(Caucasian)", y = "P(African)")
 
 results %>%
     ggplot(aes(
-        x = Prob_European, y = Prob_Asian,
+        x = Prob_Caucasian, y = Prob_Asian,
         col = Predicted_ethnicity
     )) +
     geom_point(alpha = 0.7) +
     coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
     scale_x_continuous(labels = scales::percent) +
     scale_y_continuous(labels = scales::percent) +
-    labs(x = "P(European)", y = "P(Asian)")
+    labs(x = "P(Caucasian)", y = "P(Asian)")
 ```
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we
 know these samples were collected in Sydney, Australia, and are therefore 
 likely mostly European with some East Asian participants.
+
 
 ```{r}
 table(results$Predicted_ethnicity)
@@ -305,65 +297,11 @@ table(results$Predicted_ethnicity)
 Because 'Ambiguous' samples might have different mixtures of ancestries, it 
 might be inadequate to adjust for them as one group in an analysis of admixed
 populations (e.g. 50/50 Asian/African should not be considered the same group 
-as 50/50 European/African). One solution would be to simply remove these
+as 50/50 Caucasian/African). One solution would be to simply remove these
 samples. Another would be to adjust for the raw probabilities-in this case, use
 only two of the three probabilities, since the third will be redundant
 (probabilities sum to 1). If sample numbers are large enough in each group,
 stratifying downstream analyses by ethnicity might also be a valid option.
-
-## Early-onset preeclampsia (EOPE)
-
-To calculate the probability of EOPE of placental DNAm chorionic villi samples, 
-we rely on 45 predictive CpGs. 
-
-In this example, we load the validation data used in the paper and 
-estimate the EOPE probability of the samples. Note that the function must 
-be run on a matrix with the full set of CpG probes in either the 
-450K or 850K arrays - the reason for this is that all 45 predictive CpGs must 
-be present for prediction to be completed. 
-
-It is recommended that data is normalized using BMIQ prior to prediction. 
-
-Note that samples must be rows and CpGs must be columns. The default threshold 
-for classification used to assign labels is 55%; if the users wishes to use 
-other threshold, different labels can be assigned based on the output 
-probabilities. 
-
-```{r}
-
-preds <- predictPreeclampsia(t(val))
-
-# have a quick look
-head(preds)
-
-# join with metadata
-valMeta <- left_join(valMeta, preds, by="Sample_ID")
-
-# visualize results
-valMeta %>% 
-  ggplot() +
-  geom_boxplot(aes(x = Class,
-                   y = EOPE),
-               width=0.3,
-               alpha=0.5,
-               color="darkgrey") +
-  geom_jitter(aes(x = Class,
-                  y = EOPE, 
-                  color = Pred_Class), 
-              alpha = 0.5, 
-              position = position_jitter(width = .1)) + 
-  coord_flip() +
-  ylab("Class Probability of EOPE") +
-  xlab("True Class") +
-  ylim(0,1) +
-  scale_color_manual(name = "Predicted Class", values=c("#E69F00", "#999999")) + 
-  theme_minimal() 
-
-# if user wishes to use different threshold from 55% probability, as an example 70%
-EOpreds %>% mutate(Pred_Class = case_when(EOPE > 0.7 ~ "EOPE",
-                                          EOPE < 0.7 ~ "Non-PE Preterm"))
-
-```
 
 ## References
 
