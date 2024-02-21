@@ -31,7 +31,15 @@ See full documentation at <https://victor.rbind.io/planet>
 
 ### Installation
 
-You can install `planet` from this github repo:
+Latest Bioconductor release
+
+```{r eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
+Or the development version of `planet`:
 
 ```{r eval = FALSE}
 devtools::install_github('wvictor14/planet')

@@ -1,6 +1,7 @@
 # planet 1.9.3 (09-08-2023)
 
-* add stop controls
+* add stop controls to `predictEthnicity`
+* added some tests
 * Bioconductor version bump
 
 # planet 1.9.2
