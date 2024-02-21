@@ -1,5 +1,5 @@
 
-# planet <img src="man/figures/logo.png" align="right" height = "139" />
+# planet <img src="man/figures/logo.png" align="right" height = "100px"  style="float:right; height:100px;"/>
 
 <!-- badges: start -->
 
