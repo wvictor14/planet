@@ -1,12 +1,10 @@
 
-# planet <img src="man/figures/logo.png" align="right" height = "139" />
+# planet <img src="man/figures/logo.png" align="right" height = "100px"  style="float:right; height:100px;"/>
 
 <!-- badges: start -->
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633)
 [![](https://img.shields.io/github/last-commit/GuangchuangYu/badger.svg)](https://github.com/GuangchuangYu/badger/commits/main)
-[![R build
-status](https://github.com/wvictor14/planet/workflows/R-CMD-check/badge.svg)](https://github.com/wvictor14/planet/actions)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![R-CMD-check](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml)
@@ -66,16 +64,16 @@ predictEthnicity(plBetas) %>%
   head()
 #> 1860 of 1860 predictors present.
 #> # A tibble: 6 × 7
-#>   Sample_ID  Predicted_ethnicity_nothresh Predicted_ethnicity
-#>   <chr>      <chr>                        <chr>              
-#> 1 GSM1944936 Caucasian                    Caucasian          
-#> 2 GSM1944939 Caucasian                    Caucasian          
-#> 3 GSM1944942 Caucasian                    Caucasian          
-#> 4 GSM1944944 Caucasian                    Caucasian          
-#> 5 GSM1944946 Caucasian                    Caucasian          
-#> 6 GSM1944948 Caucasian                    Caucasian          
-#> # ℹ 4 more variables: Prob_African <dbl>, Prob_Asian <dbl>,
-#> #   Prob_Caucasian <dbl>, Highest_Prob <dbl>
+#>   Sample_ID  Predicted_ethnicity_n…¹ Predicted_ethnicity Prob_African Prob_Asian
+#>   <chr>      <chr>                   <chr>                      <dbl>      <dbl>
+#> 1 GSM1944936 Caucasian               Caucasian               0.00331    0.0164  
+#> 2 GSM1944939 Caucasian               Caucasian               0.000772   0.000514
+#> 3 GSM1944942 Caucasian               Caucasian               0.000806   0.000699
+#> 4 GSM1944944 Caucasian               Caucasian               0.000883   0.000792
+#> 5 GSM1944946 Caucasian               Caucasian               0.000885   0.00130 
+#> 6 GSM1944948 Caucasian               Caucasian               0.000852   0.000973
+#> # ℹ abbreviated name: ¹​Predicted_ethnicity_nothresh
+#> # ℹ 2 more variables: Prob_Caucasian <dbl>, Highest_Prob <dbl>
 ```
 
 #### Predict Gestational Age
@@ -112,20 +110,20 @@ minfi:::projectCellType(
   lessThanOne = FALSE) %>%
   
   head()
-#>            Trophoblasts    Stromal      Hofbauer Endothelial
-#> GSM1944936    0.1091279 0.04891919  0.000000e+00  0.08983998
-#> GSM1944939    0.2299918 0.00000000 -1.806592e-19  0.07888007
-#> GSM1944942    0.1934287 0.03483540  0.000000e+00  0.09260353
-#> GSM1944944    0.2239896 0.06249135  1.608645e-03  0.11040693
-#> GSM1944946    0.1894152 0.07935955  0.000000e+00  0.10587439
-#> GSM1944948    0.2045124 0.07657717  0.000000e+00  0.09871149
-#>                  nRBC Syncytiotrophoblast
-#> GSM1944936 0.05294062           0.6979477
-#> GSM1944939 0.03374149           0.6377822
-#> GSM1944942 0.02929310           0.6350506
-#> GSM1944944 0.04447951           0.5467642
-#> GSM1944946 0.05407587           0.6022329
-#> GSM1944948 0.02269798           0.6085825
+#>            Trophoblasts    Stromal      Hofbauer Endothelial       nRBC
+#> GSM1944936    0.1091279 0.04891919  0.000000e+00  0.08983998 0.05294062
+#> GSM1944939    0.2299918 0.00000000 -1.806592e-19  0.07888007 0.03374149
+#> GSM1944942    0.1934287 0.03483540  0.000000e+00  0.09260353 0.02929310
+#> GSM1944944    0.2239896 0.06249135  1.608645e-03  0.11040693 0.04447951
+#> GSM1944946    0.1894152 0.07935955  0.000000e+00  0.10587439 0.05407587
+#> GSM1944948    0.2045124 0.07657717  0.000000e+00  0.09871149 0.02269798
+#>            Syncytiotrophoblast
+#> GSM1944936           0.6979477
+#> GSM1944939           0.6377822
+#> GSM1944942           0.6350506
+#> GSM1944944           0.5467642
+#> GSM1944946           0.6022329
+#> GSM1944948           0.6085825
 ```
 
 ### References
