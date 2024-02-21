@@ -1,4 +1,4 @@
-# planet (development version)
+# planet 1.9.4
 
 # planet 1.9.3 (09-08-2023)
 
