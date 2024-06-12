@@ -11,6 +11,8 @@
 #'
 #' @param betas matrix or array of methylation values on the beta scale (0, 1),
 #' where the variables are arranged in rows, and samples in columns.
+#' 
+#' @param ... feeds into outersect function
 #'
 #' @return produces a list with components detailed in the `mixOmics::predict` R documentation
 #'
@@ -76,7 +78,7 @@ predictPreeclampsia <- function(betas, ...){
   } else
     
     # predict
-    out <- mixOmics:::predict.mixo_spls(mod, betasSubset)
+    out <- mixOmics::predict.mixo_spls(mod, betasSubset)
   
   # get class probabilities
   CP <- out$predict[,,1]

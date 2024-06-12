@@ -22,6 +22,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Victor Yuan \email{victor.2wy@gmail.com}
 
+Authors:
+\itemize{
+  \item Icíar Fernández-Boyano \email{iciarfernandez@outlook.com} [contributor]
+}
+
 Other contributors:
 \itemize{
   \item Wendy P. Robinson [contributor]

@@ -4,8 +4,10 @@ Version: 1.7.0
 Authors@R: 
     c(person("Victor", "Yuan", email = "victor.2wy@gmail.com",
             role = c("aut", "cre")),
-    person(c("Wendy", "P."), "Robinson",
-            role = "ctb"))
+      person(c("Wendy", "P."), "Robinson",
+            role = "ctb"),
+      person("Icíar", "Fernández-Boyano", email = "iciarfernandez@outlook.com",
+            role = c("aut", "ctb")))
 URL: 
     https://victor.rbind.io/planet, http://github.com/wvictor14/planet
 BugReports: 

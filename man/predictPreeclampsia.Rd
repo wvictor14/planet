@@ -9,6 +9,8 @@ predictPreeclampsia(betas, ...)
 \arguments{
 \item{betas}{matrix or array of methylation values on the beta scale (0, 1),
 where the variables are arranged in rows, and samples in columns.}
+
+\item{...}{feeds into outersect function}
 }
 \value{
 produces a list with components detailed in the \code{mixOmics::predict} R documentation
