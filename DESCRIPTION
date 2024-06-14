@@ -5,7 +5,7 @@ Authors@R:
     c(person("Victor", "Yuan", email = "victor.2wy@gmail.com",
             role = c("aut", "cre")),
       person(c("Wendy", "P."), "Robinson",
-            role = "ctb"),
+            role = c("aut", "ctb")),
       person("Icíar", "Fernández-Boyano", email = "iciarfernandez@outlook.com",
             role = c("aut", "ctb")))
 URL: 
