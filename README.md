@@ -8,6 +8,19 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![R-CMD-check](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml)
+
+[![Bioc release
+status](http://www.bioconductor.org/shields/build/release/bioc/planet.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/planet)
+[![Bioc devel
+status](http://www.bioconductor.org/shields/build/devel/bioc/planet.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/planet)
+[![Bioc downloads
+rank](https://bioconductor.org/shields/downloads/release/planet.svg)](http://bioconductor.org/packages/stats/bioc/planet/)
+[![Bioc
+history](https://bioconductor.org/shields/years-in-bioc/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
+[![Bioc last
+commit](https://bioconductor.org/shields/lastcommit/devel/bioc/planet.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/planet/)
+[![Bioc
+dependencies](https://bioconductor.org/shields/dependencies/release/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** (1), **gestational
@@ -110,13 +123,13 @@ minfi:::projectCellType(
   lessThanOne = FALSE) %>%
   
   head()
-#>            Trophoblasts    Stromal      Hofbauer Endothelial       nRBC
-#> GSM1944936    0.1091279 0.04891919  0.000000e+00  0.08983998 0.05294062
-#> GSM1944939    0.2299918 0.00000000 -1.806592e-19  0.07888007 0.03374149
-#> GSM1944942    0.1934287 0.03483540  0.000000e+00  0.09260353 0.02929310
-#> GSM1944944    0.2239896 0.06249135  1.608645e-03  0.11040693 0.04447951
-#> GSM1944946    0.1894152 0.07935955  0.000000e+00  0.10587439 0.05407587
-#> GSM1944948    0.2045124 0.07657717  0.000000e+00  0.09871149 0.02269798
+#>            Trophoblasts    Stromal     Hofbauer Endothelial       nRBC
+#> GSM1944936    0.1091279 0.04891919 0.000000e+00  0.08983998 0.05294062
+#> GSM1944939    0.2299918 0.00000000 9.725560e-19  0.07888007 0.03374149
+#> GSM1944942    0.1934287 0.03483540 0.000000e+00  0.09260353 0.02929310
+#> GSM1944944    0.2239896 0.06249135 1.608645e-03  0.11040693 0.04447951
+#> GSM1944946    0.1894152 0.07935955 0.000000e+00  0.10587439 0.05407587
+#> GSM1944948    0.2045124 0.07657717 0.000000e+00  0.09871149 0.02269798
 #>            Syncytiotrophoblast
 #> GSM1944936           0.6979477
 #> GSM1944939           0.6377822

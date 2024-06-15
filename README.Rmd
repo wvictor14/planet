@@ -22,6 +22,13 @@ knitr::opts_chunk$set(
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633) `r badger::badge_last_commit("GuangchuangYu/badger")`
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![R-CMD-check](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml)
+
+[![Bioc release status](http://www.bioconductor.org/shields/build/release/bioc/planet.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/planet)
+[![Bioc devel status](http://www.bioconductor.org/shields/build/devel/bioc/planet.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/planet)
+[![Bioc downloads rank](https://bioconductor.org/shields/downloads/release/planet.svg)](http://bioconductor.org/packages/stats/bioc/planet/)
+[![Bioc history](https://bioconductor.org/shields/years-in-bioc/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
+[![Bioc last commit](https://bioconductor.org/shields/lastcommit/devel/bioc/planet.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/planet/)
+[![Bioc dependencies](https://bioconductor.org/shields/dependencies/release/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** (1), **gestational age** (2), and **cell composition** (3) from placental DNA methylation data. 
