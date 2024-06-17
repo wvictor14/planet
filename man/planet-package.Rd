@@ -24,12 +24,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Icíar Fernández-Boyano \email{iciarfernandez@outlook.com} [contributor]
-}
-
-Other contributors:
-\itemize{
   \item Wendy P. Robinson [contributor]
+  \item Icíar Fernández-Boyano \email{iciarfernandez@outlook.com} [contributor]
 }
 
 }

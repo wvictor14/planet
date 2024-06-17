@@ -24,15 +24,13 @@
 #' # data(peBetas)
 #' # predictPreeclampsia(peBetas, dist = "max.dist")
 #' 
-#' @import mixOmics
-#' @import ExperimentHub
 #' @export predictPreeclampsia
 #'
 
 predictPreeclampsia <- function(betas, ...){
   
   # read in data to generate model
-  eh = ExperimentHub()
+  eh = ExperimentHub::ExperimentHub()
   mod = eh[['EH8090']]
   trainCpGs = colnames(mod$X)
   
@@ -78,7 +76,7 @@ predictPreeclampsia <- function(betas, ...){
   } else
     
     # predict
-    out <- mixOmics::predict.mixo_spls(mod, betasSubset)
+    out <- mixOmics:::predict.mixo_spls(mod, betasSubset)
   
   # get class probabilities
   CP <- out$predict[,,1]

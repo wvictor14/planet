@@ -14,3 +14,4 @@ Meta
 pkgdown/
 *.rds
 .vscode/settings.json
+.DS_Store
