@@ -23,9 +23,9 @@ Imports:
     tibble,
     magrittr,
     dplyr,
-    ExperimentHub,
-    mixOmics
 Suggests:
+    ExperimentHub,
+    mixOmics,
     ggplot2,
     testthat,
     tidyr,
