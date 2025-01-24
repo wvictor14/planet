@@ -1,6 +1,6 @@
 Package: planet
 Title: Placental DNA methylation analysis tools
-Version: 1.7.0
+Version: 1.15.0
 Authors@R: 
     c(person("Victor", "Yuan", email = "victor.2wy@gmail.com",
             role = c("aut", "cre")),
@@ -12,13 +12,12 @@ URL:
     https://victor.rbind.io/planet, http://github.com/wvictor14/planet
 BugReports: 
     http://github.com/wvictor14/planet/issues
-Description: This package contains R functions to infer additional biological
-    variables to supplemental DNA methylation analysis of placental data. This 
+Description: This package contains R functions to predict biological variables
+    to from placnetal DNA methylation data generated from infinium arrays. This 
     includes inferring ethnicity/ancestry, gestational age, and cell composition
-    from placental DNA methylation array (450k/850k) data. The package comes 
-    with an example processed placental dataset.
+    from placental DNA methylation array (450k/850k) data.
 Depends: 
-    R (>= 4.0)
+    R (>= 4.3)
 Imports: 
     methods,
     tibble,
@@ -27,7 +26,6 @@ Imports:
     ExperimentHub,
     mixOmics
 Suggests:
-    badger,
     ggplot2,
     testthat,
     tidyr,

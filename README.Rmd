@@ -16,12 +16,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-# planet <img src="man/figures/logo.png" align="right" height = "139" />
+# planet <img src="man/figures/logo.png" align="right" height = "100px"  style="float:right; height:100px;"/>
 
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633) `r badger::badge_last_commit("wvictor14/planet")` 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633) `r badger::badge_last_commit("GuangchuangYu/badger")`
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![R-CMD-check](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml)
+
+[![Bioc release status](http://www.bioconductor.org/shields/build/release/bioc/planet.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/planet)
+[![Bioc devel status](http://www.bioconductor.org/shields/build/devel/bioc/planet.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/planet)
+[![Bioc downloads rank](https://bioconductor.org/shields/downloads/release/planet.svg)](http://bioconductor.org/packages/stats/bioc/planet/)
+[![Bioc history](https://bioconductor.org/shields/years-in-bioc/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
+[![Bioc last commit](https://bioconductor.org/shields/lastcommit/devel/bioc/planet.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/planet/)
+[![Bioc dependencies](https://bioconductor.org/shields/dependencies/release/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** (1), **gestational age** (2), and **cell composition** (3) from placental DNA methylation data. 
@@ -30,7 +37,15 @@ See full documentation at <https://victor.rbind.io/planet>
 
 ### Installation
 
-You can install `planet` from this github repo:
+Latest Bioconductor release
+
+```{r eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("planet")
+```
+
+Or the development version of `planet`:
 
 ```{r eval = FALSE}
 devtools::install_github('wvictor14/planet')
