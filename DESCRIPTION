@@ -23,6 +23,7 @@ Imports:
     tibble,
     magrittr,
     dplyr,
+    eoPredData
 Suggests:
     ExperimentHub,
     mixOmics,
@@ -37,7 +38,7 @@ Suggests:
 License: GPL-2
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 biocViews: Software, DifferentialMethylation, Epigenetics, Microarray, 
     MethylationArray, DNAMethylation, CpGIsland

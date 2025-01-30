@@ -32,7 +32,9 @@ prior to prediction. This was the normalization method used on the training data
 # To predict early preeclampsia on 450k/850k samples
 
 # Load data
-# data(peBetas)
-# predictPreeclampsia(peBetas, dist = "max.dist")
+library(ExperimentHub)
 
+# test object
+x_test <- eh[['EH8403']]
+x_test \%>\% predictPreeclampsia()
 }
