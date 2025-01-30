@@ -21,22 +21,23 @@
 #' # To predict early preeclampsia on 450k/850k samples
 #'
 #' # Load data
-#' # data(peBetas)
-#' # predictPreeclampsia(peBetas, dist = "max.dist")
+#' library(ExperimentHub)
 #' 
+#' # test object
+#' x_test <- eh[['EH8403']]
+#' x_test %>% predictPreeclampsia()
 #' @export predictPreeclampsia
 #'
-
 predictPreeclampsia <- function(betas, ...){
   
   # read in data to generate model
-  eh = ExperimentHub::ExperimentHub()
-  mod = eh[['EH8090']]
-  trainCpGs = colnames(mod$X)
+  eh <- ExperimentHub::ExperimentHub()
+  mod <- eh[['EH8090']]
+  trainCpGs <- colnames(mod$X)
   
   # check that there are no NAs in the predictors (or if there are, how many)
-  peCpGs = mixOmics::selectVar(mod)$name
-  pp <- intersect(colnames(betas), peCpGs)
+  peCpGs <- mixOmics::selectVar(mod)$name
+  pp <- intersect(rownames(betas), peCpGs)
   
   if(length(pp) < length(peCpGs)){
     stop(paste(
@@ -53,30 +54,29 @@ predictPreeclampsia <- function(betas, ...){
   # adds the ones that are missing as NAs
   # necessary for `mixOmics::predict` to work
   
-  outersect = function(x, y) {
+  outersect <- function(x, y) {
     sort(c(x[!x%in%y],
            y[!y%in%x]))
   }
   
   if(inherits(betas, 'matrix')){
-  } else if (inherits(betas, 'array')) {
-  } else {
     
+  } else if (inherits(betas, 'array')) {
+    
+  } else {
     # throw an error
     print(paste0("Input data must be a matrix or an array"))
   }
   
-  betasSubset <- betas[,colnames(betas) %in% trainCpGs]
+  betasSubset <- betas[rownames(betas) %in% trainCpGs,]
   
   # order
-  betasSubset <- betasSubset[drop=FALSE,, trainCpGs]
+  betasSubset <- betasSubset[drop=FALSE,trainCpGs, ]
   
-  if(all(colnames(betasSubset) == trainCpGs) == FALSE){
-    stop()
-  } else
-    
-    # predict
-    out <- mixOmics:::predict.mixo_spls(mod, betasSubset)
+  stopifnot(all(rownames(betasSubset) == trainCpGs))
+  
+  # predict
+  out <- mixOmics:::predict.mixo_spls(mod, t(betasSubset))
   
   # get class probabilities
   CP <- out$predict[,,1]
@@ -85,7 +85,6 @@ predictPreeclampsia <- function(betas, ...){
   CP$PE_Status <- CP$comp1
   CP <- CP %>%
     dplyr::mutate(PE_Status = dplyr::case_when(EOPE > 0.55 ~ "EOPE",
-                                                EOPE < 0.55 ~ "Normotensive"))
-  
-  return(CP)
+                                               EOPE < 0.55 ~ "Normotensive"))
+  return(tibble::as_tibble(CP))
 }
