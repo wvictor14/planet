@@ -3,20 +3,8 @@
 \name{predict}
 \alias{predict}
 \alias{predict.mixo_pls}
-\alias{predict.pls}
-\alias{predict.spls}
-\alias{predict.plsda}
-\alias{predict.splsda}
-\alias{predict.mint.pls}
-\alias{predict.mint.spls}
-\alias{predict.mint.plsda}
-\alias{predict.mint.splsda}
-\alias{predict.mint.block.pls}
-\alias{predict.mint.block.spls}
-\alias{predict.mint.block.plsda}
-\alias{predict.mint.block.splsda}
 \alias{predict.mixo_spls}
-\title{Predict Method for (mint).(block).(s)pls(da) methods}
+\title{predict mixxo from}
 \usage{
 \method{predict}{mixo_pls}(
   object,
@@ -95,86 +83,12 @@ distance requested.} \item{vote}{majority vote result for multi block
 analysis (see details above).}
 }
 \description{
-Predicted values based on PLS models. New responses and variates are
-predicted using a fitted model and a new matrix of observations.
+copied from mixOmicsTeam/mixOmics/refs/heads/master/R/predict.R
+on 2025 Jan 30. Some components omitted that are not used in planet.
 }
-\details{
-\code{predict} produces predicted values, obtained by evaluating the
-PLS-derived methods, returned by \code{(mint).(block).(s)pls(da)} in the
-frame \code{newdata}. Variates for \code{newdata} are also returned. Please
-note that this method performs multilevel decomposition and/or log ratio
-transformations if needed (\code{multilevel} is an input parameter while
-\code{logratio} is extracted from \code{object}).
+\examples{
+# example code
 
-Different prediction distances are proposed for discriminant analysis. The
-reason is that our supervised models work with a dummy indicator matrix of
-\code{Y} to indicate the class membership of each sample. The prediction of
-a new observation results in either a predicted dummy variable (output
-\code{object$predict}), or a predicted variate (output
-\code{object$variates}). Therefore, an appropriate distance needs to be
-applied to those predicted values to assign the predicted class. We propose
-distances such as \verb{maximum distance' for the predicted dummy variables, }Mahalanobis distance' and `Centroids distance' for the predicted variates.
-
-\code{"max.dist"} is the simplest method to predict the class of a test
-sample. For each new individual, the class with the largest predicted dummy
-variable is the predicted class. This distance performs well in single data
-set analysis with multiclass problems (PLS-DA).
-
-\code{"centroids.dist"} allocates to the new observation the class that
-mimimises the distance between the predicted score and the centroids of the
-classes calculated on the latent components or variates of the trained
-model.
-
-\code{"mahalanobis.dist"} allocates the new sample the class defined as the
-centroid distance, but using the Mahalanobis metric in the calculation of
-the distance.
-
-In practice we found that the centroid-based distances
-(\code{"centroids.dist"} and \code{"mahalanobis.dist"}), and specifically
-the Mahalanobis distance led to more accurate predictions than the maximum
-distance for complex classification problems and N-integration problems
-(block.splsda). The centroid distances consider the prediction in
-dimensional space spanned by the predicted variates, while the maximum
-distance considers a single point estimate using the predicted scores on the
-last dimension of the model. The user can assess the different distances,
-and choose the prediction distance that leads to the best performance of the
-model, as highlighted from the tune and perf outputs
-
-More (mathematical) details about the prediction distances are available in
-the supplemental of the mixOmics article (Rohart et al 2017).
-
-For a visualisation of those prediction distances, see
-\code{background.predict} that overlays the prediction area in
-\code{plotIndiv} for a sPLS-DA object.
-
-Allocates the individual \eqn{x} to the class of \eqn{Y} minimizing
-\eqn{dist(\code{x-variate}, G_l)}, where \eqn{G_l}, \eqn{l = 1,...,L} are
-the centroids of the classes calculated on the \eqn{X}-variates of the
-model. \code{"mahalanobis.dist"} allocates the individual \eqn{x} to the
-class of \eqn{Y} as in \code{"centroids.dist"} but by using the Mahalanobis
-metric in the calculation of the distance.
-
-For MINT objects, the \code{study.test} argument is required and provides
-the grouping factor of \code{newdata}.
-
-For multi block analysis (thus block objects), \code{newdata} is a list of
-matrices whose names are a subset of \code{names(object$X)} and missing
-blocks are allowed. Several predictions are returned, either for each block
-or for all blocks. For non discriminant analysis, the predicted values
-(\code{predict}) are returned for each block and these values are combined
-by average (\code{AveragedPredict}) or weighted average
-(\code{WeightedPredict}), using the weights of the blocks that are
-calculated as the correlation between a block's components and the outcome's
-components.
-
-For discriminant analysis, the predicted class is returned for each block
-(\code{class}) and each distance (\code{dist}) and these predictions are
-combined by majority vote (\code{MajorityVote}) or weighted majority vote
-(\code{WeightedVote}), using the weights of the blocks that are calculated
-as the correlation between a block's components and the outcome's
-components. NA means that there is no consensus among the block. For PLS-DA
-and sPLS-DA objects, the prediction area can be visualised in plotIndiv via
-the \code{background.predict} function.
 }
 \references{
 Rohart F, Gautier B, Singh A, Lê Cao K-A. mixOmics: an R package for 'omics

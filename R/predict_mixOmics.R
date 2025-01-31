@@ -1,100 +1,9 @@
-# copied from https://raw.githubusercontent.com/mixOmicsTeam/mixOmics/refs/heads/master/R/predict.R
-# on 2025 Jan 30. Some components omitted that are not used in planet. 
 
-# ========================================================================================================
-# This function makes a prediction of a 'newdata' by using the results of 'object'.
-# Depending on the class of the object (mint).(block).(s)pls(da) (16 classes so far), the input data is different
-# and the preparation of the data is different - different scaling for instance if object="mint...."
-# However, the prediction formula is the same for all classes, thus only one code
-# ========================================================================================================
-
-#' Predict Method for (mint).(block).(s)pls(da) methods
+#' predict mixxo from
 #' 
-#' Predicted values based on PLS models. New responses and variates are
-#' predicted using a fitted model and a new matrix of observations.
+#' copied from mixOmicsTeam/mixOmics/refs/heads/master/R/predict.R
+#' on 2025 Jan 30. Some components omitted that are not used in planet. 
 #' 
-#' \code{predict} produces predicted values, obtained by evaluating the
-#' PLS-derived methods, returned by \code{(mint).(block).(s)pls(da)} in the
-#' frame \code{newdata}. Variates for \code{newdata} are also returned. Please
-#' note that this method performs multilevel decomposition and/or log ratio
-#' transformations if needed (\code{multilevel} is an input parameter while
-#' \code{logratio} is extracted from \code{object}).
-#' 
-#' Different prediction distances are proposed for discriminant analysis. The
-#' reason is that our supervised models work with a dummy indicator matrix of
-#' \code{Y} to indicate the class membership of each sample. The prediction of
-#' a new observation results in either a predicted dummy variable (output
-#' \code{object$predict}), or a predicted variate (output
-#' \code{object$variates}). Therefore, an appropriate distance needs to be
-#' applied to those predicted values to assign the predicted class. We propose
-#' distances such as `maximum distance' for the predicted dummy variables,
-#' `Mahalanobis distance' and `Centroids distance' for the predicted variates.
-#' 
-#' \code{"max.dist"} is the simplest method to predict the class of a test
-#' sample. For each new individual, the class with the largest predicted dummy
-#' variable is the predicted class. This distance performs well in single data
-#' set analysis with multiclass problems (PLS-DA).
-#' 
-#' \code{"centroids.dist"} allocates to the new observation the class that
-#' mimimises the distance between the predicted score and the centroids of the
-#' classes calculated on the latent components or variates of the trained
-#' model.
-#' 
-#' \code{"mahalanobis.dist"} allocates the new sample the class defined as the
-#' centroid distance, but using the Mahalanobis metric in the calculation of
-#' the distance.
-#' 
-#' In practice we found that the centroid-based distances
-#' (\code{"centroids.dist"} and \code{"mahalanobis.dist"}), and specifically
-#' the Mahalanobis distance led to more accurate predictions than the maximum
-#' distance for complex classification problems and N-integration problems
-#' (block.splsda). The centroid distances consider the prediction in
-#' dimensional space spanned by the predicted variates, while the maximum
-#' distance considers a single point estimate using the predicted scores on the
-#' last dimension of the model. The user can assess the different distances,
-#' and choose the prediction distance that leads to the best performance of the
-#' model, as highlighted from the tune and perf outputs
-#' 
-#' More (mathematical) details about the prediction distances are available in
-#' the supplemental of the mixOmics article (Rohart et al 2017).
-#' 
-#' For a visualisation of those prediction distances, see
-#' \code{background.predict} that overlays the prediction area in
-#' \code{plotIndiv} for a sPLS-DA object.
-#' 
-#' Allocates the individual \eqn{x} to the class of \eqn{Y} minimizing
-#' \eqn{dist(\code{x-variate}, G_l)}, where \eqn{G_l}, \eqn{l = 1,...,L} are
-#' the centroids of the classes calculated on the \eqn{X}-variates of the
-#' model. \code{"mahalanobis.dist"} allocates the individual \eqn{x} to the
-#' class of \eqn{Y} as in \code{"centroids.dist"} but by using the Mahalanobis
-#' metric in the calculation of the distance.
-#' 
-#' For MINT objects, the \code{study.test} argument is required and provides
-#' the grouping factor of \code{newdata}.
-#' 
-#' For multi block analysis (thus block objects), \code{newdata} is a list of
-#' matrices whose names are a subset of \code{names(object$X)} and missing
-#' blocks are allowed. Several predictions are returned, either for each block
-#' or for all blocks. For non discriminant analysis, the predicted values
-#' (\code{predict}) are returned for each block and these values are combined
-#' by average (\code{AveragedPredict}) or weighted average
-#' (\code{WeightedPredict}), using the weights of the blocks that are
-#' calculated as the correlation between a block's components and the outcome's
-#' components.
-#' 
-#' For discriminant analysis, the predicted class is returned for each block
-#' (\code{class}) and each distance (\code{dist}) and these predictions are
-#' combined by majority vote (\code{MajorityVote}) or weighted majority vote
-#' (\code{WeightedVote}), using the weights of the blocks that are calculated
-#' as the correlation between a block's components and the outcome's
-#' components. NA means that there is no consensus among the block. For PLS-DA
-#' and sPLS-DA objects, the prediction area can be visualised in plotIndiv via
-#' the \code{background.predict} function.
-#' 
-#' @aliases predict predict.pls predict.spls predict.plsda predict.splsda
-#' predict.mint.pls predict.mint.spls predict.mint.plsda predict.mint.splsda
-#' predict.mint.block.pls predict.mint.block.spls predict.mint.block.plsda
-#' predict.mint.block.splsda
 #' @param object object of class inheriting from
 #' \code{"(mint).(block).(s)pls(da)"}.
 #' @param newdata data matrix in which to look for for explanatory variables to
@@ -161,6 +70,9 @@
 #' @method predict mixo_pls
 #' @importFrom methods hasArg is
 #' @importFrom stats setNames
+#' @examples
+#' # example code
+#' 
 predict.mixo_pls <-
   function(object,
            newdata,
@@ -817,43 +729,6 @@ Check.entry.single = function(X,  ncomp, q)
   return(list(X=X, ncomp=ncomp, X.names=X.names, ind.names=ind.names))
 }
 
-# from https://github.com/mixOmicsTeam/mixOmics/blob/master/R/logratio-transformations.R
-#' Log-ratio transformation
-#' 
-#' This function applies a log transformation to the data, either CLR or ILR
-#' 
-#' \code{logratio.transfo} applies a log transformation to the data, either CLR
-#' (centered log ratio transformation) or ILR (Isometric Log Ratio
-#' transformation). In the case of CLR log-transformation, X needs to be a
-#' matrix of non-negative values and \code{offset} is used to shift the values
-#' away from 0, as commonly done with counts data.
-#' 
-#' @param X numeric matrix of predictors
-#' @param logratio log-ratio transform to apply, one of "none", "CLR" or "ILR"
-#' @param offset Value that is added to X for CLR and ILR log transformation.
-#' Default to 0.
-#' @return \code{logratio.transfo} simply returns the log-ratio transformed
-#' data.
-#' @author Florian Rohart, Kim-Anh Lê Cao, Al J Abadi
-#' @references Kim-Anh Lê Cao, Mary-Ellen Costello, Vanessa Anne Lakis,
-#' Francois Bartolo, Xin-Yi Chua, Remi Brazeilles, Pascale Rondeau mixMC: a
-#' multivariate statistical framework to gain insight into Microbial
-#' Communities bioRxiv 044206; doi: http://dx.doi.org/10.1101/044206
-#' 
-#' John Aitchison. The statistical analysis of compositional data. Journal of
-#' the Royal Statistical Society. Series B (Methodological), pages 139-177,
-#' 1982.
-#' 
-#' Peter Filzmoser, Karel Hron, and Clemens Reimann. Principal component
-#' analysis for compositional data with outliers. Environmetrics,
-#' 20(6):621-632, 2009.
-#' 
-#' See mixOmics documentation for more information
-#' @name logratio-transformations
-NULL
-#' @rdname logratio-transformations
-#' @importFrom stats aggregate
-#' @importFrom utils data
 logratio.transfo <- function(X,
                              logratio = c('none','CLR','ILR'),
                              offset = 0)
@@ -1134,45 +1009,6 @@ internal_predict.DA <-
     
   }
 
-# from https://github.com/mixOmicsTeam/mixOmics/blob/766521eaff07b25c9c2ceccdabdf281dd0ef735c/R/unmap.R#L47
-# ---------------------------------------------------
-# unmap variates.A variable for (s)plsda
-# ---------------------------------------------------
-#' Dummy matrix for an outcome factor
-#' 
-#' Converts a class or group vector or factor into a matrix of indicator
-#' variables.
-#' 
-#' @param classification A numeric or character vector or factor. Typically the
-#' distinct entries of this vector would represent a classification of
-#' observations in a data set.
-#' @param groups A numeric or character vector indicating the groups from which
-#' \code{classification} is drawn. If not supplied, the default is to assumed
-#' to be the unique entries of classification.
-#' @param noise A single numeric or character value used to indicate the value
-#' of \code{groups} corresponding to noise.
-#' @return An \emph{n} by \emph{K} matrix of \emph{(0,1)} indicator variables,
-#' where \emph{n} is the length of samples and \emph{K} the number of classes
-#' in the outcome.
-#' 
-#' If a \code{noise} value of symbol is designated, the corresponding indicator
-#' variables are relocated to the last column of the matrix.
-#' 
-#' Note: - you can remap an unmap vector using the function \code{map} from the
-#' package \pkg{mclust}. - this function should be used to unmap an outcome
-#' vector as in the non-supervised methods of mixOmics. For other supervised
-#' analyses such as (s)PLS-DA, (s)gccaDA this function is used internally.
-#' @author Ignacio Gonzalez, Kim-Anh Le Cao, Pierre Monget, AL J Abadi
-#' @references 
-#' C. Fraley and A. E. Raftery (2002). Model-based
-#' clustering, discriminant analysis, and density estimation. \emph{Journal of
-#' the American Statistical Association 97:611-631}.
-#' 
-#' C. Fraley, A. E. Raftery, T. B. Murphy and L. Scrucca (2012). mclust Version
-#' 4 for R: Normal Mixture Modeling for Model-Based Clustering, Classification,
-#' and Density Estimation. Technical Report No. 597, Department of Statistics,
-#' University of Washington.
-#' @keywords cluster
 unmap <-
   function (classification, groups = NULL, noise = NULL)
   {
