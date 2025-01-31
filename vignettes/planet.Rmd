@@ -72,7 +72,7 @@ head(houseman_estimates)
 
 #### EpiDISH
 
-```{r epidish echo=FALSE}
+```{r epidish, results='hide'}
 # robust partial correlations
 epidish_RPC <- epidish(
   beta.m = plBetas[rownames(plCellCpGsThird), ],
@@ -323,15 +323,13 @@ for classification used to assign labels is 55%; if the users wishes to use
 other threshold, different labels can be assigned based on the output 
 probabilities. 
 
-```{r include=TRUE, eval = TRUE}
-
+```{r predict_pe, include=TRUE, eval = TRUE}
 library(ExperimentHub)
 eh <- ExperimentHub()
 query(eh, "eoPredData")
 
 # download BMIQ normalized 450k data
 x_test <- eh[['EH8403']]
-valMeta <- eh[['EH8404']]
 preds <- x_test %>% predictPreeclampsia()
 ```
 
@@ -341,6 +339,7 @@ Inspect the results:
 head(preds)
 
 # join with metadata
+valMeta <- eh[['EH8404']]
 valMeta <- left_join(valMeta, preds, by="Sample_ID")
 
 # visualize results
