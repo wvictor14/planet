@@ -90,8 +90,3 @@ predictAge <- function(betas, type = "RPC") {
 
     return(age)
 }
-
-pl_infer_age <- function(betas, type = 'RPC'){
-    .Deprecated('predictAge')
-    predictAge(betas = betas, type = type)
-}

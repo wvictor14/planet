@@ -16,7 +16,7 @@
 #'
 #' @return produces a list with components detailed in the `mixOmics::predict` R documentation
 #'
-#' @examples \dontrun{
+#' @examples
 #'
 #' # To predict early preeclampsia on 450k/850k samples
 #'
@@ -28,7 +28,7 @@
 #' # test object
 #' x_test <- eh[['EH8403']]
 #' x_test %>% predictPreeclampsia()
-#' }
+#' 
 #' @export predictPreeclampsia
 #'
 predictPreeclampsia <- function(betas, ...){

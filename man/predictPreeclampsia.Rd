@@ -28,7 +28,6 @@ prior to prediction. This was the normalization method used on the training data
 }
 
 \examples{
-\dontrun{
 
 # To predict early preeclampsia on 450k/850k samples
 
@@ -40,5 +39,5 @@ query(eh, "eoPredData")
 # test object
 x_test <- eh[['EH8403']]
 x_test \%>\% predictPreeclampsia()
-}
+
 }
