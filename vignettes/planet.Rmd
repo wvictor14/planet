@@ -8,18 +8,18 @@ output:
 pkgdown:
     as_is: true
 vignette: >
-    %\VignetteIndexEntry{planet}
-    %\VignetteEncoding{UTF-8}
-    %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-    chunk_output_type: console
+  %\VignetteIndexEntry{planet}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: source
+chunk_output_type: console
 ---
 
 ## Installation
 
 ```{r, message = FALSE, warning = FALSE, eval = FALSE}
 if(!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+  install.packages("BiocManager")
 BiocManager::install("planet")
 ```
 
@@ -60,9 +60,9 @@ how to do both.
 
 ```{r}
 houseman_estimates <- minfi:::projectCellType(
-    plBetas[rownames(plCellCpGsThird), ],
-    plCellCpGsThird,
-    lessThanOne = FALSE
+  plBetas[rownames(plCellCpGsThird), ],
+  plCellCpGsThird,
+  lessThanOne = FALSE
 )
 
 head(houseman_estimates)
@@ -73,23 +73,23 @@ head(houseman_estimates)
 ```{r}
 # robust partial correlations
 epidish_RPC <- epidish(
-    beta.m = plBetas[rownames(plCellCpGsThird), ],
-    ref.m = plCellCpGsThird,
-    method = "RPC"
+  beta.m = plBetas[rownames(plCellCpGsThird), ],
+  ref.m = plCellCpGsThird,
+  method = "RPC"
 )
 
 # CIBERSORT
 epidish_CBS <- epidish(
-    beta.m = plBetas[rownames(plCellCpGsThird), ],
-    ref.m = plCellCpGsThird,
-    method = "CBS"
+  beta.m = plBetas[rownames(plCellCpGsThird), ],
+  ref.m = plCellCpGsThird,
+  method = "CBS"
 )
 
 # constrained projection (houseman 2012)
 epidish_CP <- epidish(
-    beta.m = plBetas[rownames(plCellCpGsThird), ],
-    ref.m = plCellCpGsThird,
-    method = "CP"
+  beta.m = plBetas[rownames(plCellCpGsThird), ],
+  ref.m = plCellCpGsThird,
+  method = "CP"
 )
 ```
 
@@ -103,40 +103,40 @@ data("plColors")
 
 # bind estimate data frames and reshape for plotting
 bind_rows(
-    houseman_estimates %>% as.data.frame() %>% mutate(algorithm = "CP (Houseman)"),
-    epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
-    epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
-    epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
+  houseman_estimates %>% as.data.frame() %>% mutate(algorithm = "CP (Houseman)"),
+  epidish_RPC$estF %>% as.data.frame() %>% mutate(algorithm = "RPC"),
+  epidish_CBS$estF %>% as.data.frame() %>% mutate(algorithm = "CBS"),
+  epidish_CP$estF %>% as.data.frame() %>% mutate(algorithm = "CP (EpiDISH)")
 ) %>%
-    mutate(sample = rep(rownames(houseman_estimates), 4)) %>%
-    as_tibble() %>%
-    pivot_longer(
-        cols = -c(algorithm, sample),
-        names_to = "component",
-        values_to = "estimate"
-    ) %>%
-
-    # relevel for plot
-    mutate(component = factor(component,
-        levels = c(
-            "nRBC", "Endothelial", "Hofbauer",
-            "Stromal", "Trophoblasts",
-            "Syncytiotrophoblast"
-        )
-    )) %>%
-
-    # plot
-    ggplot(aes(x = sample, y = estimate, fill = component)) +
-    geom_bar(stat = "identity") +
-    facet_wrap(~algorithm, ncol = 1) +
-    scale_fill_manual(values = plColors) +
-    scale_y_continuous(
-        limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1),
-        labels = scales::percent
-    ) +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-    coord_cartesian(ylim = c(0, 1)) +
-    labs(x = "", fill = "")
+  mutate(sample = rep(rownames(houseman_estimates), 4)) %>%
+  as_tibble() %>%
+  pivot_longer(
+    cols = -c(algorithm, sample),
+    names_to = "component",
+    values_to = "estimate"
+  ) %>%
+  
+  # relevel for plot
+  mutate(component = factor(component,
+                            levels = c(
+                              "nRBC", "Endothelial", "Hofbauer",
+                              "Stromal", "Trophoblasts",
+                              "Syncytiotrophoblast"
+                            )
+  )) %>%
+  
+  # plot
+  ggplot(aes(x = sample, y = estimate, fill = component)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~algorithm, ncol = 1) +
+  scale_fill_manual(values = plColors) +
+  scale_y_continuous(
+    limits = c(-0.1, 1.1), breaks = c(0, 0.5, 1),
+    labels = scales::percent
+  ) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "", fill = "")
 ```
 
 Some notes:
@@ -197,11 +197,11 @@ sample information data.frame, `plPhenoData`.
 
 ```{r}
 plPhenoData <- plPhenoData %>%
-    mutate(
-        ga_RPC = predictAge(plBetas, type = "RPC"),
-        ga_CPC = predictAge(plBetas, type = "CPC"),
-        ga_RRPC = predictAge(plBetas, type = "RRPC")
-    )
+  mutate(
+    ga_RPC = predictAge(plBetas, type = "RPC"),
+    ga_CPC = predictAge(plBetas, type = "CPC"),
+    ga_RRPC = predictAge(plBetas, type = "RRPC")
+  )
 ```
 
 Note that the number of predictors (CpGs) that were used in our data are 
@@ -215,21 +215,21 @@ each of the 3 gestational age predictors.
 ```{r, fig.width = 7, fig.height = 5}
 plPhenoData %>%
   
-    # reshape, to plot
-    pivot_longer(
-        cols = contains("ga"),
-        names_to = "clock_type",
-        names_prefix = "ga_",
-        values_to = "ga"
-    ) %>%
-
-    # plot code
-    ggplot(aes(x = gestation_wk, y = ga, col = disease)) +
-    geom_point() +
-    geom_smooth(method = "lm", se = FALSE) +
-    facet_wrap(~clock_type) +
-    theme(legend.position = "top") +
-    labs(x = "Reported GA (weeks)", y = "Inferred GA (weeks)", col = "")
+  # reshape, to plot
+  pivot_longer(
+    cols = contains("ga"),
+    names_to = "clock_type",
+    names_prefix = "ga_",
+    values_to = "ga"
+  ) %>%
+  
+  # plot code
+  ggplot(aes(x = gestation_wk, y = ga, col = disease)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~clock_type) +
+  theme(legend.position = "top") +
+  labs(x = "Reported GA (weeks)", y = "Inferred GA (weeks)", col = "")
 ```
 
 ## Ethnicity
@@ -243,7 +243,7 @@ all(ethnicityCpGs %in% rownames(plBetas))
 
 results <- predictEthnicity(plBetas)
 results %>%
-    tail(8)
+  tail(8)
 ```
 
 `predictEthnicity` returns probabilities corresponding to each ethnicity for
@@ -261,26 +261,26 @@ require special attention in downstream analyses.
 
 ```{r, fig.width = 7}
 results %>%
-    ggplot(aes(
-        x = Prob_Caucasian, y = Prob_African,
-        col = Predicted_ethnicity
-    )) +
-    geom_point(alpha = 0.7) +
-    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
-    scale_x_continuous(labels = scales::percent) +
-    scale_y_continuous(labels = scales::percent) +
-    labs(x = "P(Caucasian)", y = "P(African)")
+  ggplot(aes(
+    x = Prob_Caucasian, y = Prob_African,
+    col = Predicted_ethnicity
+  )) +
+  geom_point(alpha = 0.7) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "P(Caucasian)", y = "P(African)")
 
 results %>%
-    ggplot(aes(
-        x = Prob_Caucasian, y = Prob_Asian,
-        col = Predicted_ethnicity
-    )) +
-    geom_point(alpha = 0.7) +
-    coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
-    scale_x_continuous(labels = scales::percent) +
-    scale_y_continuous(labels = scales::percent) +
-    labs(x = "P(Caucasian)", y = "P(Asian)")
+  ggplot(aes(
+    x = Prob_Caucasian, y = Prob_Asian,
+    col = Predicted_ethnicity
+  )) +
+  geom_point(alpha = 0.7) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  scale_x_continuous(labels = scales::percent) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "P(Caucasian)", y = "P(Asian)")
 ```
 
 We can't compare this to self-reported ethnicity as it is unavailable. But we
@@ -321,51 +321,63 @@ for classification used to assign labels is 55%; if the users wishes to use
 other threshold, different labels can be assigned based on the output 
 probabilities. 
 
-```{r include=FALSE, eval = FALSE}
+```{r include=TRUE, eval = TRUE}
 
 library(ExperimentHub)
-eh = ExperimentHub()
-query(eh, c('eoPred'))
-val = eh[["EH8091"]]
-# add line to load valMeta
+eh <- ExperimentHub()
+query(eh, "eoPredData")
 
+# download BMIQ normalized 450k data
+x_test <- eh[['EH8403']]
+valMeta <- eh[['EH8404']]
+preds <- x_test %>% predictPreeclampsia()
 ```
 
-```{r include=FALSE, eval = FALSE}
+Inspect the results:
 
-dim(val) # 48 by 341,281
-
-preds <- predictPreeclampsia(val)
-
-# have a quick look
+```{r include=FALSE, eval = TRUE}
 head(preds)
 
 # join with metadata
 valMeta <- left_join(valMeta, preds, by="Sample_ID")
 
 # visualize results
-valMeta %>% 
-  ggplot() +
-  geom_boxplot(aes(x = Class,
-                   y = EOPE),
-               width=0.3,
-               alpha=0.5,
-               color="darkgrey") +
-  geom_jitter(aes(x = Class,
-                  y = EOPE, 
-                  color = Pred_Class), 
-              alpha = 0.5, 
-              position = position_jitter(width = .1)) + 
-  coord_flip() +
-  ylab("Class Probability of EOPE") +
-  xlab("True Class") +
-  ylim(0,1) +
-  scale_color_manual(name = "Predicted Class", values=c("#E69F00", "#999999")) + 
-  theme_minimal() 
+plot_predictions <- function(df, predicted_class_column) {
+  df %>% 
+    ggplot() +
+    geom_boxplot(
+      aes(x = Class, y = EOPE),
+      width = 0.3,
+      alpha = 0.5,
+      color = "darkgrey"
+    ) +
+    geom_jitter(
+      aes(x = Class, y = EOPE, color = {{predicted_class_column}}), 
+      alpha = 0.75, 
+      position = position_jitter(width = .1)
+    ) + 
+    coord_flip() +
+    ylab("Class Probability of EOPE") +
+    xlab("True Class") +
+    ylim(0,1) +
+    scale_color_manual(
+      name = "Predicted Class", 
+      values = c("#E69F00", "skyblue", "#999999")
+    ) + 
+    theme_minimal() 
+}
+valMeta %>% plot_predictions(PE_Status)
+```
 
-# if user wishes to use different threshold from 55% probability, as an example 70%
-EOpreds %>% mutate(Pred_Class = case_when(EOPE > 0.7 ~ "EOPE",
-                                          EOPE < 0.7 ~ "Non-PE Preterm"))
+if user wishes to use different threshold from 55% probability, as an example 70%
+
+```{r}
+valMeta %>% mutate(
+  Pred_Class = case_when(
+    EOPE > 0.7 ~ "EOPE",
+    `Non-PE Preterm` > 0.7 ~ "Non-PE Preterm",
+    .default = 'low-confidence'
+  )) %>% plot_predictions(Pred_Class)
 
 ```
 
