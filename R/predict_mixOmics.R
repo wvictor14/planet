@@ -161,7 +161,6 @@
 #' @method predict mixo_pls
 #' @importFrom methods hasArg is
 #' @importFrom stats setNames
-#' @export
 predict.mixo_pls <-
   function(object,
            newdata,
@@ -760,7 +759,6 @@ predict.mixo_pls <-
 
 #' @rdname predict
 #' @method predict mixo_spls
-#' @export
 predict.mixo_spls <- predict.mixo_pls
 
 
@@ -837,8 +835,6 @@ Check.entry.single = function(X,  ncomp, q)
 #' @return \code{logratio.transfo} simply returns the log-ratio transformed
 #' data.
 #' @author Florian Rohart, Kim-Anh Lê Cao, Al J Abadi
-#' @seealso \code{\link{pca}}, \code{\link{pls}}, \code{\link{spls}},
-#' \code{\link{plsda}}, \code{\link{splsda}}.
 #' @references Kim-Anh Lê Cao, Mary-Ellen Costello, Vanessa Anne Lakis,
 #' Francois Bartolo, Xin-Yi Chua, Remi Brazeilles, Pascale Rondeau mixMC: a
 #' multivariate statistical framework to gain insight into Microbial
@@ -856,7 +852,8 @@ Check.entry.single = function(X,  ncomp, q)
 #' @name logratio-transformations
 NULL
 #' @rdname logratio-transformations
-#' @export
+#' @importFrom stats aggregate
+#' @importFrom utils data
 logratio.transfo <- function(X,
                              logratio = c('none','CLR','ILR'),
                              offset = 0)
@@ -1176,14 +1173,6 @@ internal_predict.DA <-
 #' and Density Estimation. Technical Report No. 597, Department of Statistics,
 #' University of Washington.
 #' @keywords cluster
-#' @export
-#' @examples
-#' data(nutrimouse)
-#' Y = unmap(nutrimouse$diet)
-#' Y
-#' data = list(gene = nutrimouse$gene, lipid = nutrimouse$lipid, Y = Y)
-#' # data could then used as an input in wrapper.rgcca, which is not, technically,
-#' # a supervised method, see ??wrapper.rgcca
 unmap <-
   function (classification, groups = NULL, noise = NULL)
   {

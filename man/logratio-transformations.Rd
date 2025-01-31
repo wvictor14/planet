@@ -29,12 +29,6 @@ transformation). In the case of CLR log-transformation, X needs to be a
 matrix of non-negative values and \code{offset} is used to shift the values
 away from 0, as commonly done with counts data.
 }
-\examples{
-
-data(diverse.16S)
-CLR = logratio.transfo(X = diverse.16S$data.TSS, logratio = 'CLR')
-# no offset needed here as we have put it prior to the TSS, see www.mixOmics.org/mixMC
-}
 \references{
 Kim-Anh Lê Cao, Mary-Ellen Costello, Vanessa Anne Lakis,
 Francois Bartolo, Xin-Yi Chua, Remi Brazeilles, Pascale Rondeau mixMC: a
@@ -48,10 +42,8 @@ the Royal Statistical Society. Series B (Methodological), pages 139-177,
 Peter Filzmoser, Karel Hron, and Clemens Reimann. Principal component
 analysis for compositional data with outliers. Environmetrics,
 20(6):621-632, 2009.
-}
-\seealso{
-\code{\link{pca}}, \code{\link{pls}}, \code{\link{spls}},
-\code{\link{plsda}}, \code{\link{splsda}}.
+
+See mixOmics documentation for more information
 }
 \author{
 Florian Rohart, Kim-Anh Lê Cao, Al J Abadi

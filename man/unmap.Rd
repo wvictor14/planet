@@ -35,14 +35,6 @@ analyses such as (s)PLS-DA, (s)gccaDA this function is used internally.
 Converts a class or group vector or factor into a matrix of indicator
 variables.
 }
-\examples{
-data(nutrimouse)
-Y = unmap(nutrimouse$diet)
-Y
-data = list(gene = nutrimouse$gene, lipid = nutrimouse$lipid, Y = Y)
-# data could then used as an input in wrapper.rgcca, which is not, technically,
-# a supervised method, see ??wrapper.rgcca
-}
 \references{
 C. Fraley and A. E. Raftery (2002). Model-based
 clustering, discriminant analysis, and density estimation. \emph{Journal of

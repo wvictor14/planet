@@ -185,14 +185,6 @@ Tenenhaus, M. (1998). \emph{La regression PLS: theorie et pratique}. Paris:
 Editions Technic.
 }
 \seealso{
-\code{\link{pls}}, \code{\link{spls}}, \code{\link{plsda}},
-\code{\link{splsda}}, \code{\link{mint.pls}}, \code{\link{mint.spls}},
-\code{\link{mint.plsda}}, \code{\link{mint.splsda}},
-\code{\link{block.pls}}, \code{\link{block.spls}},
-\code{\link{block.plsda}}, \code{\link{block.splsda}},
-\code{\link{mint.block.pls}}, \code{\link{mint.block.spls}},
-\code{\link{mint.block.plsda}}, \code{\link{mint.block.splsda}} and
-visualisation with \code{\link{background.predict}} and
 http://www.mixOmics.org for more details.
 }
 \author{
