@@ -146,15 +146,7 @@
 #' analysis (see details above).}
 #' @author Florian Rohart, Sébastien Déjean, Ignacio González, Kim-Anh Lê Cao,
 #' Al J Abadi
-#' @seealso \code{\link{pls}}, \code{\link{spls}}, \code{\link{plsda}},
-#' \code{\link{splsda}}, \code{\link{mint.pls}}, \code{\link{mint.spls}},
-#' \code{\link{mint.plsda}}, \code{\link{mint.splsda}},
-#' \code{\link{block.pls}}, \code{\link{block.spls}},
-#' \code{\link{block.plsda}}, \code{\link{block.splsda}},
-#' \code{\link{mint.block.pls}}, \code{\link{mint.block.spls}},
-#' \code{\link{mint.block.plsda}}, \code{\link{mint.block.splsda}} and
-#' visualisation with \code{\link{background.predict}} and
-#' http://www.mixOmics.org for more details.
+#' @seealso http://www.mixOmics.org for more details.
 #' @references
 #' 
 #' Rohart F, Gautier B, Singh A, Lê Cao K-A. mixOmics: an R package for 'omics
@@ -859,11 +851,8 @@ Check.entry.single = function(X,  ncomp, q)
 #' Peter Filzmoser, Karel Hron, and Clemens Reimann. Principal component
 #' analysis for compositional data with outliers. Environmetrics,
 #' 20(6):621-632, 2009.
-#' @examples
 #' 
-#' data(diverse.16S)
-#' CLR = logratio.transfo(X = diverse.16S$data.TSS, logratio = 'CLR')
-#' # no offset needed here as we have put it prior to the TSS, see www.mixOmics.org/mixMC
+#' See mixOmics documentation for more information
 #' @name logratio-transformations
 NULL
 #' @rdname logratio-transformations
