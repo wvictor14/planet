@@ -1,0 +1,1056 @@
+
+#' predict mixxo from
+#' 
+#' copied from mixOmicsTeam/mixOmics/refs/heads/master/R/predict.R
+#' on 2025 Jan 30. Some components omitted that are not used in planet. 
+#' 
+#' @param object object of class inheriting from
+#' \code{"(mint).(block).(s)pls(da)"}.
+#' @param newdata data matrix in which to look for for explanatory variables to
+#' be used for prediction. Please note that this method does not perform
+#' multilevel decomposition or log ratio transformations, which need to be
+#' processed beforehand.
+#' @param study.test For MINT objects, grouping factor indicating which samples
+#' of \code{newdata} are from the same study. Overlap with \code{object$study}
+#' are allowed.
+#' @param dist distance to be applied for discriminant methods to predict the
+#' class of new data, should be a subset of \code{"centroids.dist"},
+#' \code{"mahalanobis.dist"} or \code{"max.dist"} (see Details). Defaults to
+#' \code{"all"}.
+#' @param multilevel Design matrix for multilevel analysis (for repeated
+#' measurements). A numeric matrix or data frame. For a one level factor
+#' decomposition, the input is a vector indicating the repeated measures on
+#' each individual, i.e. the individuals ID. For a two level decomposition with
+#' splsda models, the two factors are included in Y. Finally for a two level
+#' decomposition with spls models, 2nd AND 3rd columns in design indicate those
+#' factors (see example in \code{?splsda} and \code{?spls}).
+#' @param ... not used currently.
+#' @return \code{predict} produces a list with the following components:
+#' \item{predict}{predicted response values. The dimensions correspond to the
+#' observations, the response variables and the model dimension, respectively.
+#' For a supervised model, it corresponds to the predicted dummy variables.}
+#' \item{variates}{matrix of predicted variates.} \item{B.hat}{matrix of
+#' regression coefficients (without the intercept).}
+#' 
+#' \item{AveragedPredict}{if more than one block, returns the average predicted
+#' values over the blocks (using the \code{predict} output)}
+#' \item{WeightedPredict}{if more than one block, returns the weighted average
+#' of the predicted values over the blocks (using the \code{predict} and
+#' \code{weights} outputs)}
+#' 
+#' \item{class}{predicted class of \code{newdata} for each
+#' \eqn{1,...,}\code{ncomp} components.}
+#' 
+#' \item{MajorityVote}{if more than one block, returns the majority class over
+#' the blocks. NA for a sample means that there is no consensus on the
+#' predicted class for this particular sample over the blocks.}
+#' \item{WeightedVote}{if more than one block, returns the weighted majority
+#' class over the blocks. NA for a sample means that there is no consensus on
+#' the predicted class for this particular sample over the blocks.}
+#' \item{weights}{Returns the weights of each block used for the weighted
+#' predictions, for each nrepeat and each fold}
+#' 
+#' \item{centroids}{matrix of coordinates for centroids.} \item{dist}{type of
+#' distance requested.} \item{vote}{majority vote result for multi block
+#' analysis (see details above).}
+#' @author Florian Rohart, Sébastien Déjean, Ignacio González, Kim-Anh Lê Cao,
+#' Al J Abadi
+#' @seealso http://www.mixOmics.org for more details.
+#' @references
+#' 
+#' Rohart F, Gautier B, Singh A, Lê Cao K-A. mixOmics: an R package for 'omics
+#' feature selection and multiple data integration. PLoS Comput Biol 13(11):
+#' e1005752
+#' 
+#' Tenenhaus, M. (1998). \emph{La regression PLS: theorie et pratique}. Paris:
+#' Editions Technic.
+#' @keywords regression multivariate
+#' @name predict
+#' @rdname predict
+#' @method predict mixo_pls
+#' @importFrom methods hasArg is
+#' @importFrom stats setNames
+#' @examples
+#' # example code
+#' 
+predict.mixo_pls <-
+  function(object,
+           newdata,
+           study.test,
+           dist = c("all", "max.dist", "centroids.dist", "mahalanobis.dist"),
+           multilevel = NULL,
+           ...
+  )
+  {
+    
+    time=FALSE
+    
+    # pass R check
+    newdata.scale = misdata.all = is.na.X = is.na.newdata = noAveragePredict = NULL
+    
+    # input parameter: noAveragePredict=> no averagePredict calculation, used in tune.block.splsda
+    
+    if(inherits(object, c("rgcca","sparse.rgcca")))
+      stop("no prediction for RGCCA methods")
+    
+    #check on dist
+    if (!any(dist %in% c("all", "max.dist", "centroids.dist", "mahalanobis.dist")) & is(object, "DA"))
+      stop("ERROR : choose one of the four following modes: 'all', 'max.dist', 'centroids.dist' or 'mahalanobis.dist'")
+    #end general checks
+    
+    ncomp = object$ncomp
+    
+    if(is(object, "DA")) # a DA analysis (mint).(block).(s)plsda
+    {
+      #if DA analysis, the unmap Y is in ind.mat
+      Y.factor=object$Y
+      Y=object$ind.mat
+    }else{
+      #if not DA, Y is in object$Y
+      Y=object$Y
+      if(is.null(Y)) # block analysis
+      {
+        Y=object$X[[object$indY]]
+      }
+    }
+    q=ncol(Y)
+    
+    if(time) time1 = proc.time()
+    #print(names(list(...)))
+    
+    if(hasArg(newdata.scale)) # if an input `newdata.scale' is given, we use that one and we don't scale the data and don't do the logratio or multilevel
+    {
+      newdata = list(...)$newdata.scale
+      object$logratio = NULL
+      multilevel = NULL
+    }
+    
+    mint.object = c("mint.pls", "mint.spls", "mint.plsda", "mint.splsda")
+    block.object = c("block.pls", "block.spls", "block.plsda", "block.splsda")
+    ### if the object is a block, the input newdata is different, we check newdata, make sure it's a list and check newdata/X
+    if(!inherits(object, block.object)) # not a block (pls/spls/plsda/splsda/mint...)
+    {
+      p=ncol(object$X)
+      if(is.list(object$X))
+        stop("Something is wrong, object$X should be a matrix and it appears to be a list") #this should never happen/intern check
+      
+      if(is.list(newdata) & !is.data.frame(newdata))
+        stop("'newdata' must be a numeric matrix")
+      
+      # deal with near.zero.var in object, to remove the same variable in newdata as in object$X (already removed in object$X)
+      if(length(object$nzv$Position) > 0)
+        newdata = newdata[, -object$nzv$Position,drop=FALSE]
+      
+      if(all.equal(colnames(newdata),colnames(object$X))!=TRUE)
+        stop("'newdata' must include all the variables of 'object$X'")
+      
+      #not a block, the input newdata should be a matrix
+      if (length(dim(newdata)) == 2) {
+        if (ncol(newdata) != p)
+          stop("'newdata' must be a numeric matrix with ncol = ", p,
+               " or a vector of length = ", p, ".")
+      }
+      
+      if (length(dim(newdata)) == 0) {
+        if (length(newdata) != p)
+          stop("'newdata' must be a numeric matrix with ncol = ", p,
+               " or a vector of length = ", p, ".")
+        dim(newdata) = c(1, p)
+      }
+      
+      #check col/rownames of newdata
+      check=Check.entry.single(newdata, ncomp,q=1)
+      newdata=check$X
+      
+      if(length(rownames(newdata))==0) rownames(newdata)=1:nrow(newdata)
+      if(max(table(rownames(newdata)))>1) stop('samples should have a unique identifier/rowname')
+      
+      # we transform everything in lists
+      X=list(X=object$X)
+      object$X=X
+      newdata=list(newdata=newdata)
+      
+      object$indY=2
+      ind.match = 1
+      
+    }else{
+      
+      # a block, newdata should be a list, each blocks should have the same number of samples
+      if(!is.list(newdata))
+        stop("'newdata' should be a list")
+      
+      if(!is.null(object$indY) && !is(object, "DA")) #if DA, object$X is already without Y
+      {
+        X = object$X[-object$indY]
+      }else{
+        X=object$X
+      }
+      object$X=X
+      
+      p = lapply(X, ncol)
+      
+      #matching newdata and X
+      
+      # error if no names on keepX or not matching the names in X
+      if(length(unique(names(newdata)))!=length(newdata) | sum(is.na(match(names(newdata),names(X)))) > 0)
+        stop("Each entry of 'newdata' must have a unique name corresponding to a block of 'X'")
+      
+      # error if not same number of samples in each block of newdata
+      if (length(unique(sapply(newdata,nrow))) != 1)
+        stop("All entries of 'newdata' must have the same number of rows")
+      
+      # I want to match keepX to X by names
+      ind.match = match(names(X), names(newdata))
+      if(any(is.na(ind.match)))
+        warning("Some blocks are missing in 'newdata'; the prediction is based on the following blocks only: ", paste(names(X)[!is.na(ind.match)],collapse=", "))
+      
+      #replace missing blocks by 0
+      newdataA = list()
+      for (q in 1:length(X))
+      {
+        
+        if (!is.na(ind.match[q])) # means there is a newdata with the same name as X[q] #(q <= length(newdata))
+        {
+          newdataA[[q]] = newdata[[ind.match[q]]]
+        }else{
+          newdataA[[q]] = matrix(0,nrow = unique(sapply(newdata,nrow)), ncol = ncol(X[[q]]), dimnames = list(rownames(newdata[[1]]), colnames(X[[q]]))) # if missing, replaced by a 0 matrix of correct size
+        }
+      }
+      names(newdataA) = names(X)
+      newdata = newdataA
+      
+      # deal with near.zero.var in object, to remove the same variable in newdata as in object$X (already removed in object$X)
+      if(!is.null(object$nzv))
+      {
+        # for each of the input blocks, checks to see if the nzv features have already been removed
+        # if not, then these features are removed here
+        for (x in 1:length(newdata)) {
+          if (nrow(object$nzv[[x]]$Metrics) == 0) { next }
+          if (all(!(rownames(object$nzv[[x]]$Metrics) %in% colnames(newdata[[x]])))) { next }
+          
+          newdata[[x]] <- newdata[[x]][, -object$nzv[[x]]$Position,drop=FALSE]
+        }
+      }
+      if(length(newdata)!=length(object$X)) stop("'newdata' must have as many blocks as 'object$X'")
+      
+      names(newdata)=names(X)
+      
+      if (any(lapply(newdata, function(x){length(dim(x))}) != 2)) {
+        if (any(unlist(lapply(newdata, ncol)) != unlist(p)))
+          stop("'newdata' must be a list with ", length(p), " numeric matrix and ncol respectively equal to ", paste(p, collapse = ", "), ".")
+      }
+      
+      if (any(lapply(newdata, function(x){length(dim(x))}) == 0)) {
+        if (any(unlist(lapply(newdata, ncol)) != unlist(p)))
+          stop("'newdata' must be a list with ", length(p), " numeric matrix and ncol respectively equal to ", paste(p, collapse = ", "), ".")
+        dim(newdata) = c(1, p) #don't understand that, Benoit?
+      }
+      
+      #check dimnames and ncomp per block of A
+      for(q in 1:length(newdata))
+      {
+        check=Check.entry.single(newdata[[q]], ncomp[q],q=q)
+        newdata[[q]]=check$X
+      }
+      names(newdata)=names(X)
+      
+      #check that newdata and X have the same variables and that they are in the same order
+      for (i in 1:length(newdata)) {
+        X.names <- colnames(X[[i]])
+        newdata.names <- colnames(newdata[[i]])
+        
+        if (any(X.names != newdata.names)) { # if there is any difference between colnames
+          if (length(setdiff(X.names, newdata.names)) > 0) { # if there is presence of novel feature/absence of existing feature
+            stop(paste("The set of features in 'object$X$", 
+                       names(X)[i], "' is different to 'newdata$", 
+                       names(newdata)[i], "'. Please ensure they have the same features.", sep = ""))
+          }
+          else if (all(sort(X.names) == sort(newdata.names))) { # if it is only a difference in order
+            stop(paste("The order of features in 'object$X$", 
+                       names(X)[i], "' is different to 'newdata$", 
+                       names(newdata)[i], "'. Please ensure that you adjust these to the same order", sep = ""))
+          }
+        }
+      }
+      
+      #reorder variables in the newdata as in X if needed
+      if (all.equal(lapply(newdata, colnames), lapply(X, colnames)) != TRUE) {
+        newdata <- setNames(lapply(seq_along(X), function(i) {newdata[[i]][, colnames(X[[i]])]}), nm = names(X))
+      }
+      #need to reorder variates and loadings to put 'Y' in last
+      if(!is.null(object$indY))
+      {
+        indY=object$indY
+        object$variates=c(object$variates[-indY],object$variates[indY])
+        object$loadings=c(object$loadings[-indY],object$loadings[indY])
+      }
+      
+      
+    }
+    
+    # logratio and multilevel transform if necessary
+    if (!is.null(object$logratio))
+      newdata = lapply(newdata, logratio.transfo, logratio = object$logratio)
+    
+    if(!is.null(multilevel))
+      newdata = lapply(newdata, withinVariation, design = data.frame(multilevel))
+    
+    p = lapply(X, ncol)
+    q = ncol(Y)
+    J = length(X) #at this stage we have a list of blocks
+    variatesX = object$variates[-(J + 1)];
+    loadingsX = object$loadings[-(J + 1)]
+    
+    scale = object$scale # X and Y are both mean centered by groups and if scale=TRUE they are scaled by groups
+    
+    
+    ### if the object is not a mint analysis, the input study.test is missing and we can go faster to scale the data
+    
+    # we only scale the data if the input `newdata.scale' is missing. Only use in tune functions where we do not need to scale for every prediction as we predict on the same newdata for a grid of keepX
+    if(!hasArg(newdata.scale))
+    {
+      if(!inherits(object, mint.object))#| nlevels(factor(object$study))<=1) #not a mint object or just one level in the study
+      {   # not a mint (pls/spls/plsda/splsda/block...)
+        
+        # scale newdata if just one study
+        if (!is.null(attr(X[[1]], "scaled:center")))
+          newdata[which(!is.na(ind.match))] = lapply(which(!is.na(ind.match)), function(x){sweep(newdata[[x]], 2, STATS = attr(X[[x]], "scaled:center"))})
+        if (scale)
+          newdata[which(!is.na(ind.match))] = lapply(which(!is.na(ind.match)), function(x){sweep(newdata[[x]], 2, FUN = "/", STATS = attr(X[[x]], "scaled:scale"))})
+        if (any(unlist(lapply(newdata[which(!is.na(ind.match))], function(x){any(is.infinite(x))})))) {
+          newdata[which(!is.na(ind.match))] <- lapply(which(!is.na(ind.match)), function(x){df <- newdata[[x]]; df[which(is.infinite(df))] <- NaN; return(df)})
+        }
+        
+        means.Y = matrix(attr(Y, "scaled:center"),nrow=nrow(newdata[[1]]),ncol=q,byrow=TRUE);
+        if (scale)
+        {sigma.Y = matrix(attr(Y, "scaled:scale"),nrow=nrow(newdata[[1]]),ncol=q,byrow=TRUE)}else{sigma.Y=matrix(1,nrow=nrow(newdata[[1]]),ncol=q)}
+        concat.newdata=newdata
+        names(concat.newdata)=names(X)
+        
+      }else{
+        # a mint analysis
+        
+        #check study.test
+        if(missing(study.test))
+        {
+          if(nlevels(object$study)==1)
+          {study.test=factor(rep(1,nrow(newdata[[1]])))}else{
+            stop("'study.test' is missing")}
+        }else{
+          study.test=as.factor(study.test)
+        }
+        if (any(unlist(lapply(newdata, nrow)) != length(study.test)))
+          stop(paste0("'study' must be a factor of length ",nrow(newdata[[1]]),"."))
+        
+        #scale newdata if more than one study. If some levels of study.test are included in study.learn, the means/sigmas of study.learn are used to scale
+        M=nlevels(study.test)
+        study.learn=factor(object$study)
+        names.study.learn=levels(study.learn);names.study.test=levels(study.test)
+        match.study=match(names.study.test,names.study.learn)
+        match.study.indice=which(!is.na(match.study))
+        
+        newdata.list.study = lapply(newdata,study_split,study.test) #a list of lists. [[j]][[m]]: j is for the blocks, m is for the levels(study)
+        
+        # each study is normalized, depending on how the normalization was performed on the learning set (center/scale)
+        newdata.list.study.scale.temp =NULL#vector("list",length=J) #list(list())
+        concat.newdata  = vector("list",length=J)
+        for(j in 1:J) # loop on the blocks
+        {
+          for (m in 1:M) #loop on the groups of study.test
+          {
+            # case 1: sample test is part of the learning data set
+            if(m%in%match.study.indice) #if some study of study.test were already in the learning set
+            {
+              
+              if(scale==TRUE)
+              {
+                if(nlevels(object$study)>1)
+                {
+                  newdata.list.study.scale.temp=scale(newdata.list.study[[j]][[m]], center = attr(X[[j]],paste0("means:", levels(study.test)[m])), scale = attr(X[[j]],paste0("sigma:", levels(study.test)[m])))
+                }else{#if just one level in object$study, the normalisation attributes are not named the same
+                  newdata.list.study.scale.temp=scale(newdata.list.study[[j]][[m]], center = attr(X[[j]],"scaled:center"), scale = attr(X[[j]],"scaled:scale"))
+                }
+              }
+              
+              if(scale==FALSE)
+              {
+                if(nlevels(object$study)>1)
+                {
+                  newdata.list.study.scale.temp=scale(newdata.list.study[[j]][[m]], center = attr(X[[j]],paste0("means:", levels(study.test)[m])),scale=FALSE)
+                }else{#if just one level in object$study, the normalisation attributes are not named the same
+                  newdata.list.study.scale.temp=scale(newdata.list.study[[j]][[m]], center = attr(X[[j]],"scaled:center"),scale=FALSE)
+                }
+                
+                
+              }
+              
+            }else{
+              # case 2: sample test is a new study # a new study which was not in the learning set
+              
+              ## if there is one sample from a new study to be scaled throw a condition and do not scale
+              if (scale == TRUE & dim(newdata.list.study[[j]][[m]])[1] == 1 ) {
+                warning("Train data are scaled but the test data include a single sample from a new study (which cannot be scaled). Mkaing prediction without scaling this test sample and thus prediction for this sample should be given with care. Consider scale=FALSE for model, or using more samples for prediction, or using a sample from model studies.\n")
+                newdata.list.study.scale.temp = newdata.list.study[[j]][[m]]
+              } else {
+                newdata.list.study.scale.temp=scale(newdata.list.study[[j]][[m]],center=TRUE,scale=scale)
+              }
+            }
+            #concatenation of the scaled data
+            concat.newdata[[j]] = rbind(concat.newdata[[j]], unlist(newdata.list.study.scale.temp))#[[j]][[m]]))
+          }
+        }
+        
+        # we now need to reorganise concat.newdata as newdata. Indeed, the concatenation was done without taking care of the order of the samples in newdata
+        for(j in 1:J) # loop on the blocks
+        {
+          indice.match=match(rownames(newdata[[j]]),rownames(concat.newdata[[j]]))
+          #match indice
+          concat.newdata[[j]]=concat.newdata[[j]][indice.match,, drop=FALSE]
+          concat.newdata[[j]][which(is.na(concat.newdata[[j]]))]=0 # taking care of the NA due to normalisation: put to 0 so they don't influence the product below (in Y.hat), reviens au meme que de supprimer les colonnes sans variances au depart.
+          
+        }
+        
+        names(concat.newdata)=names(X)
+        
+        means.Y=matrix(0,nrow=nrow(concat.newdata[[1]]),ncol=q)
+        sigma.Y=matrix(1,nrow=nrow(concat.newdata[[1]]),ncol=q)
+        
+        #loop on the blocks to define means.Y and sigma.Y for mint analysis
+        for(m in 1:M)
+        {
+          if(m%in%match.study.indice) #if some study of study.test were already in the learning set
+          {
+            if(nlevels(object$study)>1)
+            {
+              means.Y[which(study.test%in%levels(study.learn)[match.study[m]]),]=matrix(attr(Y,paste0("means:", levels(study.test)[m])),nrow=length(which(study.test%in%levels(study.learn)[match.study[m]])),ncol=q,byrow=TRUE)
+            }else{#if just one level in object$study, the normalisation attributes are not named the same
+              means.Y[which(study.test%in%levels(study.learn)[match.study[m]]),]=matrix(attr(Y,"scaled:center"),nrow=length(which(study.test%in%levels(study.learn)[match.study[m]])),ncol=q,byrow=TRUE)
+            }
+            
+            
+            if(scale==TRUE)
+            {
+              # I want to build a vector with sigma.Y for each group
+              if(nlevels(object$study)>1)
+              {
+                sigma.Y[which(study.test%in%levels(study.learn)[match.study[m]]),]=matrix(attr(Y,paste0("sigma:", levels(study.test)[m])),nrow=length(which(study.test%in%levels(study.learn)[match.study[m]])),ncol=q,byrow=TRUE)
+              }else{#if just one level in object$study, the normalisation attributes are not named the same
+                sigma.Y[which(study.test%in%levels(study.learn)[match.study[m]]),]=matrix(attr(Y,"scaled:scale"),nrow=length(which(study.test%in%levels(study.learn)[match.study[m]])),ncol=q,byrow=TRUE)
+              }
+              
+              
+            }
+          }
+        }
+        
+      }
+      ### end if object is a mint analysis
+    } else {
+      means.Y = matrix(attr(Y, "scaled:center"),nrow=nrow(newdata[[1]]),ncol=q,byrow=TRUE);
+      if (scale)
+      {sigma.Y = matrix(attr(Y, "scaled:scale"),nrow=nrow(newdata[[1]]),ncol=q,byrow=TRUE)}else{sigma.Y=matrix(1,nrow=nrow(newdata[[1]]),ncol=q)}
+      concat.newdata=newdata
+      names(concat.newdata)=names(X)
+    }
+    if(time) time2 = proc.time()
+    if(time) print("scaling")
+    if(time) print(time2-time1)
+    
+    
+    ### at this stage we have
+    # X         # list of blocks
+    # Y         # observation
+    # newdata   #list of blocks for the prediction, same length as A, scaled
+    
+    ###  replace NA by 0 in the training data
+    if( (hasArg(misdata.all) & hasArg(is.na.X)) && any(list(...)$misdata.all)) # ind.na.X: all blocks except Y
+    {    # if misdata.all and ind.na.X are provided, we don't calculate the is.na(X) as it takes time. Used in tune functions.
+      for(j in c(1:J)[list(...)$misdata.all])
+        X[[j]][list(...)$is.na.X[[j]]]=0 # faster than using replace
+    } else {
+      # replace NA by 0
+      X = lapply(X,function(x)
+      {
+        if (anyNA(x)){
+          ind = is.na(x)
+          x[ind] = 0
+        }
+        x
+      })
+    }
+    
+    ###  replace NA by 0 in the test data
+    
+    if( (hasArg(misdata.all) & hasArg(is.na.newdata)) && any(list(...)$misdata.all)) # ind.na.newdata: all blocks of newdata
+    {
+      # if misdata.all and ind.na.X are provided, we don't calculate the is.na(X) as it takes time. Used in tune functions.
+      concat.newdata = lapply(1:J, function(q){replace(concat.newdata[[q]], list(...)$is.na.newdata[[q]], 0)})
+      
+    }
+    
+    if (any(sapply(concat.newdata, anyNA)))
+    {
+      concat.newdata = lapply(concat.newdata,function(x)
+      {
+        if (anyNA(x)){
+          ind = is.na(x)
+          x[ind] = 0
+        }
+        x
+      })
+    }
+    
+    
+    # replace NA by 0 in Y
+    Y[is.na(Y)] = 0
+    
+    if(time) time3 = proc.time()
+    if(time) print("NA")
+    if(time) print(time3-time2)
+    
+    # -----------------------
+    #       prediction
+    # -----------------------
+    
+    B.hat = t.pred = Y.hat = list() #= betay
+    for (i in 1 : J)
+    {
+      Pmat = Cmat = Wmat = NULL
+      
+      ### Start estimation using formula Y = XW(P'W)C (+ Yr, residuals on Y) See page 136 La regression PLS Theorie et pratique Tenenhaus
+      # Estimation matrix W, P and C
+      Pmat = crossprod(X[[i]], variatesX[[i]])
+      Cmat = crossprod(Y, variatesX[[i]])
+      Wmat = loadingsX[[i]]
+      
+      # Prediction Y.hat, B.hat and t.pred
+      Ypred = lapply(1 : ncomp[i], function(x){concat.newdata[[i]] %*% Wmat[, 1:x] %*% solve(t(Pmat[, 1:x]) %*% Wmat[, 1:x]) %*% t(Cmat)[1:x, ]})
+      Ypred = sapply(Ypred, function(x){x*sigma.Y + means.Y}, simplify = "array")
+      
+      Y.hat[[i]] = array(Ypred, c(nrow(newdata[[i]]), ncol(Y), ncomp[i])) # in case one observation and only one Y, we need array() to keep it an array with a third dimension being ncomp
+      
+      t.pred[[i]] = concat.newdata[[i]] %*% Wmat %*% solve(t(Pmat) %*% Wmat)
+      t.pred[[i]] = matrix(data = sapply(1:ncol(t.pred[[i]]),
+                                         function(x) {t.pred[[i]][, x] * apply(variatesX[[i]], 2,
+                                                                               function(y){(norm(y, type = "2"))^2})[x]}), nrow = nrow(concat.newdata[[i]]), ncol = ncol(t.pred[[i]]))
+      
+      B.hat[[i]] = sapply(1 : ncomp[i], function(x){Wmat[, 1:x] %*% solve(t(Pmat[, 1:x]) %*% Wmat[, 1:x]) %*% t(Cmat)[1:x, ]}, simplify = "array")
+      ### End estimation using formula Y = XW(P'W)C (+ Yr, residuals on Y) See page 136 La regression PLS Theorie et pratique Tenenhaus
+      
+      rownames(t.pred[[i]]) = rownames(newdata[[i]])
+      colnames(t.pred[[i]]) = paste0("dim", c(1:ncomp[i]))
+      rownames(Y.hat[[i]]) = rownames(newdata[[i]])
+      colnames(Y.hat[[i]]) = colnames(Y)
+      dimnames(Y.hat[[i]])[[3]]=paste0("dim", c(1:ncomp[i]))
+      rownames(B.hat[[i]]) = colnames(newdata[[i]])
+      colnames(B.hat[[i]]) = colnames(Y)
+      dimnames(B.hat[[i]])[[3]]=paste0("dim", c(1:ncomp[i]))
+      
+    }
+    
+    if(time) time4 = proc.time()
+    if(time) print("Prediction")
+    if(time) print(time4-time3)
+    
+    #-- valeurs sortantes --#
+    names(Y.hat)=names(t.pred)=names(B.hat)=names(object$X)
+    
+    if(time) time4 = proc.time()
+    
+    # basic prediction results
+    if(inherits(object, block.object) & length(object$X)>1 )
+    {
+      out=list(predict=Y.hat[which(!is.na(ind.match))],variates=t.pred[which(!is.na(ind.match))],B.hat=B.hat[which(!is.na(ind.match))])
+      
+      # average prediction over the blocks
+      temp.all =list()
+      for(comp in 1:min(ncomp[-object$indY])) #note: all ncomp are the same in v6 as the input parameter is a single value
+      {
+        temp = array(0, c(nrow(Y.hat[[1]]), ncol(Y.hat[[1]]), J), dimnames = list(rownames(newdata[[1]]), colnames(Y),names(object$X)))
+        for(i in 1 : J)
+          temp[, , i] = Y.hat[[i]][, , comp]
+        
+        temp.all[[comp]] = temp
+      }
+      names(temp.all) = paste0("dim", c(1:min(ncomp[-object$indY])))
+      
+      if(!hasArg(noAveragePredict))
+      {
+        out$AveragedPredict = array(unlist(lapply(temp.all, function(x){
+          apply(x, c(1,2), mean)
+          
+        })), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
+        
+        out$WeightedPredict = array(unlist(lapply(temp.all, function(x){
+          apply(x, c(1,2), function(z){
+            temp = aggregate(rowMeans(object$weights),list(z),sum)
+            ind = which(temp[,2]== max (temp[,2]))# if two max, then NA
+            if(length(ind) == 1)
+            {
+              res = temp[ind, 1]
+            } else {
+              res = NA
+            }
+            res
+          })})), dim(Y.hat[[1]]), dimnames = list(rownames(newdata[[1]]), colnames(Y), paste0("dim", c(1:min(ncomp[-object$indY])))))
+      }
+      
+      
+      #out$newdata=concat.newdata
+    }else if(inherits(object, block.object)){ # a block but can have only one block (so e.g. a pls done with a block.pls)
+      out=list(predict=Y.hat,variates=t.pred,B.hat=B.hat)
+      
+    } else {# not a block (pls/spls/plsda/splsda/mint...)
+      out=list(predict=Y.hat[[1]],variates=t.pred[[1]],B.hat=B.hat[[1]])
+    }
+    
+    if(time) time5 = proc.time()
+    if(time) print("Y.hat")
+    if(time) print(time5-time4)
+    
+    
+    # get the classification for each new sample if the object is a DA
+    if(is(object, "DA")) # a DA analysis (mint).(block).(s)plsda
+    {
+      
+      if(inherits(object, block.object) & length(object$X)>1 )
+      {
+        if(!hasArg(noAveragePredict))
+        {
+          # predict class of AveragePredict, only with max.dist
+          out$AveragedPredict.class$max.dist = matrix(sapply(1:ncomp[1], ### List level
+                                                             function(y){apply(out$AveragedPredict[, , y, drop = FALSE], 1,  ### component level
+                                                                               function(z){
+                                                                                 paste(levels(Y.factor)[which(z == max(z))], collapse = "/")
+                                                                               }) ### matrix level
+                                                             }), nrow = nrow(newdata[[1]]), ncol = ncomp[1])
+          
+          
+          # predict class of WeightedPredict, only with max.dist
+          out$WeightedPredict.class$max.dist = matrix(sapply(1:ncomp[1], ### List level
+                                                             function(y){apply(out$WeightedPredict[, , y, drop = FALSE], 1,  ### component level
+                                                                               function(z){
+                                                                                 paste(levels(Y.factor)[which(z == max(z))], collapse = "/")
+                                                                               }) ### matrix level
+                                                             }), nrow = nrow(newdata[[1]]), ncol = ncomp[1])
+          
+          rownames(out$AveragedPredict.class$max.dist) = rownames(out$WeightedPredict.class$max.dist) = rownames(newdata[[1]])
+          colnames(out$AveragedPredict.class$max.dist) = colnames(out$WeightedPredict.class$max.dist) = paste0("dim", c(1:min(ncomp[-object$indY])))
+        }
+      }
+      
+      
+      # creating temporary 'blocks' outputs to pass into the internal_predict.DA function
+      out.temp=list(predict=Y.hat[which(!is.na(ind.match))],variates=t.pred[which(!is.na(ind.match))],B.hat=B.hat[which(!is.na(ind.match))])
+      out.temp$newdata=concat.newdata[which(!is.na(ind.match))]
+      
+      # getting classification for each new sample
+      object.temp = object
+      object.temp$X = object.temp$X[which(!is.na(ind.match))]
+      object.temp$variates = object.temp$variates[c(which(!is.na(ind.match)),J+1)] #J+1 is Y
+      if (!is.null(object$weights))
+        weights <- rowMeans(object$weights)[which(!is.na(ind.match))]
+      else
+        weights <- NULL
+      
+      classif.DA=internal_predict.DA(object=object.temp, q=q, out=out.temp, dist=dist, weights = weights)
+      out=c(out,classif.DA)
+      
+    }
+    
+    if(time) time6 = proc.time()
+    if(time) print("DA")
+    if(time) print(time6-time5)
+    
+    out$call = match.call()
+    class(out) = paste("predict")
+    
+    out
+    
+  }
+
+#' @rdname predict
+#' @method predict mixo_spls
+predict.mixo_spls <- predict.mixo_pls
+
+
+# from https://github.com/mixOmicsTeam/mixOmics/blob/master/R/check_entry.R#L111
+################################################################################
+# --------------------------------------
+# Check.entry.single: check input parameter for a single matrix that comes
+#   from a list of matrix
+# --------------------------------------
+# X: a single numeric matrix
+# ncomp: the number of components to include in the model
+# q: position of X in a list of matrix, as used in horizontal analysis
+#   (e.g. block.pls)
+Check.entry.single = function(X,  ncomp, q)
+{
+  
+  #-- validation des arguments --#
+  if (length(dim(X)) != 2)
+    stop(paste0("'X[[", q, "]]' must be a numeric matrix."))
+  
+  if(! any(class(X) %in% "matrix"))
+    X = as.matrix(X)
+  
+  if (!is.numeric(X))
+    stop(paste0("'X[[", q, "]]'  must be a numeric matrix."))
+  
+  N = nrow(X)
+  P = ncol(X)
+  
+  if (is.null(ncomp) || !is.numeric(ncomp) || ncomp <= 0)
+    stop(paste0(
+      "invalid number of variates 'ncomp' for matrix 'X[[", q, "]]'."))
+  
+  ncomp = round(ncomp)
+  
+  # add colnames and rownames if missing
+  X.names = dimnames(X)[[2]]
+  if (is.null(X.names))
+  {
+    X.names = paste("X", 1:P, sep = "")
+    dimnames(X)[[2]] = X.names
+  }
+  
+  ind.names = dimnames(X)[[1]]
+  if (is.null(ind.names))
+  {
+    ind.names = 1:N
+    rownames(X)  = ind.names
+  }
+  
+  if (length(unique(rownames(X))) != nrow(X))
+    stop("samples should have a unique identifier/rowname")
+  if (length(unique(X.names)) != P)
+    stop("Unique indentifier is needed for the columns of X")
+  
+  return(list(X=X, ncomp=ncomp, X.names=X.names, ind.names=ind.names))
+}
+
+logratio.transfo <- function(X,
+                             logratio = c('none','CLR','ILR'),
+                             offset = 0)
+{
+  X <- as.matrix(X)
+  if (!is.numeric(X))
+    stop("X must be a numeric matrix", call. = FALSE)
+  
+  logratio <- match.arg(logratio)
+  if (logratio == 'ILR')
+  {
+    if (!is(X, 'ilr'))
+    {   # data are ilr transformed, then the data lose 1 variable, but we'll use V to reconstruct the matrix
+      X = ilr.transfo(X, offset = offset)
+    }
+  } else if (logratio == 'CLR') {
+    X = clr.transfo(X, offset = offset)
+  }
+  return(X)
+}
+
+
+#' @importFrom dplyr group_by row_number filter n
+internal_predict.DA <- 
+  function(object, out, q, dist, weights)
+  {
+    # a DA analysis (mint).(block).(s)plsda
+    if (!is(object, "DA"))
+      stop("'Object' is not from a Discriminant Analysis", call.=FALSE)
+    
+    out.DA = list()
+    J = length(object$X) #at this stage we have a list of blocks
+    p = lapply(object$X, ncol)
+    t.pred = out$variates
+    Y.hat = out$predict
+    newdata = out$newdata #actually concat.newdata
+    variatesX = object$variates[-(J + 1)];
+    ncomp = object$ncomp
+    
+    Y = object$Y
+    Y.prim = unmap(object$Y)
+    G = cls = list()
+    for (i in 1 : J)
+    {
+      G[[i]] = sapply(1:q, function(x)
+      {apply(as.matrix(variatesX[[i]][Y.prim[, x] == 1,
+                                      ,drop=FALSE]), 2, mean)})
+      if (ncomp[i] == 1)
+        G[[i]] = t(t(G[[i]]))
+      else
+        G[[i]] = t(G[[i]])
+      colnames(G[[i]]) = paste0("dim", c(1:ncomp[i]))
+      rownames(G[[i]]) = colnames(object$ind.mat)
+      
+    }
+    names(G)=names(object$X)
+    
+    ### Start: Maximum distance
+    if (any(dist == "all") || any(dist == "max.dist"))
+    {
+      cls$max.dist = lapply(1:J, function(x){matrix(sapply(1:ncomp[x],
+                                                           ### List level
+                                                           function(y){apply(Y.hat[[x]][, , y, drop = FALSE], 1,
+                                                                             ### component level
+                                                                             function(z){
+                                                                               paste(levels(Y)[which(z == max(z))], collapse = "/")
+                                                                             }) ### matrix level
+                                                           }), nrow = nrow(newdata[[x]]), ncol = ncomp[x])
+      })
+      cls$max.dist = lapply(1:J, function(x){colnames(cls$max.dist[[x]]) =
+        paste0(rep("comp", ncomp[x]), 1 : ncomp[[x]]);
+      rownames(cls$max.dist[[x]]) = rownames(newdata[[x]]);
+      return(cls$max.dist[[x]])})
+      names(cls$max.dist)=names(object$X)
+    }
+    
+    
+    ### Start: Centroids distance
+    if (any(dist == "all") || any(dist == "centroids.dist"))
+    {
+      cl = list()
+      centroids.fun = function(x, G, h, i) {
+        q = nrow(G[[i]])
+        x = matrix(x, nrow = q, ncol = h, byrow = TRUE)
+        
+        if (h > 1) {
+          d = apply((x - G[[i]][, 1:h])^2, 1, sum)
+        }
+        else {
+          d = (x - G[[i]][, 1])^2
+        }
+        cl.id = paste(levels(Y)[which(d == min(d))], collapse = "/")
+      }
+      
+      for (i in 1 : J)
+      {
+        cl[[i]] = matrix(nrow = nrow(newdata[[1]]), ncol = ncomp[i])
+        
+        for (h in 1 : ncomp[[i]])
+        {
+          cl.id = apply(matrix(t.pred[[i]][, 1:h], ncol = h), 1,
+                        function(x) {centroids.fun(x = x, G = G, h = h, i = i)})
+          cl[[i]][, h] = cl.id
+        }
+      }
+      
+      cls$centroids.dist = lapply(1:J, function(x){colnames(cl[[x]]) =
+        paste0(rep("comp", ncomp[x]), 1 : ncomp[[x]]);
+      rownames(cl[[x]]) = rownames(newdata[[x]]); return(cl[[x]])})
+      names(cls$centroids.dist)=names(object$X)
+    }### End: Centroids distance
+    
+    
+    ### Start: Mahalanobis distance
+    if (any(dist == "all") || any(dist == "mahalanobis.dist"))
+    {
+      cl = list()
+      Sr.fun = function(x, G, Yprim, h, i) {
+        q = nrow(G[[i]])
+        Xe = Yprim %*% G[[i]][, 1:h]
+        #Xr = object$variates$X[, 1:h] - Xe
+        Xr = variatesX[[i]][, 1:h] - Xe
+        Sr = t(Xr) %*% Xr/nrow(Yprim)
+        Sr.inv = solve(Sr)
+        x = matrix(x, nrow = q, ncol = h, byrow = TRUE)
+        if (h > 1) {
+          mat = (x - G[[i]][, 1:h]) %*% Sr.inv %*% t(x - G[[i]][, 1:h])
+          d = apply(mat^2, 1, sum)
+        } else {
+          d = drop(Sr.inv) * (x - G[[i]][, 1])^2
+        }
+        cl.id = paste(levels(Y)[which(d == min(d))], collapse = "/")
+      }
+      
+      for (i in 1 : J){
+        cl[[i]] = matrix(nrow = nrow(newdata[[1]]), ncol = ncomp[i])
+        
+        for (h in 1:ncomp[[i]]) {
+          cl.id = apply(matrix(t.pred[[i]][, 1:h], ncol = h), 1, Sr.fun,
+                        G = G, Yprim = Y.prim, h = h, i = i)
+          cl[[i]][, h] = cl.id
+        }
+      }
+      
+      cls$mahalanobis.dist = lapply(1:J, function(x){colnames(cl[[x]]) =
+        paste0(rep("comp", ncomp[x]), 1 : ncomp[[x]]);
+      rownames(cl[[x]]) = rownames(newdata[[x]]);return(cl[[x]])})
+      names(cls$mahalanobis.dist)=names(object$X)
+    } ### End: Mahalanobis distance
+    
+    out.DA$class = cls
+    
+    ### End if discriminant analysis is performed
+    
+    # at this stage, we have the classification of each sample for each dataset
+    #   of object$X
+    # now we need to combine the classification by vote (majority wins),
+    #  only when more than one block, otherwise 'vote' is classic classification
+    if (length(object$X)>1)
+    {
+      for (ijk in 1:length(out.DA$class))# loop on the dist
+      {
+        # create a temporary array to make computation on the lists easier
+        temp=array(, c(nrow(newdata[[1]]), min(ncomp), J))
+        for(i in 1:J)
+        {
+          temp[, , i] = out.DA$class[[ijk]][[i]][, 1:min(ncomp)]
+          
+        }
+        # look at the majority vote for all dataset of object$X (with table)
+        #   if more than a unique max, we put NA
+        table.temp = apply(temp,c(1,2), function(x)
+        {a=table(x); if (length(which(a==max(a)))==1)
+        {b=names(which.max(a))}else{b=NA}; b})
+        colnames(table.temp) =
+          colnames(out.DA$class[[ijk]][[i]])[1:min(ncomp)]
+        rownames(table.temp) = rownames(out.DA$class[[ijk]][[i]])
+        out.DA$MajorityVote[[ijk]] = table.temp
+      }
+      names(out.DA$MajorityVote) = names(out.DA$class)
+      
+      #save(list=ls(),file="temp.Rdata")
+      #stop("")
+      # weighted vote for each distance, each comp
+      if(!is.null(weights))
+      {
+        out.WeightedVote = vector("list",length=length(out.DA$class))
+        Group.2 = n = x =NULL #CRAN check
+        for(i in 1:length(out.DA$class)){ #i distance
+          out = matrix(NA_real_,nrow=nrow(newdata[[1]]), ncol=min(ncomp))
+          rownames(out) = rownames(newdata[[1]])
+          colnames(out) = paste0("comp",1:min(ncomp))
+          
+          for(comp in 1:min(ncomp)){ #comp
+            data.temp=NULL
+            for(j in 1:J){ #block
+              data.temp = rbind(data.temp,
+                                out.DA$class[[i]][[j]][,comp,drop=FALSE])
+            }
+            colnames(data.temp)="pred"
+            temp=data.frame(data.temp,indiv=rownames(data.temp),
+                            weights=rep(weights,each=nrow(out.DA$class[[1]][[1]])))
+            ag = aggregate(temp$weights,
+                           by=list(temp$pred, temp$indiv), FUN=sum)
+            data_max <- group_by(.data = ag, Group.2)
+            data_max <- filter(.data = data_max, row_number(x)==n())
+            out.comp = as.matrix(data_max[,1])
+            rownames(out.comp) = as.matrix(data_max[,2])
+            colnames(out.comp) = paste0("comp",comp)
+            
+            out[,comp] = out.comp[match(rownames(out),
+                                        rownames(out.comp)),]
+          }
+          
+          out.WeightedVote[[i]] = out
+        }
+        names(out.WeightedVote) = names(out.DA$class)
+        out.DA$WeightedVote = out.WeightedVote
+        
+        
+        
+        if(FALSE){
+          out.DA$WeightedVote = lapply(out.DA$class, function(x){
+            # x is a distance
+            class.per.comp = lapply(1:min(ncomp), function(y) {
+              matrix(sapply(x, function(z)
+                z[,y, drop = FALSE]),ncol=J)})
+            # combine the results per component
+            names(class.per.comp) = paste0("comp",1:min(ncomp))
+            class.weighted.per.comp = sapply(class.per.comp, function(y){
+              # for each component
+              apply(y,1,function(z){
+                # we aggregate the results of each individuals using the 'weights'
+                temp = aggregate(weights,list(as.character(z)),sum)
+                ind = which(temp[,2]== max (temp[,2]))
+                # if two max, then NA
+                if(length(ind) == 1)
+                {
+                  res = as.character(temp[ind, 1])
+                } else {
+                  res = NA
+                }
+                res
+                
+              })
+              
+            })
+            class.weighted.per.comp = matrix(class.weighted.per.comp,
+                                             nrow = nrow(class.per.comp[[1]]))
+            colnames(class.weighted.per.comp) = names(class.per.comp)
+            rownames(class.weighted.per.comp) =
+              rownames(out.DA$MajorityVote[[1]])
+            class.weighted.per.comp
+            
+          })
+        }
+        out.DA$weights = weights
+        
+      }
+    }else{
+      out.DA$MajorityVote = lapply(out.DA$class,function(x){x[[1]]})
+    }
+    
+    block.object = c("block.pls", "block.spls", "block.plsda", "block.spsda")
+    if (inherits(object, block.object) & J>1) # a block
+    {
+      out.DA$centroids = G
+    }else{ #not a block
+      out.DA$centroids = G[[1]]
+      out.DA$class = out.DA$MajorityVote
+    }
+    if (any(dist == "all"))
+      dist = "all"
+    
+    out.DA$dist = dist
+    
+    out.DA
+    
+  }
+
+unmap <-
+  function (classification, groups = NULL, noise = NULL)
+  {
+    n = length(classification)
+    u = sort(unique(classification))
+    levels =  levels(classification)### Add levels
+    
+    if (is.null(groups))
+    {
+      groups = u
+    } else {
+      if (any(match(u, groups, nomatch = 0) == 0))
+        stop("groups incompatible with classification")
+      miss = match(groups, u, nomatch = 0) == 0
+    }
+    
+    cgroups = as.character(groups)
+    if (!is.null(noise))
+    {
+      noiz = match(noise, groups, nomatch = 0)
+      if (any(noiz == 0))
+        stop("noise incompatible with classification")
+      
+      groups = c(groups[groups != noise], groups[groups == noise])
+      noise = as.numeric(factor(as.character(noise), levels = unique(groups)))
+    }
+    
+    groups = as.numeric(factor(cgroups, levels = unique(cgroups)))
+    classification = as.numeric(factor(as.character(classification), levels = unique(cgroups)))
+    k = length(groups) - length(noise)
+    nam = levels(groups)
+    
+    if (!is.null(noise))
+    {
+      k = k + 1
+      nam = nam[1:k]
+      nam[k] = "noise"
+    }
+    
+    z = matrix(0, n, k, dimnames = c(names(classification), nam))
+    for (j in 1:k) z[classification == groups[j], j] = 1
+    attr(z, "levels") = levels
+    z
+  }
+

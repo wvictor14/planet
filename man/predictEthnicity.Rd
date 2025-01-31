@@ -2,7 +2,6 @@
 % Please edit documentation in R/predictEthnicity.R
 \name{predictEthnicity}
 \alias{predictEthnicity}
-\alias{pl_infer_ethnicity}
 \title{Predicts ethnicity using placental DNA methylation microarray data}
 \usage{
 predictEthnicity(betas, threshold = 0.75, force = FALSE)

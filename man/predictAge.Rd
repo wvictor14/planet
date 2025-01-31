@@ -2,7 +2,6 @@
 % Please edit documentation in R/predictAge.R
 \name{predictAge}
 \alias{predictAge}
-\alias{pl_infer_age}
 \title{Predicts gestational age using placental DNA methylation microarray
 data}
 \usage{

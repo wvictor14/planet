@@ -31,8 +31,6 @@
 #'     mutate(inferred_ga = predictAge(plBetas, type = "RPC"))
 #'     
 #' @export predictAge
-#' @export pl_infer_age
-#' @aliases pl_infer_age
 #' 
 predictAge <- function(betas, type = "RPC") {
     data(ageCpGs, envir = environment())
@@ -89,9 +87,4 @@ predictAge <- function(betas, type = "RPC") {
         as.vector()
 
     return(age)
-}
-
-pl_infer_age <- function(betas, type = 'RPC'){
-    .Deprecated('predictAge')
-    predictAge(betas = betas, type = type)
 }
