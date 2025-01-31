@@ -16,16 +16,19 @@
 #'
 #' @return produces a list with components detailed in the `mixOmics::predict` R documentation
 #'
-#' @examples
+#' @examples \dontrun{
 #'
 #' # To predict early preeclampsia on 450k/850k samples
 #'
 #' # Load data
 #' library(ExperimentHub)
+#' eh <- ExperimentHub()
+#' query(eh, "eoPredData")
 #' 
 #' # test object
 #' x_test <- eh[['EH8403']]
 #' x_test %>% predictPreeclampsia()
+#' }
 #' @export predictPreeclampsia
 #'
 predictPreeclampsia <- function(betas, ...){
@@ -76,7 +79,7 @@ predictPreeclampsia <- function(betas, ...){
   stopifnot(all(rownames(betasSubset) == trainCpGs))
   
   # predict
-  out <- mixOmics:::predict.mixo_spls(mod, t(betasSubset))
+  out <- predict.mixo_spls(mod, t(betasSubset))
   
   # get class probabilities
   CP <- out$predict[,,1]
@@ -88,3 +91,4 @@ predictPreeclampsia <- function(betas, ...){
                                                EOPE < 0.55 ~ "Normotensive"))
   return(tibble::as_tibble(CP))
 }
+
