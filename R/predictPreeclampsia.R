@@ -6,8 +6,11 @@
 #' @details Assigns the class labels "early-PE" or "normotensive" to each sample
 #' and returns a class probability.
 #'
-#' # It is recommended that users apply beta-mixture quantile normalization (BMIQ) to their data
+#' It is recommended that users apply beta-mixture quantile normalization (BMIQ) to their data
 #' prior to prediction. This was the normalization method used on the training data.
+#' 
+#' Fernández-Boyano, A.M. Inkster, V. Yuan, W.P. Robinson medRxiv 
+#' 2023.05.17.23290125; doi: https://doi.org/10.1101/2023.05.17.23290125 
 #'
 #' @param betas matrix or array of methylation values on the beta scale (0, 1),
 #' where the variables are arranged in rows, and samples in columns.

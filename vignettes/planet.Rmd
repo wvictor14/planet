@@ -310,7 +310,7 @@ stratifying downstream analyses by ethnicity might also be a valid option.
 To calculate the probability of EOPE of placental DNAm chorionic villi samples, 
 we rely on 45 predictive CpGs. 
 
-In this example, we load the validation data used in the paper and 
+In this example, we load the validation data used in [Fernández-Boyano 2023](https://www.medrxiv.org/content/10.1101/2023.05.17.23290125v1)] and 
 estimate the EOPE probability of the samples. Note that the function must 
 be run on a matrix with the full set of CpG probes in either the 
 450K or 850K arrays - the reason for this is that all 45 predictive CpGs must 
@@ -393,6 +393,8 @@ valMeta %>% mutate(
 [Yuan V, Price EM, Del Gobbo G, Mostafavi S, Cox B, Binder AM, et al. Accurate ethnicity prediction from placental DNA methylation data. Epigenetics & Chromatin. 2019 Aug 9;12(1):51.](https://epigeneticsandchromatin.biomedcentral.com/articles/10.1186/s13072-019-0296-3)
 
 [Lee Y, Choufani S, Weksberg R, Wilson SL, Yuan V, Burt A, et al. Placental epigenetic clocks: estimating gestational age using placental DNA methylation levels. Aging (Albany NY). 2019 Jun 24;11(12):4238–53.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6628997/)
+
+[**Fernández-Boyano I**, A.M. Inkster, **V. Yuan**, W.P. Robinson medRxiv 2023 May](https://www.medrxiv.org/content/10.1101/2023.05.17.23290125v1)
 
 ## Session Info
 

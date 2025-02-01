@@ -31,9 +31,11 @@ knitr::opts_chunk$set(
 [![Bioc dependencies](https://bioconductor.org/shields/dependencies/release/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
 <!-- badges: end -->
 
-`planet` is an R package for inferring **ethnicity** (1), **gestational age** (2), and **cell composition** (3) from placental DNA methylation data. 
+`planet` is an R package for inferring **ethnicity** [(1)](#references), **gestational age** 
+[(2)](#references), **cell composition** [(3)](#references), and disease status (preeclampsia/inflammation) [(4)](#references), 
+from placental DNA methylation data. 
 
-See full documentation at <https://victor.rbind.io/planet>
+See full documentation at [victoryuan.com/planet](https://victoryuan.com/planet)
 
 ### Installation
 
@@ -115,3 +117,4 @@ minfi:::projectCellType(
 
 3. [**Yuan V**, Hui D, Yin Y, Peñaherrera MS, Beristain AG, Robinson WP. Cell-specific characterization of the placental methylome. BMC Genomics. 2021 Jan 6;22(1):6.](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6)
 
+4. [**Fernández-Boyano I**, A.M. Inkster, **V. Yuan**, W.P. Robinson medRxiv 2023 May](https://www.medrxiv.org/content/10.1101/2023.05.17.23290125v1)

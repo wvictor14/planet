@@ -23,11 +23,13 @@ commit](https://bioconductor.org/shields/lastcommit/devel/bioc/planet.svg)](http
 dependencies](https://bioconductor.org/shields/dependencies/release/planet.svg)](https://bioconductor.org/packages/release/bioc/html/planet.html#since)
 <!-- badges: end -->
 
-`planet` is an R package for inferring **ethnicity** (1), **gestational
-age** (2), and **cell composition** (3) from placental DNA methylation
-data.
+`planet` is an R package for inferring **ethnicity** [(1)](#references),
+**gestational age** [(2)](#references), **cell composition**
+[(3)](#references), and disease status (preeclampsia/inflammation)
+[(4)](#references), from placental DNA methylation data.
 
-See full documentation at <https://victor.rbind.io/planet>
+See full documentation at
+[victoryuan.com/planet](https://victoryuan.com/planet)
 
 ### Installation
 
@@ -125,7 +127,7 @@ minfi:::projectCellType(
   head()
 #>            Trophoblasts    Stromal     Hofbauer Endothelial       nRBC
 #> GSM1944936    0.1091279 0.04891919 0.000000e+00  0.08983998 0.05294062
-#> GSM1944939    0.2299918 0.00000000 9.725560e-19  0.07888007 0.03374149
+#> GSM1944939    0.2299918 0.00000000 6.680983e-20  0.07888007 0.03374149
 #> GSM1944942    0.1934287 0.03483540 0.000000e+00  0.09260353 0.02929310
 #> GSM1944944    0.2239896 0.06249135 1.608645e-03  0.11040693 0.04447951
 #> GSM1944946    0.1894152 0.07935955 0.000000e+00  0.10587439 0.05407587
@@ -156,3 +158,7 @@ minfi:::projectCellType(
     WP. Cell-specific characterization of the placental methylome. BMC
     Genomics. 2021 Jan
     6;22(1):6.](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07186-6)
+
+4.  [**Fernández-Boyano I**, A.M. Inkster, **V. Yuan**, W.P. Robinson
+    medRxiv 2023
+    May](https://www.medrxiv.org/content/10.1101/2023.05.17.23290125v1)
