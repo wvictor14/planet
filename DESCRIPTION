@@ -1,11 +1,13 @@
 Package: planet
 Title: Placental DNA methylation analysis tools
-Version: 1.13.0
+Version: 1.15.1
 Authors@R: 
     c(person("Victor", "Yuan", email = "victor.2wy@gmail.com",
             role = c("aut", "cre")),
-    person(c("Wendy", "P."), "Robinson",
-            role = "ctb"))
+      person(c("Wendy", "P."), "Robinson",
+            role = c("aut", "ctb")),
+      person("Icíar", "Fernández-Boyano", email = "iciarfernandez@outlook.com",
+            role = c("aut", "ctb")))
 URL: 
     https://victor.rbind.io/planet, http://github.com/wvictor14/planet
 BugReports: 
@@ -22,6 +24,8 @@ Imports:
     magrittr,
     dplyr
 Suggests:
+    ExperimentHub,
+    mixOmics,
     ggplot2,
     testthat,
     tidyr,
@@ -33,7 +37,7 @@ Suggests:
 License: GPL-2
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 biocViews: Software, DifferentialMethylation, Epigenetics, Microarray, 
     MethylationArray, DNAMethylation, CpGIsland

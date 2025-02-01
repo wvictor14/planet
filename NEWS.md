@@ -1,6 +1,22 @@
+# planet 1.15.1
+
+* added predictPreclampsia 
+
+# planet 1.9.4
+
+# planet 1.9.3 (09-08-2023)
+
+* add stop controls to `predictEthnicity`
+* added some tests
+* Bioconductor version bump
+
 # planet 1.9.2
 
+* Bioconductor version bump
+
 # planet 1.9.1
+
+* Bioconductor version bump
 
 # planet 0.99.4 (03-10-2021)
 

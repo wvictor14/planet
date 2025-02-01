@@ -30,9 +30,6 @@
 #' predictEthnicity(plBetas)
 #' 
 #' @export predictEthnicity 
-#' @export pl_infer_ethnicity
-#' @aliases pl_infer_ethnicity
-
 predictEthnicity <- function(betas, threshold = 0.75, force = FALSE) {
   data(ethnicityCpGs, envir=environment())
   pf <- intersect(ethnicityCpGs, rownames(betas)) 
@@ -146,9 +143,4 @@ glmnet_softmax <- function(x, ignore_labels = FALSE) {
     }
   }
   pclass
-}
-
-pl_infer_ethnicity <- function(betas, threshold = 0.75) {
-  .Deprecated("predictEthnicity")
-  predictEthnicity(betas = betas, threshold = threshold)
 }
