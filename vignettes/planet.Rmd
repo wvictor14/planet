@@ -335,7 +335,7 @@ preds <- x_test %>% predictPreeclampsia()
 
 Inspect the results:
 
-```{r include=FALSE, eval = TRUE}
+```{r include=TRUE, eval = TRUE, fig.width = 7}
 head(preds)
 
 # join with metadata
@@ -367,12 +367,16 @@ plot_predictions <- function(df, predicted_class_column) {
     ) + 
     theme_minimal() 
 }
+```
+
+```{r, fig.width = 7}
 valMeta %>% plot_predictions(PE_Status)
 ```
 
+
 if user wishes to use different threshold from 55% probability, as an example 70%
 
-```{r}
+```{r, fig.width = 7}
 valMeta %>% mutate(
   Pred_Class = case_when(
     EOPE > 0.7 ~ "EOPE",
