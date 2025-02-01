@@ -8,8 +8,7 @@ Authors@R:
             role = c("aut", "ctb")),
       person("Icíar", "Fernández-Boyano", email = "iciarfernandez@outlook.com",
             role = c("aut", "ctb")))
-URL: 
-    https://victor.rbind.io/planet, http://github.com/wvictor14/planet
+URL: http://github.com/wvictor14/planet, http://victoryuan.com/planet/
 BugReports: 
     http://github.com/wvictor14/planet/issues
 Description: This package contains R functions to predict biological variables
