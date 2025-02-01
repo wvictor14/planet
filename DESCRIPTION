@@ -22,8 +22,7 @@ Imports:
     methods,
     tibble,
     magrittr,
-    dplyr,
-    eoPredData
+    dplyr
 Suggests:
     ExperimentHub,
     mixOmics,
