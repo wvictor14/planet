@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 `planet` is an R package for inferring **ethnicity** [(1)](#references), **gestational age** 
-[(2)](#references), **cell composition** [(3)](#references), and disease status (preeclampsia/inflammation) [(4)](#references), 
+[(2)](#references), **cell composition** [(3)](#references), and **preeclampsia** [(4)](#references), 
 from placental DNA methylation data. 
 
 See full documentation at [victoryuan.com/planet](https://victoryuan.com/planet)
@@ -75,7 +75,7 @@ data(plPhenoData) # sample information
 #### Predict Ethnicity
 
 ```{r}
-predictEthnicity(plBetas) %>%
+predictEthnicity(plBetas) |>
   head()
 ```
 
@@ -85,7 +85,7 @@ There are 3 gestational age clocks for placental DNA methylation data from Lee
 Y. et al. 2019 (2). To use a specific one, we can use the `type` argument in `predictAge`:
 
 ```{r predictAge, dpi = 200}
-predictAge(plBetas, type = 'RPC') %>%
+predictAge(plBetas, type = 'RPC') |>
   head()
 ```
 
@@ -104,9 +104,23 @@ minfi:::projectCellType(
   # input the reference cpg matrix
   plCellCpGsThird,
   
-  lessThanOne = FALSE) %>%
+  lessThanOne = FALSE) |>
   
   head()
+```
+
+#### Predict Preeclampsia
+
+```{r}
+# download the model from experimenthub
+library(ExperimentHub)
+eh <- ExperimentHub()
+# query(eh, "eoPredData") # see data
+
+# download BMIQ normalized 450k data for prediction
+x_test <- eh[['EH8403']]
+preds <- x_test |> predictPreeclampsia()
+preds |>  head()
 ```
 
 ### References

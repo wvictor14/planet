@@ -25,8 +25,8 @@ dependencies](https://bioconductor.org/shields/dependencies/release/planet.svg)]
 
 `planet` is an R package for inferring **ethnicity** [(1)](#references),
 **gestational age** [(2)](#references), **cell composition**
-[(3)](#references), and disease status (preeclampsia/inflammation)
-[(4)](#references), from placental DNA methylation data.
+[(3)](#references), and **preeclampsia** [(4)](#references), from
+placental DNA methylation data.
 
 See full documentation at
 [victoryuan.com/planet](https://victoryuan.com/planet)
@@ -75,7 +75,7 @@ data(plPhenoData) # sample information
 #### Predict Ethnicity
 
 ``` r
-predictEthnicity(plBetas) %>%
+predictEthnicity(plBetas) |>
   head()
 #> 1860 of 1860 predictors present.
 #> # A tibble: 6 × 7
@@ -98,7 +98,7 @@ from Lee Y. et al. 2019 (2). To use a specific one, we can use the
 `type` argument in `predictAge`:
 
 ``` r
-predictAge(plBetas, type = 'RPC') %>%
+predictAge(plBetas, type = 'RPC') |>
   head()
 #> 558 of 558 predictors present.
 #> [1] 38.46528 33.09680 34.32520 35.50937 37.63910 36.77051
@@ -122,7 +122,7 @@ minfi:::projectCellType(
   # input the reference cpg matrix
   plCellCpGsThird,
   
-  lessThanOne = FALSE) %>%
+  lessThanOne = FALSE) |>
   
   head()
 #>            Trophoblasts    Stromal     Hofbauer Endothelial       nRBC
@@ -139,6 +139,43 @@ minfi:::projectCellType(
 #> GSM1944944           0.5467642
 #> GSM1944946           0.6022329
 #> GSM1944948           0.6085825
+```
+
+#### Predict Preeclampsia
+
+``` r
+# download the model from experimenthub
+library(ExperimentHub)
+#> Loading required package: AnnotationHub
+#> Loading required package: BiocFileCache
+#> Loading required package: dbplyr
+#> 
+#> Attaching package: 'AnnotationHub'
+#> The following object is masked from 'package:Biobase':
+#> 
+#>     cache
+eh <- ExperimentHub()
+# query(eh, "eoPredData") # see data
+
+# download BMIQ normalized 450k data for prediction
+x_test <- eh[['EH8403']]
+#> see ?eoPredData and browseVignettes('eoPredData') for documentation
+#> loading from cache
+preds <- x_test |> predictPreeclampsia()
+#> see ?eoPredData and browseVignettes('eoPredData') for documentation
+#> loading from cache
+#> 45 of 45 predictive CpGs present.
+#> BMIQ normalization is recommended for best results. If choosing other method, it is recommended to compare results to predictions on BMIQ normalized data.
+preds |>  head()
+#> # A tibble: 6 × 4
+#>   Sample_ID   EOPE `Non-PE Preterm` PE_Status   
+#>   <chr>      <dbl>            <dbl> <chr>       
+#> 1 GSM2589533 0.670            0.330 EOPE        
+#> 2 GSM2589535 0.768            0.232 EOPE        
+#> 3 GSM2589536 0.807            0.193 EOPE        
+#> 4 GSM2589538 0.784            0.216 EOPE        
+#> 5 GSM2589540 0.386            0.614 Normotensive
+#> 6 GSM2589541 0.649            0.351 EOPE
 ```
 
 ### References
