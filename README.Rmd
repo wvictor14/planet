@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 # planet <img src="man/figures/logo.png" align="right" height = "100px"  style="float:right; height:100px;"/>
 
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633) `r badger::badge_last_commit("GuangchuangYu/badger")`
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4321633.svg)](https://doi.org/10.5281/zenodo.4321633) `r badger::badge_last_commit("wvictor14/planet")`
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![R-CMD-check](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wvictor14/planet/actions/workflows/R-CMD-check.yaml)
 
